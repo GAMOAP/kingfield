@@ -27,6 +27,7 @@
 
 #include "cocos2d.h"
 
+
 /**
 @brief    The cocos2d Application.
 
@@ -59,6 +60,8 @@ public:
     */
     virtual void applicationWillEnterForeground();
 };
+
+static cocos2d::Scene m_mainScene;
 
 #endif // _APP_DELEGATE_H_
 

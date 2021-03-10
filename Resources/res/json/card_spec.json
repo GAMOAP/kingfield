@@ -1,0 +1,996 @@
+{
+  "breed" : {
+    "sun" : {
+      "slot0" : "life",
+      "slot1" : "crystal_blue",
+      "slot2" : "defense"
+    },
+    "night" : {
+      "slot0" : "life",
+      "slot1" : "crystal_blue",
+      "slot2" : "attack"
+    },
+    "time" : {
+      "slot0" : "life",
+      "slot1" : "crystal_blue",
+      "slot2" : "crystal_red"
+    }
+  },
+  "job" : {
+    "sun" : {
+      "slot0" : "defense",
+      "slot1" : "defense",
+      "slot2" : "attack"
+    },
+    "night" : {
+      "slot0" : "attack",
+      "slot1" : "attack",
+      "slot2" : "defense"
+    },
+    "time" : {
+      "slot0" : "defense",
+      "slot1" : "attack",
+      "slot2" : "crystal_blue"
+    }
+  },
+  "helmet" : {
+    "sun" : {
+      "sun" : {
+        "slot0" : "defense",
+        "slot1" : "defense",
+        "slot2" : "life"
+      },
+      "night" : {
+        "slot0" : "attack",
+        "slot1" : "life",
+        "slot2" : "life"
+      },
+      "time" : {
+        "slot0" : "defense",
+        "slot1" : "crystal_red",
+        "slot2" : "life"
+      }
+    },
+    "night" : {
+      "sun" : {
+        "slot0" : "defense",
+        "slot1" : "life",
+        "slot2" : "life"
+      },
+      "night" : {
+        "slot0" : "attack",
+        "slot1" : "attack",
+        "slot2" : "life"
+      },
+      "time" : {
+        "slot0" : "attack",
+        "slot1" : "crystal_blue",
+        "slot2" : "life"
+      }
+    },
+    "time" : {
+      "sun" : {
+        "slot0" : "defense",
+        "slot1" : "life",
+        "slot2" : "crystal_blue"
+      },
+      "night" : {
+        "slot0" : "life",
+        "slot1" : "life",
+        "slot2" : "crystal_blue"
+      },
+      "time" : {
+        "slot0" : "life",
+        "slot1" : "crystal_blue",
+        "slot2" : "crystal_red"
+      }
+    }
+  },
+  "armor" : {
+    "sun" : {
+      "sun" : {
+        "slot0" : "defense",
+        "slot1" : "life",
+        "slot2" : "crystal_red"
+      },
+      "night" : {
+        "slot0" : "defense",
+        "slot1" : "life",
+        "slot2" : "crystal_blue"
+      },
+      "time" : {
+        "slot0" : "defense",
+        "slot1" : "crystal_blue",
+        "slot2" : "crystal_red"
+      }
+    },
+    "night" : {
+      "sun" : {
+        "slot0" : "attack",
+        "slot1" : "life",
+        "slot2" : "crystal_red"
+      },
+      "night" : {
+        "slot0" : "attack",
+        "slot1" : "life",
+        "slot2" : "crystal_blue"
+      },
+      "time" : {
+        "slot0" : "attack",
+        "slot1" : "crystal_blue",
+        "slot2" : "crystal_red"
+      }
+    },
+    "time" : {
+      "sun" : {
+        "slot0" : "crystal_object",
+        "slot1" : "life",
+        "slot2" : "crystal_red"
+      },
+      "night" : {
+        "slot0" : "crystal_weapon",
+        "slot1" : "life",
+        "slot2" : "crystal_blue"
+      },
+      "time" : {
+        "slot0" : "crystal_move",
+        "slot1" : "crystal_red",
+        "slot2" : "crystal_blue"
+      }
+    }
+  },
+  "item" : {
+    "sun" : {
+      "sun" : {
+        "slot0" : "defense",
+        "slot1" : "defense",
+        "slot2" : "life"
+      },
+      "night" : {
+        "slot0" : "defense",
+        "slot1" : "attack",
+        "slot2" : "life"
+      },
+      "time" : {
+        "slot0" : "defense",
+        "slot1" : "life",
+        "slot2" : "crystal_blue"
+      }
+    },
+    "night" : {
+      "sun" : {
+        "slot0" : "defense",
+        "slot1" : "defense",
+        "slot2" : "attack"
+      },
+      "night" : {
+        "slot0" : "attack",
+        "slot1" : "attack",
+        "slot2" : "life"
+      },
+      "time" : {
+        "slot0" : "attack",
+        "slot1" : "life",
+        "slot2" : "crystal_red"
+      }
+    },
+    "time" : {
+      "sun" : {
+        "slot0" : "defense",
+        "slot1" : "defense",
+        "slot2" : "crystal_blue"
+      },
+      "night" : {
+        "slot0" : "attack",
+        "slot1" : "attack",
+        "slot2" : "crystal_red"
+      },
+      "time" : {
+        "slot0" : "crystal_blue",
+        "slot1" : "crystal_red",
+        "slot2" : "life"
+      }
+    }
+  },
+  "move" : {
+    "sun" : {
+      "sun" : {
+        "mana" : 2,
+        "slot0" : "NULL",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            0,
+            2,
+            3,
+            4,
+            7
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 2,
+        "slot0" : "NULL",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            0,
+            3,
+            6,
+            8
+          ],
+          [
+            1,
+            0,
+            0,
+            3
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 3,
+        "slot0" : "NULL",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            0,
+            3,
+            6,
+            8
+          ],
+          [
+            1,
+            0,
+            0,
+            2,
+            4
+          ]
+        ]
+      }
+    },
+    "night" : {
+      "sun" : {
+        "mana" : 2,
+        "slot0" : "NULL",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            0,
+            1,
+            3,
+            5,
+            7
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 1,
+        "slot0" : "NULL",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            0,
+            3,
+            7
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            5
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 3,
+        "slot0" : "NULL",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            0,
+            1,
+            5,
+            7
+          ],
+          [
+            0,
+            1,
+            0,
+            3,
+            7
+          ],
+          [
+            0,
+            -1,
+            0,
+            3,
+            7
+          ],
+          [
+            1,
+            1,
+            0,
+            3
+          ],
+          [
+            1,
+            -1,
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    "time" : {
+      "sun" : {
+        "mana" : 2,
+        "slot0" : "NULL",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            0,
+            2,
+            4,
+            6,
+            8
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 4,
+        "slot0" : "NULL",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            0,
+            2,
+            4,
+            6,
+            8
+          ],
+          [
+            1,
+            1,
+            0,
+            3
+          ],
+          [
+            1,
+            -1,
+            0,
+            3
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 4,
+        "slot0" : "NULL",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            0,
+            2,
+            4,
+            6,
+            8
+          ],
+          [
+            1,
+            1,
+            0,
+            2
+          ],
+          [
+            1,
+            -1,
+            0,
+            4
+          ]
+        ]
+      }
+    }
+  },
+  "spell" : {
+    "sun" : {
+      "sun" : {
+        "mana" : 2,
+        "slot0" : "block",
+        "slot1" : "block",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            2,
+            0
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 4,
+        "slot0" : "strike",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            0,
+            1,
+            1,
+            0,
+            5,
+            3
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 4,
+        "slot0" : "sleep",
+        "slot1" : "sleep",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            2,
+            2,
+            0
+          ],
+          [
+            2,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            -2,
+            2,
+            0
+          ]
+        ]
+      }
+    },
+    "night" : {
+      "sun" : {
+        "mana" : 1,
+        "slot0" : "strike",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 2,
+        "slot0" : "strike",
+        "slot1" : "strike",
+        "slot2" : "strike",
+        "board" : [
+          [
+            -1,
+            1,
+            1,
+            0
+          ],
+          [
+            -1,
+            0,
+            1,
+            0
+          ],
+          [
+            -1,
+            -1,
+            1,
+            0
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 4,
+        "slot0" : "poison",
+        "slot1" : "poison",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            2,
+            1,
+            2,
+            0
+          ],
+          [
+            2,
+            -1,
+            2,
+            0
+          ]
+        ]
+      }
+    },
+    "time" : {
+      "sun" : {
+        "mana" : 3,
+        "slot0" : "block",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            0,
+            2,
+            0,
+            1,
+            5
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 4,
+        "slot0" : "strike",
+        "slot1" : "strike",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            0
+          ],
+          [
+            2,
+            -1,
+            1,
+            0
+          ],
+          [
+            1,
+            -2,
+            1,
+            0
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 2,
+        "slot0" : "crystal_break",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            2,
+            1,
+            2,
+            0
+          ],
+          [
+            2,
+            0,
+            2,
+            0
+          ],
+          [
+            2,
+            -1,
+            2,
+            0
+          ]
+        ]
+      }
+    }
+  },
+  "weapon" : {
+    "sun" : {
+      "sun" : {
+        "mana" : 2,
+        "slot0" : "strike",
+        "slot1" : "strike",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            0,
+            1,
+            0,
+            3
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 2,
+        "slot0" : "strike",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            -1,
+            1,
+            0
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 2,
+        "slot0" : "strike",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            0,
+            1,
+            0
+          ],
+          [
+            2,
+            -2,
+            1,
+            0
+          ]
+        ]
+      }
+    },
+    "night" : {
+      "sun" : {
+        "mana" : 3,
+        "slot0" : "strike",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            1,
+            1,
+            0,
+            3
+          ],
+          [
+            1,
+            -1,
+            1,
+            0,
+            3
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 2,
+        "slot0" : "strike",
+        "slot1" : "strike",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            -1,
+            1,
+            0
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 2,
+        "slot0" : "strike",
+        "slot1" : "strike",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            2,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
+    },
+    "time" : {
+      "sun" : {
+        "mana" : 2,
+        "slot0" : "attack",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            -1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            2
+          ],
+          [
+            1,
+            -1,
+            1,
+            4
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 2,
+        "slot0" : "strike",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            -1,
+            1,
+            0
+          ],
+          [
+            -1,
+            1,
+            1,
+            0
+          ],
+          [
+            -1,
+            -1,
+            1,
+            0
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 2,
+        "slot0" : "strike",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            2,
+            1,
+            0
+          ],
+          [
+            2,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            -2,
+            1,
+            0
+          ]
+        ]
+      }
+    }
+  },
+  "object" : {
+    "sun" : {
+      "sun" : {
+        "mana" : 3,
+        "slot0" : "heal",
+        "slot1" : "heal",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            0,
+            1,
+            0,
+            3
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 1,
+        "slot0" : "heal",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            -1,
+            1,
+            0
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 3,
+        "slot0" : "heal",
+        "slot1" : "heal",
+        "slot2" : "heal",
+        "board" : [
+          [
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      }
+    },
+    "night" : {
+      "sun" : {
+        "mana" : 3,
+        "slot0" : "defense_more",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            0,
+            2,
+            0,
+            1,
+            5
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 3,
+        "slot0" : "attack_more",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            0,
+            2,
+            0,
+            1,
+            5
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 4,
+        "slot0" : "attack_more",
+        "slot1" : "attack_more",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            0,
+            2,
+            0
+          ]
+        ]
+      }
+    },
+    "time" : {
+      "sun" : {
+        "mana" : 3,
+        "slot0" : "defense_less",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            0,
+            2,
+            0,
+            1,
+            5
+          ]
+        ]
+      },
+      "night" : {
+        "mana" : 3,
+        "slot0" : "attack_less",
+        "slot1" : "NULL",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            0,
+            2,
+            0,
+            1,
+            5
+          ]
+        ]
+      },
+      "time" : {
+        "mana" : 4,
+        "slot0" : "defense_more",
+        "slot1" : "defense_more",
+        "slot2" : "NULL",
+        "board" : [
+          [
+            1,
+            0,
+            2,
+            0
+          ]
+        ]
+      }
+    }
+  }
+}
