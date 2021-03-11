@@ -1,21 +1,21 @@
 //
-//  MainDirector.hpp
+//  GameDirector.hpp
 //  kingfield-mobile
 //
-//  Created by alexandre gimeno on 10/03/2021.
+//  Created by alexandre gimeno on 28/04/2019.
 //
 
-#ifndef MainDirector_hpp
-#define MainDirector_hpp
+#ifndef GameDirector_hpp
+#define GameDirector_hpp
 
 #include "cocos2d.h"
 #include "KFScene.hpp"
 
-class MainDirector
+class GameDirector
 {
 public:
     
-    static MainDirector* getInstance();
+    static GameDirector* getInstance();
     
     static void setScene(std::string scene, int tag = NAN);
     static KFScene* getScene();
@@ -56,7 +56,7 @@ protected:
     bool m_actionInProgress;
 };
 
-static MainDirector* m_SharedMainDirector = nullptr;
+static GameDirector* m_SharedGameDirector = nullptr;
 static std::string m_kingBreed;
 
-#endif /* MainDirector_hpp */
+#endif /* GameDirector_hpp */

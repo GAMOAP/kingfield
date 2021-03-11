@@ -61,7 +61,7 @@ bool MainScene::init()
     MainStuff::getInstance();
     
     //Init Game Director
-    MainDirector::getInstance();
+    GameDirector::getInstance();
     
     //Init GameMultiplayer
     MainMultiPlayer::getInstance();
@@ -85,12 +85,12 @@ bool MainScene::init()
     //add Node Listener.
     auto IsAllEvent = EventListenerCustom::create("ALL_NODE_IS_IN", [](EventCustom* event)
     {
-        MainDirector::allNodeIsIn();
+        GameDirector::allNodeIsIn();
     });
     _eventDispatcher->addEventListenerWithSceneGraphPriority(IsAllEvent, this);
     
     //Start
-    MainDirector::setScene("intro");
+    GameDirector::setScene("intro");
     return true;
 }
 
@@ -100,7 +100,7 @@ bool MainScene::onTouchBegan(Touch* touch, Event* event)
     const int touchBoxTag = m_mainGrid->getTagByLocation(touch->getLocation());
     
     m_touchBoxTag = touchBoxTag;
-    MainDirector::touchBox(m_touchBoxTag);
+    GameDirector::touchBox(m_touchBoxTag);
         
     cancelTouchLong();
     
@@ -122,7 +122,7 @@ void MainScene::onTouchEnded(Touch* touch, Event* event)
     const int touchboxTagEnded = MainGrid::getTagByLocation(touch->getLocation());
     if(m_touchBoxTag == touchboxTagEnded)
     {
-        MainDirector::unTouchBox(touchboxTagEnded);
+        GameDirector::unTouchBox(touchboxTagEnded);
     }
 }
 
@@ -133,7 +133,7 @@ void MainScene::onTouchMoved(Touch* touch, Event* event)
     if(m_touchBoxTag != touchboxTagMoved)
     {
         cancelTouchLong();
-        MainDirector::cancelTouchBox(m_touchBoxTag);
+        GameDirector::cancelTouchBox(m_touchBoxTag);
     }
 }
 
@@ -141,7 +141,7 @@ void MainScene::onTouchMoved(Touch* touch, Event* event)
 void MainScene::onTouchCancelled(Touch* touch, Event* event)
 {
     cancelTouchLong();
-    MainDirector::cancelTouchBox(m_touchBoxTag);
+    GameDirector::cancelTouchBox(m_touchBoxTag);
 }
 
 //longTouch
@@ -149,7 +149,7 @@ void MainScene::onTouchLong(int boxTag)
 {
     if(boxTag == m_touchBoxTag)
     {
-        MainDirector::longTouchBox(m_touchBoxTag);
+        GameDirector::longTouchBox(m_touchBoxTag);
     }
 }
 void MainScene::cancelTouchLong()

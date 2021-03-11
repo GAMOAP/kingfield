@@ -1,20 +1,20 @@
 //
-//  MainInfoLayer.hpp
+//  GameInfoLayer.hpp
 //  kingfield-mobile
 //
-//  Created by alexandre gimeno on 10/03/2021.
+//  Created by alexandre gimeno on 26/09/2019.
 //
 
-#ifndef MainInfoLayer_hpp
-#define MainInfoLayer_hpp
+#ifndef GameInfoLayer_hpp
+#define GameInfoLayer_hpp
 
 #include "cocos2d.h"
 #include "KFSprite.hpp"
 
-class MainInfoLayer
+class GameInfoLayer
 {
 public:
-    static MainInfoLayer* getInstance();
+    static GameInfoLayer* getInstance();
     
     static void addIntroTitle();
     static void removeIntroTitle();
@@ -36,6 +36,6 @@ protected:
     
 };
 
-static MainInfoLayer* m_SharedMainInfoLayer = nullptr;
+static GameInfoLayer* m_SharedGameInfoLayer = nullptr;
 
-#endif /* MainInfoLayer_hpp */
+#endif /* GameInfoLayer_hpp */

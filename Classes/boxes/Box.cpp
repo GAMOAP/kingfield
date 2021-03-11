@@ -9,7 +9,7 @@
 #include "MainGrid.hpp"
 #include "MainObject.hpp"
 
-#include "MainDirector.hpp"
+#include "GameDirector.hpp"
 
 #include "Box.hpp"
 
@@ -68,7 +68,7 @@ bool Box::init(int line, int collumn)
 
 void Box::initDisplay()
 {
-    auto gameDirector = MainDirector::getInstance();
+    auto gameDirector = GameDirector::getInstance();
     m_scene = gameDirector->getScene()->getName();
     m_breed = gameDirector->getKingBreed();
     

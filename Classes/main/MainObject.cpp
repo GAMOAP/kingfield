@@ -7,8 +7,8 @@
 
 #include "MainObject.hpp"
 
-#include "MainDirector.hpp"
-#include "MainInfoLayer.hpp"
+#include "GameDirector.hpp"
+#include "GameInfoLayer.hpp"
 
 #include <iostream>
 
@@ -42,7 +42,7 @@ cocos2d::Node* MainObject::getMainLayer()
 void MainObject::setInfoLayer(cocos2d::Node* infoLayer)
 {
     m_SharedMainObject->m_infoLayer = infoLayer;
-    MainInfoLayer::getInstance();
+    GameInfoLayer::getInstance();
 }
 cocos2d::Node* MainObject::getInfoLayer()
 {

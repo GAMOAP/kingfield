@@ -10,7 +10,7 @@
 #include "MainStuff.hpp"
 #include "MainAction.hpp"
 
-#include "MainDirector.hpp"
+#include "GameDirector.hpp"
 
 #include "GameBoxes.hpp"
 #include "GameCards.hpp"
@@ -104,7 +104,7 @@ void GameCharacters::setCharSelect(int number)
                 if(character->getNumber() == number)
                 {
                     m_SharedGameCharacters->m_charSelected = character;
-                    if(MainDirector::getScene()->getIsPlayerTurn())
+                    if(GameDirector::getScene()->getIsPlayerTurn())
                     {
                         GameBoxes::setBoxSelect(character->getTag());
                         character->setSelect();
@@ -204,7 +204,7 @@ void GameCharacters::setActionSequence()
     if(m_sequenceState >= m_actionSequence.size())
     {
         m_actionSequence.clear();
-        MainDirector::endTurn();
+        GameDirector::endTurn();
     }
     else
     {
@@ -234,7 +234,7 @@ void GameCharacters::setActionAll(std::string actionName)
         if(character)
         {
             if(actionName == "give_crystals" &&
-               MainDirector::getScene()->getIsTeamTurn(character->getNumber()))
+               GameDirector::getScene()->getIsTeamTurn(character->getNumber()))
             {
                 MainStuff::setCharSpec(character->getNumber(), "crystal", +1);
             }

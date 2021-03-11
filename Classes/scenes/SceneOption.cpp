@@ -12,7 +12,7 @@
 #include "MainObject.hpp"
 #include "MainGrid.hpp"
 
-#include "MainDirector.hpp"
+#include "GameDirector.hpp"
 #include "GameCharacters.hpp"
 #include "GameCards.hpp"
 
@@ -55,7 +55,7 @@ void SceneOption::addToStage()
 void SceneOption::removeToStage()
 {
     resetFocus();
-    MainDirector::setScene(m_oldScene);
+    GameDirector::setScene(m_oldScene);
 }
 
 bool SceneOption::touchBox(int tag)

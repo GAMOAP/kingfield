@@ -9,7 +9,7 @@
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
 
-#include "MainDirector.hpp"
+#include "GameDirector.hpp"
 
 #include "GameBoxes.hpp"
 #include "GameCharacters.hpp"

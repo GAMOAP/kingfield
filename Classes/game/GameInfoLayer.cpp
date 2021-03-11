@@ -1,11 +1,11 @@
 //
-//  MainInfoLayer.cpp
+//  GameInfoLayer.cpp
 //  kingfield-mobile
 //
-//  Created by alexandre gimeno on 10/03/2021.
+//  Created by alexandre gimeno on 26/09/2019.
 //
 
-#include "MainInfoLayer.hpp"
+#include "GameInfoLayer.hpp"
 
 #include "MainGrid.hpp"
 #include "MainObject.hpp"
@@ -14,17 +14,17 @@
 
 USING_NS_CC;
 
-MainInfoLayer* MainInfoLayer::getInstance()
+GameInfoLayer* GameInfoLayer::getInstance()
 {
-    if (!m_SharedMainInfoLayer)
+    if (!m_SharedGameInfoLayer)
     {
-        m_SharedMainInfoLayer = new (std::nothrow) MainInfoLayer;
-        m_SharedMainInfoLayer->init();
+        m_SharedGameInfoLayer = new (std::nothrow) GameInfoLayer;
+        m_SharedGameInfoLayer->init();
     }
-    return m_SharedMainInfoLayer;
+    return m_SharedGameInfoLayer;
 }
 
-bool MainInfoLayer::init()
+bool GameInfoLayer::init()
 {
     m_infoLayer = MainObject::getInfoLayer();
     
@@ -32,15 +32,15 @@ bool MainInfoLayer::init()
 }
 
 //------------------------INTRO TITLE---------------------------------
-void MainInfoLayer::addIntroTitle()
+void GameInfoLayer::addIntroTitle()
 {
-    m_SharedMainInfoLayer->initIntroTitle(true);
+    m_SharedGameInfoLayer->initIntroTitle(true);
 }
-void MainInfoLayer::removeIntroTitle()
+void GameInfoLayer::removeIntroTitle()
 {
-    m_SharedMainInfoLayer->initIntroTitle(false);
+    m_SharedGameInfoLayer->initIntroTitle(false);
 }
-void MainInfoLayer::initIntroTitle(bool addRemove)
+void GameInfoLayer::initIntroTitle(bool addRemove)
 {
     if(!addRemove)
     {
@@ -66,15 +66,15 @@ void MainInfoLayer::initIntroTitle(bool addRemove)
 }
 
 //------------------------CONNECT SPRITE------------------------------
-void MainInfoLayer::addConnectSprite()
+void GameInfoLayer::addConnectSprite()
 {
-    m_SharedMainInfoLayer->initConnectSprite(true);
+    m_SharedGameInfoLayer->initConnectSprite(true);
 }
-void MainInfoLayer::removeConnectSprite()
+void GameInfoLayer::removeConnectSprite()
 {
-    m_SharedMainInfoLayer->initConnectSprite(false);
+    m_SharedGameInfoLayer->initConnectSprite(false);
 }
-void MainInfoLayer::initConnectSprite(bool addRemove)
+void GameInfoLayer::initConnectSprite(bool addRemove)
 {
     if(!addRemove)
     {
@@ -123,4 +123,3 @@ void MainInfoLayer::initConnectSprite(bool addRemove)
         m_spriteConnect->runAction(RepeatForever::create(animate));
     }
 }
-

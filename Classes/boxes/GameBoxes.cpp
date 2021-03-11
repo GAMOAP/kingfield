@@ -10,7 +10,7 @@
 #include "MainStuff.hpp"
 #include "MainAction.hpp"
 
-#include "MainDirector.hpp"
+#include "GameDirector.hpp"
 #include "GameCharacters.hpp"
 #include "GameCards.hpp"
 
@@ -116,7 +116,7 @@ void GameBoxes::setSelectActionBoxes(std::vector<cocos2d::Vec3> selectedActionBo
     {
         auto box = MainObject::getBoxByTag(selectedActionBoxes[t].y);
         if(box)
-            box->setActionUI(selectedActionBoxes[t].z, MainDirector::getScene()->getIsPlayerTurn());
+            box->setActionUI(selectedActionBoxes[t].z, GameDirector::getScene()->getIsPlayerTurn());
     }
 }
 

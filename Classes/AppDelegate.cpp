@@ -76,7 +76,7 @@ void AppDelegate::initGLContextAttrs()
     GLView::setGLContextAttrs(glContextAttrs);
     
     auto filesPath = FileUtils::getInstance();
-    filesPath->addSearchPath("Images.xcassets");
+    filesPath->addSearchPath("/Users/axxwel/Documents/gamoap/kingfield/kingfield/proj.ios_mac/ios/Images.xcassets/");
     filesPath->addSearchPath("/Users/axxwel/Documents/gamoap/kingfield/kingfield/Resources/res");
 }
 

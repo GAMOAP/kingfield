@@ -10,14 +10,13 @@
 
 #include "cocos2d.h"
 
-
 #include "MainGrid.hpp"
 #include "MainUser.hpp"
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
 #include "MainMultiPlayer.hpp"
 
-#include "MainDirector.hpp"
+#include "GameDirector.hpp"
 
 class MainScene : public cocos2d::Scene
 {
@@ -31,7 +30,6 @@ public:
     virtual void onTouchCancelled(cocos2d::Touch*, cocos2d::Event*);
     
     CREATE_FUNC(MainScene);
-    
 private:
     
     MainGrid* m_mainGrid = nullptr;

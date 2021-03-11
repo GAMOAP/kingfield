@@ -10,8 +10,8 @@
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
 
-#include "MainDirector.hpp"
-#include "MainInfoLayer.hpp"
+#include "GameDirector.hpp"
+#include "GameInfoLayer.hpp"
 
 #include "GameBoxes.hpp"
 #include "GameCharacters.hpp"
@@ -60,7 +60,7 @@ void SceneBarrack::removeToStage()
 {
     removeLibraryButton();
     
-    MainDirector::setScene("fight");
+    GameDirector::setScene("fight");
 }
 
 bool SceneBarrack::allNodeIsIn()
@@ -153,7 +153,7 @@ bool SceneBarrack::longTouchBox(int tag)
     if(getIsUsedBox(tag))
     {
         cancelTouchObject();
-        MainDirector::setScene("option", tag);
+        GameDirector::setScene("option", tag);
     }
     return true;
 }

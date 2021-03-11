@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment version="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -16,31 +16,31 @@
                         <viewControllerLayoutGuide type="bottom" id="uRH-d6-mvd"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="logo_gamoap_LaunchScreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="1mG-cH-blu">
-                                <rect key="frame" x="-836.5" y="0.0" width="2048" height="667"/>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" insetsLayoutMarginsFromSafeArea="NO" image="axxwelLaunchScreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="YCC-wj-Gww" userLabel="Background">
+                                <rect key="frame" x="0.0" y="241" width="414" height="414"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="1mG-cH-blu" secondAttribute="height" multiplier="2048:667" id="a6u-Xu-DKQ"/>
+                                    <constraint firstAttribute="width" secondItem="YCC-wj-Gww" secondAttribute="height" multiplier="1:1" id="l5i-ax-VTw"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="1mG-cH-blu" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="KQe-8E-yeW"/>
-                            <constraint firstItem="uRH-d6-mvd" firstAttribute="top" secondItem="1mG-cH-blu" secondAttribute="bottom" id="QOw-oA-z1V"/>
-                            <constraint firstItem="1mG-cH-blu" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ZhL-ZL-cNj"/>
-                            <constraint firstItem="1mG-cH-blu" firstAttribute="top" secondItem="fm7-M6-edp" secondAttribute="bottom" id="nsx-5g-3pb"/>
+                            <constraint firstItem="YCC-wj-Gww" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Upq-bF-oL0"/>
+                            <constraint firstItem="YCC-wj-Gww" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="c0V-sa-TPj"/>
+                            <constraint firstAttribute="trailing" secondItem="YCC-wj-Gww" secondAttribute="trailing" id="idk-Vc-jiz"/>
+                            <constraint firstItem="YCC-wj-Gww" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="syT-jc-vBH"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="50.399999999999999" y="372.86356821589209"/>
+            <point key="canvasLocation" x="47.826086956521742" y="372.32142857142856"/>
         </scene>
     </scenes>
     <resources>
-        <image name="logo_gamoap_LaunchScreen.png" width="2048.159912109375" height="2048.159912109375"/>
+        <image name="axxwelLaunchScreen.png" width="768" height="768"/>
     </resources>
 </document>

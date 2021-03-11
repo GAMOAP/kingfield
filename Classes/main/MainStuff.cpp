@@ -11,7 +11,7 @@
 
 #include "MainObject.hpp"
 
-#include "MainDirector.hpp"
+#include "GameDirector.hpp"
 
 #include <json/istreamwrapper.h>
 #include <fstream>

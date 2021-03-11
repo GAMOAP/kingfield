@@ -6,7 +6,7 @@
 //
 
 #include "KFScene.hpp"
-#include "MainInfoLayer.hpp"
+#include "GameInfoLayer.hpp"
 
 #include "MainObject.hpp"
 
@@ -33,12 +33,12 @@ bool KFScene::allNodeIsIn()
 
 bool KFScene::appConnecting()
 {
-    MainInfoLayer::addConnectSprite();
+    GameInfoLayer::addConnectSprite();
     return true;
 }
 bool KFScene::appConnected()
 {
-    MainInfoLayer::removeConnectSprite();
+    GameInfoLayer::removeConnectSprite();
     return true;
 }
 

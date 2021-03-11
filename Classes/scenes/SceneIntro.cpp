@@ -11,8 +11,8 @@
 
 #include "MainMultiPlayer.hpp"
 
-#include "MainDirector.hpp"
-#include "MainInfoLayer.hpp"
+#include "GameDirector.hpp"
+#include "GameInfoLayer.hpp"
 #include "GameBoxes.hpp"
 #include "GameCharacters.hpp"
 #include "GameCards.hpp"
@@ -42,7 +42,7 @@ bool SceneIntro::init()
 
 void SceneIntro::addToStage()
 {
-    MainInfoLayer::addIntroTitle();
+    GameInfoLayer::addIntroTitle();
     
     GameBoxes::setBoxes();
     GameCharacters::setCharacters(0);
@@ -55,8 +55,8 @@ void SceneIntro::addToStage()
 
 void SceneIntro::removeToStage()
 {
-    MainInfoLayer::removeIntroTitle();
-    MainDirector::setScene("barrack");
+    GameInfoLayer::removeIntroTitle();
+    GameDirector::setScene("barrack");
 }
 
 
@@ -72,7 +72,7 @@ bool SceneIntro::allNodeIsIn()
 
 bool SceneIntro::appConnected()
 {
-    MainInfoLayer::removeConnectSprite();
+    GameInfoLayer::removeConnectSprite();
     removeToStage();
     return true;
 }

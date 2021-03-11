@@ -13,8 +13,8 @@
 #include "MainObject.hpp"
 #include "MainAction.hpp"
 
-#include "MainDirector.hpp"
-#include "MainInfoLayer.hpp"
+#include "GameDirector.hpp"
+#include "GameInfoLayer.hpp"
 
 #include "GameCharacters.hpp"
 
@@ -104,7 +104,7 @@ void MainMultiPlayer::onConnectDone(int res, int reasonCode)
         unscheduleConnect();
         m_isConnected = true;
         if(c_testNetOn)printf("\nonConnectDone .. SUCCESS..session=%d\n",AppWarp::AppWarpSessionID);
-        MainDirector::appConnected();
+        GameDirector::appConnected();
     }
     else if (res==AppWarp::ResultCode::auth_error)
     {
@@ -115,7 +115,7 @@ void MainMultiPlayer::onConnectDone(int res, int reasonCode)
     {
         unscheduleRecover();
         if(c_testNetOn)printf("\nonConnectDone .. SUCCESS with success_recovered..session=%d\n",AppWarp::AppWarpSessionID);
-        MainDirector::appConnected();
+        GameDirector::appConnected();
     }
     else if (res==AppWarp::ResultCode::connection_error_recoverable)
     {
@@ -142,7 +142,7 @@ void MainMultiPlayer::scheduleConnect()
     if (!this->isScheduled(schedule_selector(MainMultiPlayer::connect)) && !m_isConnected)
     {
         this->schedule(schedule_selector(MainMultiPlayer::connect), 20.0f);
-        MainDirector::appConnecting();
+        GameDirector::appConnecting();
     }
 }
 void MainMultiPlayer::unscheduleConnect()
@@ -162,7 +162,7 @@ void MainMultiPlayer::scheduleRecover()
     if (!this->isScheduled(schedule_selector(MainMultiPlayer::recover)))
     {
         this->schedule(schedule_selector(MainMultiPlayer::recover), 5.0f);
-        MainDirector::appConnecting();
+        GameDirector::appConnecting();
     }
 }
 void MainMultiPlayer::unscheduleRecover()
@@ -259,7 +259,7 @@ void MainMultiPlayer::onUserLeftRoom(AppWarp::room revent, std::string userName)
 {
     if(c_testNetOn)printf("\nonUserLeftRoom .. SUCCESS .. room_id=%s user=%s", revent.roomId.c_str(), userName.c_str());
     AppWarp::Client::getInstance()->deleteRoom(revent.roomId);
-    MainDirector::stopFight(userName != m_userName);
+    GameDirector::stopFight(userName != m_userName);
 }
 
 //-----------------------SEND RECEIVE DATA--------------------------
@@ -270,7 +270,7 @@ void MainMultiPlayer::sendStartGameData(int userNbr)
     
     auto teamReceived = EventListenerCustom::create("TEAM_RECEIVED", [=](EventCustom* event)
     {
-        MainDirector::startFight(userNbr);
+        GameDirector::startFight(userNbr);
         _eventDispatcher->removeCustomEventListeners("TEAM_RECEIVED");
     });
     _eventDispatcher->addEventListenerWithSceneGraphPriority(teamReceived, this);
@@ -313,7 +313,7 @@ void MainMultiPlayer::onChatReceived(AppWarp::chat chatEvent)
                                
             auto actionSequence = MainAction::getEnemyActionSequence(charNbr, cardNbr, boxTag);
             GameCharacters::setAction(actionSequence);
-            MainDirector::setActionInProgress(true);
+            GameDirector::setActionInProgress(true);
         }
         else if(zstr == "t")
         {

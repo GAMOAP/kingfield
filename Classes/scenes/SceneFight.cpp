@@ -14,8 +14,8 @@
 #include "MainMultiPlayer.hpp"
 #include "MainAction.hpp"
 
-#include "MainDirector.hpp"
-#include "MainInfoLayer.hpp"
+#include "GameDirector.hpp"
+#include "GameInfoLayer.hpp"
 
 #include "GameBoxes.hpp"
 #include "GameCharacters.hpp"
@@ -70,7 +70,7 @@ void SceneFight::removeToStage()
 {
     GameBoxes::setUnselectActionBoxes();
     
-    MainDirector::setScene("barrack");
+    GameDirector::setScene("barrack");
 }
 
 bool SceneFight::allNodeIsIn()
@@ -118,7 +118,7 @@ bool SceneFight::endTurn()
     m_SharedSceneFight->m_turnNumber++;
     GameCharacters::setActionAll("give_crystals");
     
-    MainDirector::setActionInProgress(false);
+    GameDirector::setActionInProgress(false);
     
     //select char, card and actionBoxes.
     m_SharedSceneFight->allNodeIsIn();
