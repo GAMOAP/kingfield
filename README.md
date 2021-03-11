@@ -12,4 +12,4 @@ Git user attention
 
       [Cocos2d-x stable versions](http://www.cocos2d-x.org/download)
 
-3. Paste cocos2d-x framework into ./kingfield folder and rename cocos2d
+3. Paste cocos2d-x-3.17.2 framework into ./kingfield folder and rename cocos2d-x-3.17.2 folder to cocos2d.
