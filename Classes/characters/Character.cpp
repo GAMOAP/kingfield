@@ -54,7 +54,7 @@ bool Character::init(int number)
     m_line = positionLC.x;
     m_collumn = positionLC.y;
     
-    if(m_originTagList[number] % 5 == 0)
+    if(m_originTagList[number] >= 60)
     {
         this->setFlip();
         m_isPlayerTeam = false;

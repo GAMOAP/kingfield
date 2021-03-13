@@ -79,8 +79,6 @@ protected:
     cocos2d::Node* m_infoDisplay = nullptr;
     std::vector<std::vector<int>> m_infoList;
     std::vector<std::string> m_typeNameInfoList = {"crystal"};
-    
-    const std::vector<int> m_originTagList= {21, 31, 41, 51, 61, 25, 35, 45, 55, 65};
 };
 
 #endif /* CharacterDisplay_hpp */

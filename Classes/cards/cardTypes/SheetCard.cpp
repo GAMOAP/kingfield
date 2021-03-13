@@ -44,7 +44,7 @@ SheetCard* SheetCard::setCard(int number, std::string board)
 
 bool SheetCard::init(int number)
 {
-    m_tagList.insert(m_tagList.end(), {25, 35, 45, 55, 65});
+    m_tagList.insert(m_tagList.end(), {52, 41, 51, 62, 61});
     m_scaleArray.insert(m_scaleArray.end(), {0.8, 1, 1.2});
     m_colorSelect = {255, 255, 255};
     m_colorUnselect = {220, 210, 210};
