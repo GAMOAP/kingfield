@@ -38,21 +38,21 @@ bool MainStuff::init()
     std::string prevPath = FileUtils::getInstance()->fullPathForFilename(filePath);
     const auto data = cocos2d::FileUtils::getInstance()->getStringFromFile(prevPath);
         
-    for(int t = 0; t < c_cardType.size(); t++)
+    for(int t = 0; t < CARD_TYPE.size(); t++)
     {
-        for(int b = 0; b < c_breedType.size(); b++)
+        for(int b = 0; b < BREED_TYPE.size(); b++)
         {
             KFSpecCard* stuffCard = nullptr;
-            if(c_cardType[t] == "breed" || c_cardType[t] == "job")
+            if(CARD_TYPE[t] == "breed" || CARD_TYPE[t] == "job")
             {
-                stuffCard = KFSpecCard::createCard(c_cardType[t], c_breedType[b]);
+                stuffCard = KFSpecCard::createCard(CARD_TYPE[t], BREED_TYPE[b]);
                 m_cardSpecLibrary.push_back(stuffCard);
             }
             else
             {
-                for(int o = 0; o < c_breedType.size(); o++)
+                for(int o = 0; o < BREED_TYPE.size(); o++)
                 {
-                    stuffCard = KFSpecCard::createCard(c_cardType[t], c_breedType[b], c_breedType[o]);
+                    stuffCard = KFSpecCard::createCard(CARD_TYPE[t], BREED_TYPE[b], BREED_TYPE[o]);
                     m_cardSpecLibrary.push_back(stuffCard);
                 }
             }
@@ -76,13 +76,13 @@ std::vector<std::vector<std::vector<std::string>>> MainStuff::getStuffList()
 bool MainStuff::setStuff(int charNumber, std::string typeString, std::string breed, std::string object)
 {
     int typeInt = -1;
-    for(int t = 0; t < c_cardType.size(); t++)
+    for(int t = 0; t < CARD_TYPE.size(); t++)
     {
-        std::string ts = c_cardType[t];
+        std::string ts = CARD_TYPE[t];
         if(ts == typeString){typeInt = t;}
     }
     m_SharedMainStuff->m_charStuffList[charNumber][typeInt][1] = breed;
-    if(c_cardType[typeInt] != "breed" && c_cardType[typeInt] != "job")
+    if(CARD_TYPE[typeInt] != "breed" && CARD_TYPE[typeInt] != "job")
     {
         m_SharedMainStuff->m_charStuffList[charNumber][typeInt][2] = object;
     }
@@ -95,10 +95,10 @@ std::vector<std::string> MainStuff::getStuffByName(int charNumber, int cardNumbe
 {
     std::vector<std::string> stuffCard;
     const auto charStuffList = m_SharedMainStuff->m_charStuffList;
-    for(int c = 0; c < c_cardType.size(); c++)
+    for(int c = 0; c < CARD_TYPE.size(); c++)
     {
         if(charStuffList[charNumber][c][0]
-           == c_cardType[cardNumber])
+           == CARD_TYPE[cardNumber])
         {
             stuffCard.push_back(charStuffList[charNumber][c][1]);
             stuffCard.push_back(charStuffList[charNumber][c][2]);
@@ -117,11 +117,11 @@ std::string MainStuff::getKarma(int charNumber)
     int breedMax = 0;
     std::map<std::string, int> karmaList;
     std::map<std::string, int>::iterator kIt;
-    for(int b = 0; b < c_breedType.size(); b++)
+    for(int b = 0; b < BREED_TYPE.size(); b++)
     {
-        karmaList[c_breedType[b]] = 0;
+        karmaList[BREED_TYPE[b]] = 0;
     }
-    for(int c = 0; c < c_cardType.size(); c++)
+    for(int c = 0; c < CARD_TYPE.size(); c++)
     {
         karmaList[charStuffList[charNumber][c][1]] += 9;
         karmaList[charStuffList[charNumber][c][2]] ++;
@@ -144,11 +144,11 @@ std::string MainStuff::getTeamKarma(int teamNumber)
     int breedMax = 0;
     std::map<std::string, int> karmaList;
     std::map<std::string, int>::iterator kIt;
-    for(int b = 0; b < c_breedType.size(); b++)
+    for(int b = 0; b < BREED_TYPE.size(); b++)
     {
-        karmaList[c_breedType[b]] = 0;
+        karmaList[BREED_TYPE[b]] = 0;
     }
-    for(int c = 0; c < c_cardType.size(); c++)
+    for(int c = 0; c < CARD_TYPE.size(); c++)
     {
         for(int n = 0 + tn; n < 5 + tn; n++)
         {
@@ -178,13 +178,13 @@ void MainStuff::initCharSpec(int charNbr)
     charSpec["defense"] = 0;
     charSpec["attack"] = 0;
     
-    for(int t = 4; t < c_cardType.size(); t++)
+    for(int t = 4; t < CARD_TYPE.size(); t++)
     {
         const int nbrSlot = 3;
         for(int s = 0; s < nbrSlot; s++)
         {
             std::vector<std::string> stuff = getStuffByName(charNbr, t);
-            std::string cardSlotName  = getCardSpec(c_cardType[t], stuff[0], stuff[1])->getSlot("slot" + std::to_string(s));
+            std::string cardSlotName  = getCardSpec(CARD_TYPE[t], stuff[0], stuff[1])->getSlot("slot" + std::to_string(s));
             
             for(csIt = charSpec.begin(); csIt != charSpec.end(); csIt++)
             {

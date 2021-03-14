@@ -76,18 +76,18 @@ std::vector<std::vector<std::vector<std::string>>> MainUser::getUserTeam()
     {
         std::stringstream stream;
         std::vector<std::vector<std::vector<int>>> cList;
-        for(int c = 0; c < c_charNumber; c++)
+        for(int c = 0; c < CHAR_NUMBER; c++)
         {
             stream << 'c';
             srand((unsigned)time(NULL) + c);
-            for(int t = 0; t < c_cardType.size(); t++)
+            for(int t = 0; t < CARD_TYPE.size(); t++)
             {
                 stream << 't';
-                int b = rand()% c_breedType.size();
+                int b = rand()% BREED_TYPE.size();
                 stream << 'b' << b << 'o';
-                if(c_cardType[t] != "breed" && c_cardType[t] != "job")
+                if(CARD_TYPE[t] != "breed" && CARD_TYPE[t] != "job")
                 {
-                    int o = rand()% c_breedType.size();
+                    int o = rand()% BREED_TYPE.size();
                     stream << o;
                 }
                 else
@@ -115,7 +115,7 @@ bool MainUser::setOpposingTeam(std::string opposingTeamStr)
             std::string breed = opposingTeam[c][t][1];
             std::string object = opposingTeam[c][t][2];
             
-            int enemyCharNumber = c + c_charNumber / 2;
+            int enemyCharNumber = c + CHAR_NUMBER / 2;
             MainStuff::setStuff(enemyCharNumber, type, breed, object);
         }
     }
@@ -149,11 +149,11 @@ std::vector<std::vector<std::vector<std::string>>> MainUser::getTeamVec(std::str
             loc = detailStr.find('o');
             std::string objectStr = detailStr.substr(loc+1,1);
             
-            std::string type = c_cardType[t];
-            std::string breed = c_breedType[(int)std::atof (breedStr.c_str())];
+            std::string type = CARD_TYPE[t];
+            std::string breed = BREED_TYPE[(int)std::atof (breedStr.c_str())];
             std::string object = "";
             if(objectStr.find_first_not_of("0123456789") == std::string::npos)
-                object = c_breedType[(int)std::atof(objectStr.c_str())];
+                object = BREED_TYPE[(int)std::atof(objectStr.c_str())];
             
             std::vector<std::string> stuffDetails;
             stuffDetails.push_back(type);
@@ -185,9 +185,9 @@ std::vector<std::string> MainUser::splitString(std::string mString, std::string 
 int MainUser::getBreedInt(std::string breed)
 {
     int result = -1;
-    for(int i = 0; i < c_breedType.size(); i++)
+    for(int i = 0; i < BREED_TYPE.size(); i++)
     {
-        const std::string b = c_breedType[i];
+        const std::string b = BREED_TYPE[i];
         if(b == breed)
             result = i;
     }

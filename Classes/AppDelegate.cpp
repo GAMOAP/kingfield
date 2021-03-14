@@ -75,6 +75,7 @@ void AppDelegate::initGLContextAttrs()
 
     GLView::setGLContextAttrs(glContextAttrs);
     
+    //set file resources files path
     auto filesPath = FileUtils::getInstance();
     filesPath->addSearchPath("/Users/axxwel/Documents/gamoap/kingfield/kingfield/proj.ios_mac/ios/Images.xcassets/");
     filesPath->addSearchPath("/Users/axxwel/Documents/gamoap/kingfield/kingfield/Resources/res");
@@ -111,6 +112,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     float gameRatio = frameSize.height/frameSize.width;
     const float screenRatio = 1.5;
     
+    // chose resolution in accordance to screen size
     if (gameRatio >= screenRatio)
     {
         glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::FIXED_WIDTH);
@@ -120,6 +122,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::FIXED_HEIGHT);
     }
     
+    //set sprites resolution scale factor.
     if(frameSize.width < 1000)
         director->setContentScaleFactor(2);
     else
@@ -129,7 +132,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     register_all_packages();
 
-    // create a scene. it's an autorelease object
+    // create the main scene.
     auto scene = MainScene::createScene();
 
     // run

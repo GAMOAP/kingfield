@@ -40,7 +40,7 @@ void GameCharacters::setCharacters(int charNbr)
 {
     if(!m_SharedGameCharacters){ getInstance();}
     
-    for(int c = 0; c < c_charNumber ; c++)
+    for(int c = 0; c < CHAR_NUMBER ; c++)
     {
         auto character = MainObject::getCharByNumber(c);
         if(character && c >= charNbr)

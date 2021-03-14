@@ -212,8 +212,8 @@ void Box::rumble()
     {
         /*
         const std::string type = m_type;
-        const int s = c_breedType.size();
-        const std::string breed = c_breedType[random(0, s)];
+        const int s = BREED_TYPE.size();
+        const std::string breed = BREED_TYPE[random(0, s)];
         
         std::string boxFile = "box_" + type + "_" + breed + "_" + std::to_string(m_line) + "_" + std::to_string(m_collumn);
         m_boxDisplay->setTexture(KFSprite::getFile(boxFile));

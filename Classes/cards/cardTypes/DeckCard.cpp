@@ -66,7 +66,7 @@ bool DeckCard::initDisplay()
     
     std::vector<std::string> cardDetails = MainStuff::getStuffByName(charSelectNumber, m_number);
     
-    std::string type = c_cardType[m_number];
+    std::string type = CARD_TYPE[m_number];
     std::string breed = cardDetails[0];
     std::string object = cardDetails[1];
     bool isEnemyTeam = true;

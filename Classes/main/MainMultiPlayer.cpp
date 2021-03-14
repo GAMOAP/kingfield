@@ -55,7 +55,7 @@ void MainMultiPlayer::connect()
 }
 void MainMultiPlayer::disconnect()
 {
-    if(c_testNetOn)printf("\ndisconnectToAppWarp");
+    if(TEST_NET_ON)printf("\ndisconnectToAppWarp");
     AppWarp::Client::getInstance()->disconnect();
 }
 
@@ -72,7 +72,7 @@ void MainMultiPlayer::leaveRoom()
 //-------------------------CONNECT APPWARP-------------------------------
 void MainMultiPlayer::connectToAppWarp(Ref* pSender)
 {
-    if(c_testNetOn)printf("\nconnectToAppWarp");
+    if(TEST_NET_ON)printf("\nconnectToAppWarp");
     m_isConnected = false;
     AppWarp::Client *warpClientRef;
     if (m_isFirstLaunch)
@@ -103,34 +103,34 @@ void MainMultiPlayer::onConnectDone(int res, int reasonCode)
         unscheduleRecover();
         unscheduleConnect();
         m_isConnected = true;
-        if(c_testNetOn)printf("\nonConnectDone .. SUCCESS..session=%d\n",AppWarp::AppWarpSessionID);
+        if(TEST_NET_ON)printf("\nonConnectDone .. SUCCESS..session=%d\n",AppWarp::AppWarpSessionID);
         GameDirector::appConnected();
     }
     else if (res==AppWarp::ResultCode::auth_error)
     {
         unscheduleRecover();
-        if(c_testNetOn)printf("\nonConnectDone .. Failed with auth_error and reasonCode = %d..session=%d\n",reasonCode,AppWarp::AppWarpSessionID);
+        if(TEST_NET_ON)printf("\nonConnectDone .. Failed with auth_error and reasonCode = %d..session=%d\n",reasonCode,AppWarp::AppWarpSessionID);
     }
     else if (res==AppWarp::ResultCode::success_recovered)
     {
         unscheduleRecover();
-        if(c_testNetOn)printf("\nonConnectDone .. SUCCESS with success_recovered..session=%d\n",AppWarp::AppWarpSessionID);
+        if(TEST_NET_ON)printf("\nonConnectDone .. SUCCESS with success_recovered..session=%d\n",AppWarp::AppWarpSessionID);
         GameDirector::appConnected();
     }
     else if (res==AppWarp::ResultCode::connection_error_recoverable)
     {
         scheduleRecover();
-        if(c_testNetOn)printf("\nonConnectDone .. FAILED..connection_error_recoverable..session=%d\n",AppWarp::AppWarpSessionID);
+        if(TEST_NET_ON)printf("\nonConnectDone .. FAILED..connection_error_recoverable..session=%d\n",AppWarp::AppWarpSessionID);
     }
     else if (res==AppWarp::ResultCode::bad_request)
     {
         disconnect();
-        if(c_testNetOn)printf("\nonConnectDone .. FAILED with bad request..session=%d\n",AppWarp::AppWarpSessionID);
+        if(TEST_NET_ON)printf("\nonConnectDone .. FAILED with bad request..session=%d\n",AppWarp::AppWarpSessionID);
     }
     else
     {
         disconnect();
-        if(c_testNetOn)printf("\nonConnectDone .. FAILED with reasonCode=%d..session=%d\n",reasonCode,AppWarp::AppWarpSessionID);
+        if(TEST_NET_ON)printf("\nonConnectDone .. FAILED with reasonCode=%d..session=%d\n",reasonCode,AppWarp::AppWarpSessionID);
     }
 }
 
@@ -138,7 +138,7 @@ void MainMultiPlayer::onConnectDone(int res, int reasonCode)
 
 void MainMultiPlayer::scheduleConnect()
 {
-    if(c_testNetOn)printf("\nscheduleConnect");
+    if(TEST_NET_ON)printf("\nscheduleConnect");
     if (!this->isScheduled(schedule_selector(MainMultiPlayer::connect)) && !m_isConnected)
     {
         this->schedule(schedule_selector(MainMultiPlayer::connect), 20.0f);
@@ -147,18 +147,18 @@ void MainMultiPlayer::scheduleConnect()
 }
 void MainMultiPlayer::unscheduleConnect()
 {
-    if(c_testNetOn)printf("\nunscheduleConnect");
+    if(TEST_NET_ON)printf("\nunscheduleConnect");
     unschedule(schedule_selector(MainMultiPlayer::connect));
 }
 void MainMultiPlayer::connect(float dt)
 {
-    if(c_testNetOn)printf("\nconnect");
+    if(TEST_NET_ON)printf("\nconnect");
     AppWarp::Client::getInstance()->connect(m_userName);
 }
 
 void MainMultiPlayer::scheduleRecover()
 {
-    if(c_testNetOn)printf("\nscheduleRecover");
+    if(TEST_NET_ON)printf("\nscheduleRecover");
     if (!this->isScheduled(schedule_selector(MainMultiPlayer::recover)))
     {
         this->schedule(schedule_selector(MainMultiPlayer::recover), 5.0f);
@@ -167,12 +167,12 @@ void MainMultiPlayer::scheduleRecover()
 }
 void MainMultiPlayer::unscheduleRecover()
 {
-    if(c_testNetOn)printf("\nunscheduleRecover");
+    if(TEST_NET_ON)printf("\nunscheduleRecover");
     unschedule(schedule_selector(MainMultiPlayer::recover));
 }
 void MainMultiPlayer::recover(float dt)
 {
-    if(c_testNetOn)printf("\nrecover");
+    if(TEST_NET_ON)printf("\nrecover");
     AppWarp::Client::getInstance()->recoverConnection();
 }
 
@@ -181,21 +181,21 @@ void MainMultiPlayer::onCreateRoomDone(AppWarp::room revent)
 {
     if (revent.result==0)
     {
-        if(c_testNetOn)printf("\nonCreateRoomDone .. SUCCESS");
+        if(TEST_NET_ON)printf("\nonCreateRoomDone .. SUCCESS");
         AppWarp::Client::getInstance()->joinRoom(revent.roomId);
     }
     else
-        if(c_testNetOn)printf("\nonCreateRoomDone .. FAILED... error==%d",revent.result);
+        if(TEST_NET_ON)printf("\nonCreateRoomDone .. FAILED... error==%d",revent.result);
 }
 void MainMultiPlayer::onDeleteRoomDone(AppWarp::room revent)
 {
     if (revent.result==0)
     {
-        if(c_testNetOn)printf("\nonDeleteRoomDone .. SUCCESS");
+        if(TEST_NET_ON)printf("\nonDeleteRoomDone .. SUCCESS");
         //GameDirector::GameOver(bool isWin);
     }
     else
-        if(c_testNetOn)printf("\nonDeleteRoomDone .. FAILED... error==%d",revent.result);
+        if(TEST_NET_ON)printf("\nonDeleteRoomDone .. FAILED... error==%d",revent.result);
 }
 
 void MainMultiPlayer::onJoinRoomDone(AppWarp::room revent)
@@ -203,12 +203,12 @@ void MainMultiPlayer::onJoinRoomDone(AppWarp::room revent)
     if (revent.result==0)
     {
         std::string roomId = revent.roomId;
-        if(c_testNetOn)printf("\nonJoinRoomDone .. SUCCESS..room_id=%s",roomId.c_str());
+        if(TEST_NET_ON)printf("\nonJoinRoomDone .. SUCCESS..room_id=%s",roomId.c_str());
         AppWarp::Client::getInstance()->subscribeRoom(roomId);
     }
     else
     {
-        if(c_testNetOn)printf("\nonJoinRoomDone .. FAILED");
+        if(TEST_NET_ON)printf("\nonJoinRoomDone .. FAILED");
         AppWarp::Client::getInstance()->createRoom("fightRoom", "a20whe", 2);
     }
 }
@@ -217,12 +217,12 @@ void MainMultiPlayer::onSubscribeRoomDone(AppWarp::room revent)
 {
     if (revent.result==0)
     {
-        if(c_testNetOn)printf("\nonSubscribeRoomDone .. SUCCESS");
+        if(TEST_NET_ON)printf("\nonSubscribeRoomDone .. SUCCESS");
         AppWarp::Client::getInstance()->getLiveRoomInfo(revent.roomId);
         m_roomId = revent.roomId;
     }
     else
-        if(c_testNetOn)printf("\nonSubscribeRoomDone .. FAILED... error==%d",revent.result);
+        if(TEST_NET_ON)printf("\nonSubscribeRoomDone .. FAILED... error==%d",revent.result);
 }
 void MainMultiPlayer::onGetLiveRoomInfoDone(AppWarp::liveroom levent)
 {
@@ -230,7 +230,7 @@ void MainMultiPlayer::onGetLiveRoomInfoDone(AppWarp::liveroom levent)
     {
         std::vector<std::string> users = levent.users;
         int usersSize = users.size();
-        if(c_testNetOn)printf("\nonGetLiveRoomInfoDone .. SUCCESS... userNbr=%i",usersSize);
+        if(TEST_NET_ON)printf("\nonGetLiveRoomInfoDone .. SUCCESS... userNbr=%i",usersSize);
         if(usersSize >= 2)
         {
             int userNbr;
@@ -244,12 +244,12 @@ void MainMultiPlayer::onGetLiveRoomInfoDone(AppWarp::liveroom levent)
         }
     }
     else
-        if(c_testNetOn)printf("\nonGetLiveRoomInfoDone .. FAILED... error==%d",levent.result);
+        if(TEST_NET_ON)printf("\nonGetLiveRoomInfoDone .. FAILED... error==%d",levent.result);
 }
 
 void MainMultiPlayer::onUserJoinedRoom(AppWarp::room revent, std::string userName)
 {
-    if(c_testNetOn)printf("\nonUserJoinRoom .. SUCCESS .. user=%s", userName.c_str());
+    if(TEST_NET_ON)printf("\nonUserJoinRoom .. SUCCESS .. user=%s", userName.c_str());
     std::string roomId = revent.roomId;
     if(roomId == m_roomId)
         AppWarp::Client::getInstance()->getLiveRoomInfo(revent.roomId);
@@ -257,7 +257,7 @@ void MainMultiPlayer::onUserJoinedRoom(AppWarp::room revent, std::string userNam
 
 void MainMultiPlayer::onUserLeftRoom(AppWarp::room revent, std::string userName)
 {
-    if(c_testNetOn)printf("\nonUserLeftRoom .. SUCCESS .. room_id=%s user=%s", revent.roomId.c_str(), userName.c_str());
+    if(TEST_NET_ON)printf("\nonUserLeftRoom .. SUCCESS .. room_id=%s user=%s", revent.roomId.c_str(), userName.c_str());
     AppWarp::Client::getInstance()->deleteRoom(revent.roomId);
     GameDirector::stopFight(userName != m_userName);
 }
@@ -291,11 +291,11 @@ void MainMultiPlayer::onChatReceived(AppWarp::chat chatEvent)
 {
     if(chatEvent.sender != m_userName)
     {
-        if(c_testNetOn)printf("\nonChatReceived..");
+        if(TEST_NET_ON)printf("\nonChatReceived..");
         std::string zstr = chatEvent.chat.substr(0,1);
         if(zstr == "c")
         {
-            if(c_testNetOn)printf("userTeamStr");
+            if(TEST_NET_ON)printf("userTeamStr");
             std::string opposingTeamStr = chatEvent.chat;
             if(MainUser::setOpposingTeam(opposingTeamStr))
             {
@@ -305,7 +305,7 @@ void MainMultiPlayer::onChatReceived(AppWarp::chat chatEvent)
         }
         else if(zstr == "p")
         {
-            if(c_testNetOn)printf("characterActionDataStr");
+            if(TEST_NET_ON)printf("characterActionDataStr");
             std::string actionData = chatEvent.chat;
             int charNbr = stoi(actionData.substr(actionData.find('p') + 1, 1));
             int cardNbr = stoi(actionData.substr(actionData.find('c') + 1, 1));
@@ -317,7 +317,7 @@ void MainMultiPlayer::onChatReceived(AppWarp::chat chatEvent)
         }
         else if(zstr == "t")
         {
-            if(c_testNetOn)printf("void");
+            if(TEST_NET_ON)printf("void");
         }
         else
             echo(chatEvent.chat);

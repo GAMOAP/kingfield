@@ -55,7 +55,7 @@ void SceneFight::addToStage()
     gameCards->removeLibrary();
     gameCards->unselectAll();
     
-    if(!c_multiPlayerOn)
+    if(!MULTI_PLAYER_ON)
         startFight(0);
     else
     {
@@ -167,7 +167,7 @@ bool SceneFight::unTouchBox(int tag)
             int charSelectNbr = GameCharacters::getCharSelect()->getNumber();
             int cardSelectNbr = GameCards::getCardSelect()->getNumber();
             
-            if(c_multiPlayerOn)
+            if(MULTI_PLAYER_ON)
                 MainMultiPlayer::sendCharacterActionData(charSelectNbr, cardSelectNbr, tag);
             
             auto actionSequence = MainAction::getActionSequence(charSelectNbr, cardSelectNbr, tag);
@@ -202,7 +202,7 @@ bool SceneFight::getIsPlayerTurn()
     else
         return false;
     
-    if(!c_multiPlayerOn)
+    if(!MULTI_PLAYER_ON)
     {
         if(charSelectNbr < 5 && m_turnNumber%2 != 0)
             return false;

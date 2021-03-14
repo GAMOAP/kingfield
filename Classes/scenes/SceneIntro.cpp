@@ -62,7 +62,7 @@ void SceneIntro::removeToStage()
 
 bool SceneIntro::allNodeIsIn()
 {
-    if(!c_multiPlayerOn)
+    if(!MULTI_PLAYER_ON)
         removeToStage();
     else
         MainMultiPlayer::connect();

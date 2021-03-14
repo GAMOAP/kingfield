@@ -45,7 +45,7 @@ private:
     
     
 protected:
-    std::map<std::string, int> m_charactersSpec[c_charNumber];
+    std::map<std::string, int> m_charactersSpec[CHAR_NUMBER];
     
     std::vector<KFSpecCard*>m_cardSpecLibrary;
     

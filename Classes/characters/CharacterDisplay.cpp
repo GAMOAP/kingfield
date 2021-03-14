@@ -98,16 +98,16 @@ bool CharacterDisplay::createFactory()
 void CharacterDisplay::setStuffList()
 {
     auto mainStuff = MainStuff::getInstance();
-    for(int i = 0; i < c_cardType.size(); i++)
+    for(int i = 0; i < CARD_TYPE.size(); i++)
     {
-        m_stuffList[c_cardType[i]] = mainStuff->getStuffByName(m_number, i);
+        m_stuffList[CARD_TYPE[i]] = mainStuff->getStuffByName(m_number, i);
     }
 }
 void CharacterDisplay::setStuffDisplay()
 {
-    for(int i = 0; i < c_charSlotNames.size();  i++)
+    for(int i = 0; i < CHAR_SLOTS.size();  i++)
     {
-        std::string slotName = c_charSlotNames[i];
+        std::string slotName = CHAR_SLOTS[i];
         std::string imageFile = getSlotFileDisplay(slotName);
         auto slot = m_armatureDisplay->getArmature()->getSlot("character_" + slotName);
         auto image = cocos2d::Sprite::create(imageFile);

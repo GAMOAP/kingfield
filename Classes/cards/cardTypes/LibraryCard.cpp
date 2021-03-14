@@ -68,22 +68,22 @@ bool LibraryCard::init(int number)
 
 bool LibraryCard::initDisplay()
 {
-    const unsigned long nbrBreed = c_breedType.size();
+    const unsigned long nbrBreed = BREED_TYPE.size();
     const int number = m_number + m_page * 9;
     const int lib_C = number / nbrBreed;
     const unsigned long lib_L = number - lib_C * nbrBreed;
     
     const auto cardSelect = GameCards::getCardSelect();
-    std::string type = c_cardType[8];
+    std::string type = CARD_TYPE[8];
     if(cardSelect){
         type = cardSelect->getType();
     }
     
-    std::string breed = c_breedType[lib_L];
+    std::string breed = BREED_TYPE[lib_L];
     
     std::string object = "";
     if(type != "job" && type != "breed")
-        object = c_breedType[lib_C];
+        object = BREED_TYPE[lib_C];
     
     bool isVisible = true;
     if(((type == "job" || type == "breed") && lib_C > 0) || (lib_L > nbrBreed && lib_C > nbrBreed))

@@ -20,7 +20,7 @@ USING_NS_CC;
 std::vector<Vec3> MainAction::getActionBoxesTags(int charSelectNbr, int cardSelectNbr)
 {
     std::vector<std::string> cardName = MainStuff::getStuffByName(charSelectNbr, cardSelectNbr);
-    KFSpecCard* specCard = MainStuff::getCardSpec(c_cardType[cardSelectNbr], cardName[0], cardName[1]);
+    KFSpecCard* specCard = MainStuff::getCardSpec(CARD_TYPE[cardSelectNbr], cardName[0], cardName[1]);
     
     std::vector<Vec3> actionBoxesTags;
     std::vector<std::vector<int>> board = specCard->getBoard();
@@ -74,7 +74,7 @@ std::vector<Vec3> MainAction::getActionBoxesTags(int charSelectNbr, int cardSele
 std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int cardSelectNbr, int touchedBoxTag)
 {
     std::vector<std::string> cardName = MainStuff::getStuffByName(charSelectNbr, cardSelectNbr);
-    KFSpecCard* specCard = MainStuff::getCardSpec(c_cardType[cardSelectNbr], cardName[0], cardName[1]);
+    KFSpecCard* specCard = MainStuff::getCardSpec(CARD_TYPE[cardSelectNbr], cardName[0], cardName[1]);
     int crystalCost = specCard->getMana(false);
     
     std::vector<KFAction*> actionSequence;
