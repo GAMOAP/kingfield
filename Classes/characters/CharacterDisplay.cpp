@@ -192,6 +192,12 @@ bool CharacterDisplay::setFlag()
         
         m_flag = Sprite::create(KFSprite::getFile("charUI_flag_" + m_karmaFlag + "_" + std::to_string(0)));
         m_flag->setAnchorPoint(Vec2(1,0));
+        
+        if(m_number == 7)
+        {
+            m_flag->setScaleX(-1);
+            m_flagPos.x -= m_flag->getContentSize().width/2;
+        }
         m_flag->setPosition(m_flagPos);
         this->addChild(m_flag, 0);
         

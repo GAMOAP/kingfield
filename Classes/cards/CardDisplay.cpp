@@ -273,8 +273,10 @@ void CardDisplay::setUnselect()
 void CardDisplay::flipChessBoard(bool isFlipped)
 {
     int intIsFlip = (-1 + isFlipped * 2)* -1;
-    if(m_chessBoard)
+    if(m_chessBoard){
         m_chessBoard->setScaleX(intIsFlip);
+        m_chessBoard->setScaleY(intIsFlip);
+    }
 }
 
 bool CardDisplay::isCardAvailable()

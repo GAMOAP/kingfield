@@ -65,7 +65,8 @@ void GameBoxes::setBoxUnselect(int tag)
 
 void GameBoxes::setFightButtonBox(bool isAuth)
 {
-    auto box = MainObject::getBoxByTag(23);
+    printf("isAuth = %i", isAuth);
+    auto box = MainObject::getBoxByTag(65);
     if(!isAuth)
     {
         box->down();

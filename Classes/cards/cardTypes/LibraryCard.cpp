@@ -47,7 +47,7 @@ LibraryCard* LibraryCard::setCard(int number, std::string board)
 
 bool LibraryCard::init(int number)
 {
-    m_tagList.insert(m_tagList.end(), {63, 64, 65, 53, 54, 55, 43, 44, 45});
+    m_tagList.insert(m_tagList.end(), {62, 63, 64, 52, 53, 54, 42, 43, 44});
     m_scaleArray.insert(m_scaleArray.end(), {0.7, 0.9, 1.2});
     m_colorSelect = {255, 255, 255};
     m_colorUnselect = {200, 200, 240};

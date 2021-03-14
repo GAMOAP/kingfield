@@ -36,7 +36,7 @@ private:
     void cancelPushLibraryButton();
     
 protected:
-    const int m_fightButtonTag = 23;
+    const int m_fightButtonTag = 65;
     const int m_libraryLeftButtonTag = 32;
     const int m_libraryRightButtonTag = 34;
     

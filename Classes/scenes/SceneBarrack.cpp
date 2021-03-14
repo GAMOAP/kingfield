@@ -78,7 +78,7 @@ bool SceneBarrack::allNodeIsIn()
 
 bool SceneBarrack::touchBox(int tag)
 {
-    if(getIsUsedBox(tag) || (tag >= 22 && tag <= 24))
+    if(getIsUsedBox(tag) || (tag == 65) || (tag == 31) || (tag == 35))
     {
         setTouchObject(tag);
         m_touchedBox = tag;
@@ -117,12 +117,12 @@ bool SceneBarrack::unTouchBox(int tag)
         //fight button
         if(tag == m_fightButtonTag)
         {
-            auto box32isOutEvent = EventListenerCustom::create("NODE_box23_IS_PLACE", [=](EventCustom* event)
+            auto boxFightIsOutEvent = EventListenerCustom::create("NODE_box" + std::to_string(m_fightButtonTag) + "_IS_PLACE", [=](EventCustom* event)
             {
                 removeToStage();
             });
             auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-            eventDispatcher->addEventListenerWithSceneGraphPriority(box32isOutEvent, MainObject::getBoxByTag(m_fightButtonTag));
+            eventDispatcher->addEventListenerWithSceneGraphPriority(boxFightIsOutEvent, MainObject::getBoxByTag(m_fightButtonTag));
         }
         //library buttons.
         if(tag == m_libraryLeftButtonTag || tag == m_libraryRightButtonTag)

@@ -203,7 +203,7 @@ int MainAction::getStartTag(int charNbr, int boardActionC, int boardActionL)
     if(charNbr < 5)
         startTag = charTag + boardActionC + boardActionL*10;
     else
-        startTag = charTag - boardActionC + boardActionL*10;
+        startTag = charTag + boardActionC - boardActionL*10;
     return startTag;
 }
 

@@ -56,10 +56,9 @@ protected:
     bool m_touchAuth;
     
     //BarackTag.
-    const std::vector<int> m_barrackFieldTag = {10,11,20,21,30,31,40,41,50,51,60,61,70,71,72,73};
-    const std::vector<int> m_barrackBarrackTag = {0,1,2,3,4,5,6,12,13,14,15,22,23,24,25,32,33,34,35,
-        42,43,44,45,52,53,54,55,62,63,64,65,80,81,82,83,84,85,86,90,91,92,93,93,94,95,96};
-    const std::vector<int> m_barrackBarrackTagInvert = {16,26,36,46,56,66,75,76,74};
+    const std::vector<int> m_barrackFieldTag = {10,11,20,21,22,23,24,25,30,40,50,60,70,71,72,73};
+    const std::vector<int> m_barrackBarrackTag = {0,1,2,3,4,5,6,12,13,14,15,31,32,33,34,35,41,42,43,44,45,51,52,53,54,55,31,61,62,63,64,65,80,81,82,83,84,85,86,90,91,92,93,93,94,95,96};
+    const std::vector<int> m_barrackBarrackTagInvert = {16,24,25,26,36,46,56,66,75,76,74};
     
     //FightTag;
     const std::vector<int> m_fightFieldTag = {10,11,20,21,22,23,24,30,31,32,33,34,40,41,42,43,44,50,51,52,53,54,60,61,62,63,64,70,71,72,73};

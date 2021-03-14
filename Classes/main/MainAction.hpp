@@ -33,7 +33,7 @@ protected:
 };
 
 const std::vector<int> m_friendBoardMap = {0, 10, 11, 1, -9, -10, -11, -1, 9};
-const std::vector<int> m_enemyBoardMap = {0, 10, 9, -1, -11, -10, -9, 1, 11};
+const std::vector<int> m_enemyBoardMap = {0, -10, -11, -1, 9, 10, 11, 1, -9};
 
 const std::vector<int> m_boardIn = {21,22,23,24,25,31,32,33,34,35,41,42,43,44,45,51,52,53,54,55,61,62,63,64,65};
 
