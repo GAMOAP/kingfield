@@ -170,7 +170,8 @@ bool SceneFight::unTouchBox(int tag)
             if(MULTI_PLAYER_ON)
                 MainMultiPlayer::sendCharacterActionData(charSelectNbr, cardSelectNbr, tag);
             
-            auto actionSequence = MainAction::getActionSequence(charSelectNbr, cardSelectNbr, tag);
+            std::vector<KFAction*> actionSequence = MainAction::getActionSequence(charSelectNbr, cardSelectNbr, tag);
+            
             GameCharacters::setAction(actionSequence);
         }
     }

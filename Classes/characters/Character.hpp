@@ -27,7 +27,7 @@ public:
     
     void setAction(KFAction* action);
     
-    void setSelect();
+    void setSelect(bool isTurn = true);
     void setUnselect();
     
     void setFlag();

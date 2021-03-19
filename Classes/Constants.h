@@ -8,9 +8,8 @@
 #ifndef Constants_h
 #define Constants_h
 
-/**
- * Global constants
- */
+//------------------------------GLOBAL CONSTANT---------------------------
+
 const bool TEST_NET_ON = false;
 const bool MULTI_PLAYER_ON = false;
 

@@ -7,6 +7,7 @@
 #include "MainGrid.hpp"
 #include "MainObject.hpp"
 #include "MainAction.hpp"
+#include "MainStuff.hpp"
 
 #include "Character.hpp"
 
@@ -107,6 +108,7 @@ void Character::setStuff()
 void Character::setAction(KFAction* action)
 {
     auto mainGrid = MainGrid::getInstance();
+    auto mainStuff = MainStuff::getInstance();
     
     //init action.
     int actionType = action->getType();
@@ -142,6 +144,32 @@ void Character::setAction(KFAction* action)
         
         m_characterDisplay->setAction("walk");
     }
+    //character strike...
+    if(actionType == 1)
+    {
+        auto delay = DelayTime::create(m_actionTime);
+        auto endFunc = CallFunc::create([this]()
+        {
+            _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
+        });
+        auto seq = Sequence::create(delay, endFunc, NULL);
+        this->runAction(seq);
+        
+        m_characterDisplay->setAction("attack_" + mainStuff->getStuffByName(m_number, 2)[1], 1);
+        
+    }
+    //character striked...
+    if(actionType == 3)
+    {
+        auto delay = DelayTime::create(m_actionTime);
+        auto endFunc = CallFunc::create([this]()
+        {
+            _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
+        });
+        auto seq = Sequence::create(delay, endFunc, NULL);
+        this->runAction(seq);
+        m_characterDisplay->setAction("pain", 1);
+    }
 }
 //------------------INFO----------------
 void Character::setInfo(std::string infoName, int infoValue)
@@ -150,11 +178,18 @@ void Character::setInfo(std::string infoName, int infoValue)
 }
 
 //------------------SELECT----------------------
-void Character::setSelect()
+void Character::setSelect(bool isTurn)
 {
-    m_select = true;
-    m_characterDisplay->setSelect();
-    this->setLocalZOrder(32);
+    if(isTurn)
+    {
+        m_select = true;
+        m_characterDisplay->setSelect();
+        this->setLocalZOrder(32);
+    }
+    else
+    {
+        this->setLocalZOrder(32);
+    }
 }
 
 void Character::setUnselect()

@@ -104,11 +104,11 @@ void GameCharacters::setCharSelect(int number)
                 if(character->getNumber() == number)
                 {
                     m_SharedGameCharacters->m_charSelected = character;
-                    if(GameDirector::getScene()->getIsPlayerTurn())
-                    {
+                    bool isPlayerTurn = GameDirector::getScene()->getIsPlayerTurn();
+                    if(isPlayerTurn)
                         GameBoxes::setBoxSelect(character->getTag());
-                        character->setSelect();
-                    }
+                    
+                    character->setSelect(isPlayerTurn);
                     m_SharedGameCharacters->m_characterUI = CharacterUI::setCharacterUI(number);
                     GameCards::resetCards();
                 }
@@ -177,6 +177,8 @@ int GameCharacters::getCharNumberMemory()
 //---------------------------ACTION-------------------------------
 void GameCharacters::setAction(std::vector<KFAction*> actionSequence)
 {
+    //unselet all, move box in place and set action when nodes are in place.
+    
     m_SharedGameCharacters->unselectAll();
     GameCards::unselectAll();
     GameBoxes::unselectAll();
@@ -211,6 +213,7 @@ void GameCharacters::setActionSequence()
         auto action = m_actionSequence[m_sequenceState];
         auto character = MainObject::getCharByNumber(action->getCharNbr());
         character->setAction(action);
+        
         auto charIsActionEnd = EventListenerCustom::create("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION", [=](EventCustom* event)
         {
             character->getEventDispatcher()->removeCustomEventListeners("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION");

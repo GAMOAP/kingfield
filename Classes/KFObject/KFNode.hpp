@@ -10,16 +10,48 @@
 
 #include "cocos2d.h"
 
+
+/**
+@brief    KingField Objects.
+ Box, Characters, Cards.
+
+ineriteance of cocos node
+*/
 class KFNode : public cocos2d::Node
 {
 public:
     
+    /**
+    @brief    get the class of KFNode Object: Unitilised!
+    */
     virtual KFNode* getClassObject();
     
+    //------------------------------POSITION---------------------------
+    
+    /**
+    @brief    set m_index, m_position, this position, Zorder, Tag and Metaname
+        use MainGrid getPositionXYZ.
+    @return true    Initialize success, app continue.
+    */
     virtual bool setNodePosition();
+    
+    /**
+    @brief    set m_isFliped to -1
+    @return true    Initialize success, app continue.
+    */
     virtual void setFlip();
     
+    //--------------------------------ADD REMOVE TO STAGE-----------------
+    /**
+    @brief    add or remove object: use move in and move out
+    @return true success, app continue / false Print "NO CLASS NAME"
+    */
     virtual bool addToStage();
+    
+    /**
+    @brief    add or remove object: use move in and move out
+    @return true success, app continue / false Print "NO CLASS NAME"
+    */
     virtual bool removeToStage();
     
     void add(float speedFactor = 1, float delayFactor = 1);

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "box_barrack_sun_3-0.png",
+      "filename" : "box_barrack_sun_1_0.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "box_barrack_sun_3-0@2x.png",
+      "filename" : "box_barrack_sun_1_0@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "box_barrack_sun_3-0@3x.png",
+      "filename" : "box_barrack_sun_1_0@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

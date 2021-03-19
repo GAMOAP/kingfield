@@ -242,9 +242,9 @@ void CharacterDisplay::setUnselect()
     m_selected = false;
 }
 //action.
-void CharacterDisplay::setAction(std::string actionType)
+void CharacterDisplay::setAction(std::string actionType, int nbrLoop)
 {
-    setAnimation(actionType);
+    setAnimation(actionType, nbrLoop);
 }
 
 //----------------ANIMATION-------------------

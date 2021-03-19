@@ -50,10 +50,7 @@ std::vector<Vec3> MainAction::getActionBoxesTags(int charSelectNbr, int cardSele
                         // type strike.
                     case 1:
                         if(isInBoardTag(tag) && isCharTag(tag))
-                        {
-                            printf("startTag = %i, tag = %i\n",startTag,tag);
                             actionBoxesTags.push_back(Vec3(startTag, tag, moveType));
-                        }
                         break;
                         // type spell.
                     case 2:
@@ -119,12 +116,21 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
     {
         auto action = KFAction::setAction(actionType, charSelectNbr);
         action->setCost(crystalCost);
-        printf("strike->");
+        
+        printf("charNbr %i strike->\n", charSelectNbr);
+        
+        actionSequence.push_back(action);
+        
         for(int a = 0; a < actionBoxesTags.size(); a++)
         {
-            printf("actionBoxTag: x = %f, y = %f, z = %f\n",actionBoxesTags[a].x,actionBoxesTags[a].y,actionBoxesTags[a].z);
+            int charStrikedNbr = MainObject::getInstance()->getCharByTag(actionBoxesTags[a].y)->getNumber();
+            
+            printf("charNbr : %i, tag = %f\n", charStrikedNbr, actionBoxesTags[a].y);
+            
+            auto actionGiven = KFAction::setAction(3, charStrikedNbr);
+            actionSequence.push_back(actionGiven);
+            
         }
-        actionSequence.push_back(action);
     }
     
     //spell.

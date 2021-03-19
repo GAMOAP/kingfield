@@ -248,6 +248,14 @@ void CharacterUI::addToStage()
             box->addChild(m_underlight, m_indexUnderlight);
             m_underlight->release();
         }
+        if(m_charNumber >= 5)
+        {
+            this->setScaleX(-1);
+        }
+        else
+        {
+            this->setScaleX(1);
+        }
     }
 }
 

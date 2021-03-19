@@ -23,10 +23,12 @@ bool KFNode::setNodePosition()
 {
     auto mainGrid = MainGrid::getInstance();
     
+    // get Node position and index on screen by its line and collumn
     m_index = mainGrid->getPositionXYZ(m_line, m_collumn).z + getIndexClassName();
     m_position.x = mainGrid->getPositionXYZ(m_line, m_collumn).x;
     m_position.y = mainGrid->getPositionXYZ(m_line, m_collumn).y;
     
+    // set Node position atributs
     this->setPosition(m_position);
     this->setLocalZOrder(m_index);
     this->setTag(mainGrid->getTag(Vec2( m_line, m_collumn)));

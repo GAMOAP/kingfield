@@ -52,9 +52,25 @@ int KFAction::getCost()
     return m_crystalCost;
 }
 
+//------------------SLOT LIST---------------------
+void KFAction::setSlotSpecNbr(cocos2d::Vec3 slotListNbr)
+{
+    m_slotListNbr = slotListNbr;
+}
+cocos2d::Vec3 KFAction::getSlotListNbr()
+{
+    return m_slotListNbr;
+}
+
 //Move
 void KFAction::setStartTag(int startTag){ m_startTag = startTag;}
 int KFAction::getSartTag(){ return m_startTag;}
 
-void KFAction::setEndTag(int startTag){ m_endTag = startTag;}
+void KFAction::setEndTag(int endTag){ m_endTag = endTag;}
 int KFAction::getEndTag(){ return m_endTag;}
+
+//Strike
+
+
+//Striked
+

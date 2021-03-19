@@ -24,7 +24,7 @@ public:
     void setSelect();
     void setUnselect();
     
-    void setAction(std::string actionType);
+    void setAction(std::string actionType, int nbrLoop = 0);
     
     int getOriginTag();
     int getNumber();
@@ -55,7 +55,7 @@ protected:
     dragonBones::CCFactory* m_factory;
     dragonBones::CCArmatureDisplay* m_armatureDisplay;
     
-    const double m_scaleArray[4] = {1.1, 1.2, 1.3, 1.4};
+    const double m_scaleArray[4] = {1, 1.1, 1.2, 1.3};
     const cocos2d::Color3B m_colorSelect = {255, 255, 255};
     const cocos2d::Color3B m_colorUnselect = {200, 200, 210};
     
