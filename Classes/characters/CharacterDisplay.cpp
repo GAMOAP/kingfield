@@ -295,68 +295,12 @@ void CharacterDisplay::stopAnimation()
 //-----------------INFO FUNCTION--------------------
 void CharacterDisplay::setInfo(std::string infoName, int infoValue)
 {
-    for(int t = 0; t < m_typeNameInfoList.size(); t++)
+    if(!m_charInfo)
     {
-        if(infoName == m_typeNameInfoList[t])
-        {
-            const std::vector<int> info = {t,infoValue};
-            m_infoList.push_back(info);
-        }
+        m_charInfo = CharacterInfo::create();
+        this->addChild(m_charInfo);
     }
-    displayInfo();
-}
-void CharacterDisplay::displayInfo()
-{
-    if(m_infoList.size() > 0 && !m_infoDisplay)
-    {
-        createInfo();
-        this->addChild(m_infoDisplay);
-        m_infoDisplay->setPosition(Vec2(0,64));
-        
-        const float time = 1;
-        auto moveUp = MoveBy::create(time, Vec2(0, 44));
-        auto endFunc = CallFunc::create([this]()
-        {
-            m_infoDisplay->removeFromParent();
-            m_infoDisplay = nullptr;
-            m_infoList.erase(m_infoList.begin());
-            displayInfo();
-        });
-        auto seq = Sequence::create(moveUp, endFunc, NULL);
-        m_infoDisplay->runAction(seq);
-    }
-}
-void CharacterDisplay::createInfo()
-{
-    std::string infoType = m_typeNameInfoList[m_infoList[0][0]];
-    int infoValue = m_infoList[0][1];
-    
-    m_infoDisplay = Node::create();
-    
-    std::string infoFileName;
-    Vec2 infoPos;
-    Color3B infoColor;
-    
-    if(infoType == "crystal")
-    {
-        infoFileName = KFSprite::getFile("charUI_info_number_" + std::to_string(abs(infoValue)));
-        infoPos = {0, 0};
-        infoColor = {41, 171, 226};
-        std::string signString = "plus";
-        if(infoValue < 0)
-            signString = "minus";
-        auto sign = Sprite::create(KFSprite::getFile("charUI_info_number_" + signString));
-        sign->setPositionX(-36);
-        sign->setColor(infoColor);
-        sign->setAnchorPoint(Vec2(0,0));
-        m_infoDisplay->addChild(sign);
-    }
-    
-    auto infoSprite = Sprite::create(infoFileName);
-    infoSprite->setAnchorPoint(Vec2(0,0));
-    infoSprite->setPosition(infoPos);
-    infoSprite->setColor(infoColor);
-    m_infoDisplay->addChild(infoSprite);
+    m_charInfo->addToInfoList(infoName, infoValue);
 }
 
 //----------------RETURN FUNCTION-------------------

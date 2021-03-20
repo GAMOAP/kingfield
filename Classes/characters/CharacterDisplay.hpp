@@ -11,6 +11,8 @@
 #include "cocos2d.h"
 #include "../proj.ios_mac/dragonBones/cocos2dx/CCDragonBonesHeaders.h"
 
+#include "CharacterInfo.hpp"
+
 class CharacterDisplay : public cocos2d::Node
 {
 public:
@@ -76,9 +78,8 @@ protected:
     std::vector<std::string> m_animationVector = {"stand", "ok"};
     int m_animationLoopNumber = 0;
     
-    cocos2d::Node* m_infoDisplay = nullptr;
-    std::vector<std::vector<int>> m_infoList;
-    std::vector<std::string> m_typeNameInfoList = {"crystal"};
+    
+    CharacterInfo* m_charInfo = nullptr;
 };
 
 #endif /* CharacterDisplay_hpp */

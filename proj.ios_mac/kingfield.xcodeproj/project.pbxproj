@@ -50,6 +50,7 @@
 		E328E7B0233CB20A0017C1E8 /* GameInfoLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E328E7AE233CB20A0017C1E8 /* GameInfoLayer.cpp */; };
 		E328E7B3233CE1F40017C1E8 /* KFSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E328E7B1233CE1F40017C1E8 /* KFSprite.cpp */; };
 		E337CC2C2386BA4D009011CF /* KFAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E337CC2A2386BA4D009011CF /* KFAction.cpp */; };
+		E36144842604B3470074F0C2 /* CharacterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E36144822604B3470074F0C2 /* CharacterInfo.cpp */; };
 		E38072A423437BC500A413AC /* SceneBarrack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38072A223437BC500A413AC /* SceneBarrack.cpp */; };
 		E38072A92345B65D00A413AC /* SceneOption.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38072A72345B65D00A413AC /* SceneOption.cpp */; };
 		E38072AD2345C88D00A413AC /* SceneFight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38072AB2345C88D00A413AC /* SceneFight.cpp */; };
@@ -214,6 +215,8 @@
 		E328E7B2233CE1F40017C1E8 /* KFSprite.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KFSprite.hpp; sourceTree = "<group>"; };
 		E337CC2A2386BA4D009011CF /* KFAction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KFAction.cpp; sourceTree = "<group>"; };
 		E337CC2B2386BA4D009011CF /* KFAction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KFAction.hpp; sourceTree = "<group>"; };
+		E36144822604B3470074F0C2 /* CharacterInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterInfo.cpp; sourceTree = "<group>"; };
+		E36144832604B3470074F0C2 /* CharacterInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CharacterInfo.hpp; sourceTree = "<group>"; };
 		E38072A223437BC500A413AC /* SceneBarrack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneBarrack.cpp; sourceTree = "<group>"; };
 		E38072A323437BC500A413AC /* SceneBarrack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneBarrack.hpp; sourceTree = "<group>"; };
 		E38072A72345B65D00A413AC /* SceneOption.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneOption.cpp; sourceTree = "<group>"; };
@@ -802,6 +805,8 @@
 				E3A7BAB22339077300960296 /* CharacterDisplay.hpp */,
 				E3A7BAB4233907E900960296 /* CharacterUI.cpp */,
 				E3A7BAB5233907E900960296 /* CharacterUI.hpp */,
+				E36144822604B3470074F0C2 /* CharacterInfo.cpp */,
+				E36144832604B3470074F0C2 /* CharacterInfo.hpp */,
 			);
 			path = characters;
 			sourceTree = "<group>";
@@ -1046,6 +1051,7 @@
 				1AF87B8A1F6F7822007BE51C /* main.m in Sources */,
 				E3A7BA8E233903C900960296 /* Armature.cpp in Sources */,
 				E3A7BA98233903C900960296 /* DataParser.cpp in Sources */,
+				E36144842604B3470074F0C2 /* CharacterInfo.cpp in Sources */,
 				E3A7BAB6233907E900960296 /* CharacterUI.cpp in Sources */,
 				E3A7BAD623392A6A00960296 /* GameDirector.cpp in Sources */,
 				E3A7BA92233903C900960296 /* TimelineState.cpp in Sources */,
