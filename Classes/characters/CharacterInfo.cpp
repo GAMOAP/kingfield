@@ -87,7 +87,21 @@ void CharacterInfo::displayUp()
 
 void CharacterInfo::displayPop()
 {
-    
+    /*
+    float popUpTime = 0.2;
+    auto scaleUp = ScaleTo::create(popUpTime, 2.5);
+    auto scaleDown = ScaleTo::create(popUpTime, 1);
+    auto scaleUpEase = EaseOut::create(scaleUp, 0.5);
+    auto scaleDownEase = EaseIn::create(scaleDown, 0.5);
+    auto callFunc = CallFunc::create([=]()
+    {
+        sprite->setName(name);
+        sprite->setTexture(KFSprite::getFile(name));
+        sprite->setVisible(isVisible);
+    });
+    auto popUpSeq = Sequence::create(scaleUpEase, callFunc, scaleDownEase, NULL);
+    sprite->runAction(popUpSeq);
+     */
 }
 
 cocos2d::Node* CharacterInfo::createUpInfo(std::vector<int> info)

@@ -62,11 +62,17 @@ protected:
     const cocos2d::Vec2 m_karmaPosition = {-50, 74};
     
     //Defense
-    cocos2d::Sprite* m_defense = nullptr;
+    cocos2d::Node* m_defense = nullptr;
+    cocos2d::Sprite* m_defense_picture = nullptr;
+    cocos2d::Sprite* m_defense_value = nullptr;
+    const cocos2d::Color3B m_colorDefense = {60, 36, 21};
     const cocos2d::Vec2 m_defensePosition = {-40, -38};
     
     //attack
-    cocos2d::Sprite* m_attack = nullptr;
+    cocos2d::Node* m_attack = nullptr;
+    cocos2d::Sprite* m_attack_picture = nullptr;
+    cocos2d::Sprite* m_attack_value = nullptr;
+    const cocos2d::Color3B m_colorAttack = {237, 28, 36};
     const cocos2d::Vec2 m_attackPosition = {40, -38};
     
     //Underlight

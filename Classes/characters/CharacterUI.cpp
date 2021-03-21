@@ -187,7 +187,13 @@ void CharacterUI::createDefense()
 {
     if(!m_defense)
     {
-        m_defense = Sprite::create(KFSprite::getFile("charUI_defense_" + std:: to_string(m_charSpec["defense"])));
+        m_defense = Node::create();
+        m_defense_picture = Sprite::create(KFSprite::getFile("charUI_defense_picture"));
+        m_defense_value = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec["defense"])));
+        m_defense_value->setColor(m_colorDefense);
+        m_defense->addChild(m_defense_picture);
+        m_defense->addChild(m_defense_value);
+        
         m_defense->setName("charUI_defense_" + std:: to_string(m_charSpec["defense"]));
         m_defense->setAnchorPoint(Vec2( 0.5, 0.5));
         m_defense->setPosition(m_defensePosition);
@@ -195,7 +201,11 @@ void CharacterUI::createDefense()
     }
     else
     {
-        popUp(m_defense, "charUI_defense_" + std:: to_string(m_charSpec["defense"]));
+        if(m_defense_value->getName() != "charUI_attributes_background_" + std:: to_string(m_charSpec["defense"]))
+        {
+            popUp(m_defense_picture, "charUI_defense_picture");
+        }
+        popUp(m_defense_value, "charUI_attributes_background_" + std:: to_string(m_charSpec["defense"]));
     }
 }
 
@@ -204,7 +214,13 @@ void CharacterUI::createAttack()
 {
     if(!m_attack)
     {
-        m_attack = Sprite::create(KFSprite::getFile("charUI_attack_" + std:: to_string(m_charSpec["attack"])));
+        m_attack = Node::create();
+        m_attack_picture = Sprite::create(KFSprite::getFile("charUI_attack_picture"));
+        m_attack_value = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec["attack"])));
+        m_attack_value->setColor(m_colorAttack);
+        m_attack->addChild(m_attack_picture);
+        m_attack->addChild(m_attack_value);
+        
         m_attack->setName("charUI_attack_" + std:: to_string(m_charSpec["attack"]));
         m_attack->setAnchorPoint(Vec2( 0.5, 0.5));
         m_attack->setPosition(m_attackPosition);
@@ -212,7 +228,11 @@ void CharacterUI::createAttack()
     }
     else
     {
-        popUp(m_attack, "charUI_attack_" + std:: to_string(m_charSpec["attack"]));
+        if(m_attack_value->getName() != "charUI_attributes_background_" + std:: to_string(m_charSpec["attack"]))
+        {
+            popUp(m_attack_picture, "charUI_attack_picture");
+        }
+        popUp(m_attack_value, "charUI_attributes_background_" + std:: to_string(m_charSpec["attack"]));
     }
 }
 
@@ -262,13 +282,16 @@ void CharacterUI::addToStage()
 //pop up
 void CharacterUI::popUp(Sprite* sprite, std::string name, bool isVisible)
 {
+    
+    name.find("picture");
+    
     if(!m_popUpActived)
     {
         sprite->setName(name);
         sprite->setTexture(KFSprite::getFile(name));
         sprite->setVisible(isVisible);
     }
-    else if(sprite->getName() != name || sprite->isVisible() != isVisible)
+    else if(sprite->getName() != name || sprite->isVisible() != isVisible || name.find("picture") != std::string::npos)
     {
         float popUpTime = 0.2;
         auto scaleUp = ScaleTo::create(popUpTime, 2.5);
