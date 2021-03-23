@@ -114,6 +114,8 @@ void Character::setAction(KFAction* action)
     int actionType = action->getType();
     
     //move character...
+    setIsMove(true);
+    
     if(actionType == 0)
     {
         int startTag = action->getSartTag();
@@ -147,28 +149,49 @@ void Character::setAction(KFAction* action)
     //character strike...
     if(actionType == 1)
     {
-        auto delay = DelayTime::create(m_actionTime);
-        auto endFunc = CallFunc::create([this]()
-        {
-            _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
-        });
-        auto seq = Sequence::create(delay, endFunc, NULL);
-        this->runAction(seq);
-        
         m_characterDisplay->setAction("attack_" + mainStuff->getStuffByName(m_number, 2)[1], 1);
+        const int strikeAttack = action->getCharAttackForce();
+        setInfo("attack", strikeAttack);
         
-    }
-    //character striked...
-    if(actionType == 3)
-    {
-        auto delay = DelayTime::create(m_actionTime);
+        std::vector<std::vector<int>> strikedList = action->getCharStrikedList();
+        
+        auto delayStrike = DelayTime::create(0.85);
+        auto strikeFunc = CallFunc::create([this, strikedList, strikeAttack]()
+        {
+            for(int c = 0; c < strikedList.size(); c++)
+            {
+                const auto strikedChar = MainObject::getCharByNumber(strikedList[c][0]);
+                const int strikedDefence = strikedList[c][1];
+                if(strikedChar)
+                {
+                    strikedChar->setInfo("defense", strikedDefence);
+                    if(strikeAttack >= strikedDefence)
+                        strikedChar->setReaction("pain");
+                    else
+                        strikedChar->setReaction("block");
+                }
+            }
+        });
+        auto delayEnd = DelayTime::create(0.3);
         auto endFunc = CallFunc::create([this]()
         {
             _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
         });
-        auto seq = Sequence::create(delay, endFunc, NULL);
+        auto seq = Sequence::create(delayStrike, strikeFunc, delayEnd, endFunc, NULL);
         this->runAction(seq);
+    }
+}
+
+void Character::setReaction(std::string reaction)
+{
+    if(reaction == "pain")
+    {
+        MainStuff::setCharSpec(m_number, "health", -1);
         m_characterDisplay->setAction("pain", 1);
+    }
+    if(reaction == "block")
+    {
+        m_characterDisplay->setAction("block", 1);
     }
 }
 //------------------INFO----------------

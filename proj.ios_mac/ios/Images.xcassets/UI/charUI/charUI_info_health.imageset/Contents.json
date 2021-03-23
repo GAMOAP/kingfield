@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "charUI_info_heart.png",
+      "filename" : "charUI_info_health.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "charUI_info_heart@2x.png",
+      "filename" : "charUI_info_health@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "charUI_info_heart@3x.png",
+      "filename" : "charUI_info_health@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

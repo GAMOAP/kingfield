@@ -53,13 +53,13 @@ int KFAction::getCost()
 }
 
 //------------------SLOT LIST---------------------
-void KFAction::setSlotSpecNbr(cocos2d::Vec3 slotListNbr)
+void KFAction::setSlotSpec(std::string slotSpec)
 {
-    m_slotListNbr = slotListNbr;
+    m_slotSpec = slotSpec;
 }
-cocos2d::Vec3 KFAction::getSlotListNbr()
+std::string KFAction::getSlotSpec()
 {
-    return m_slotListNbr;
+    return m_slotSpec;
 }
 
 //Move
@@ -70,7 +70,11 @@ void KFAction::setEndTag(int endTag){ m_endTag = endTag;}
 int KFAction::getEndTag(){ return m_endTag;}
 
 //Strike
+void KFAction::setCharStrikedList(std::vector<std::vector<int>> strikedList){ m_strikedList = strikedList;}
+std::vector<std::vector<int>> KFAction::getCharStrikedList(){ return m_strikedList;}
 
+void KFAction::setCharAttackForce(int charForce){ m_charForce = charForce;}
+int KFAction::getCharAttackForce(){ return m_charForce;}
 
 //Striked
 

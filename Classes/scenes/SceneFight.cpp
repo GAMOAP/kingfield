@@ -123,6 +123,8 @@ bool SceneFight::endTurn()
     //select char, card and actionBoxes.
     m_SharedSceneFight->allNodeIsIn();
     
+    
+    
     return true;
 }
 

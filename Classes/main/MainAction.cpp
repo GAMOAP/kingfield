@@ -36,26 +36,26 @@ std::vector<Vec3> MainAction::getActionBoxesTags(int charSelectNbr, int cardSele
         {
             std::vector<int> boardAction = board[b];
             const int startTag = getStartTag(charSelectNbr, boardAction[0], boardAction[1]);
-            int moveType = boardAction[2];
+            int actionType = boardAction[2];
             
             for(int m = 3; m < boardAction.size(); m++)
             {
                 int tag = startTag + getBoardMap(charSelectNbr)[boardAction[m]];
-                switch (moveType) {
+                switch (actionType) {
                         // type move.
                     case 0:
                         if(isInBoardTag(tag) && !isCharTag(tag) && !isForbiddenTag(tag, forbidenTagList))
-                            actionBoxesTags.push_back(Vec3(startTag, tag, moveType));
+                            actionBoxesTags.push_back(Vec3(startTag, tag, actionType));
                         break;
                         // type strike.
                     case 1:
                         if(isInBoardTag(tag) && isCharTag(tag))
-                            actionBoxesTags.push_back(Vec3(startTag, tag, moveType));
+                            actionBoxesTags.push_back(Vec3(startTag, tag, actionType));
                         break;
                         // type spell.
                     case 2:
                         if(isInBoardTag(tag) && isCharTag(tag))
-                            actionBoxesTags.push_back(Vec3(startTag, tag, moveType));
+                            actionBoxesTags.push_back(Vec3(startTag, tag, actionType));
                         break;
                         
                     default:
@@ -113,23 +113,42 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
     
     //strike.
     if(actionType == 1)
-    {
-        auto action = KFAction::setAction(actionType, charSelectNbr);
-        action->setCost(crystalCost);
+    {        
+        auto mainStuff = MainStuff::getInstance();
         
-        printf("charNbr %i strike->\n", charSelectNbr);
+        srand((unsigned)time(NULL));
         
-        actionSequence.push_back(action);
-        
-        for(int a = 0; a < actionBoxesTags.size(); a++)
+        for(int s = 0; s < 3; s++)
         {
-            int charStrikedNbr = MainObject::getInstance()->getCharByTag(actionBoxesTags[a].y)->getNumber();
+            std::string slotName = specCard->getSlot(s);
             
-            printf("charNbr : %i, tag = %f\n", charStrikedNbr, actionBoxesTags[a].y);
-            
-            auto actionGiven = KFAction::setAction(3, charStrikedNbr);
-            actionSequence.push_back(actionGiven);
-            
+            if(slotName != "NULL")
+            {
+                auto action = KFAction::setAction(actionType, charSelectNbr);
+                action->setCost(crystalCost);
+                
+                int attack = mainStuff->getCharSpec(charSelectNbr)["strike"] + 1;
+                
+                int charForce = rand() % (attack);
+                action->setCharAttackForce(charForce);
+                action->setSlotSpec(slotName);
+                
+                std::vector<std::vector<int>> strikedList;
+                
+                for(int a = 0; a < actionBoxesTags.size(); a++)
+                {
+                    if(touchedBox.x == actionBoxesTags[a].x)
+                    {
+                        int charStrikedNbr = MainObject::getInstance()->getCharByTag(actionBoxesTags[a].y)->getNumber();
+                        int charForce = rand() % (mainStuff->getCharSpec(charStrikedNbr)["shield"] + 1);
+                        std::vector<int> strikeValue = {charStrikedNbr, charForce};
+                        strikedList.push_back(strikeValue);
+                        
+                        action->setCharStrikedList(strikedList);
+                    }
+                }
+                actionSequence.push_back(action);
+            }
         }
     }
     

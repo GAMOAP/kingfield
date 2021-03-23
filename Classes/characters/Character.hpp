@@ -42,6 +42,8 @@ private:
     
     void setActionSequence();
     
+    void setReaction(std::string reaction);
+    
 protected:
     bool m_isPlayerTeam;
     

@@ -158,8 +158,13 @@ void CharacterUI::createLife()
     for(int l = 0; l < m_lifeList.size(); l++)
     {
         auto lifePointer = m_lifeList[l];
+        
+        std::string isVoid = "";
+        if(l >= m_charSpec["health"])
+            isVoid = "void";
+        
         if(l < m_charSpec["life"])
-            popUp(lifePointer, "charUI_lifebar", true);
+            popUp(lifePointer, "charUI_lifebar" + isVoid, true);
         else
             popUp(lifePointer, "charUI_lifebar", false);
     }

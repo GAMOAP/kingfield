@@ -22,8 +22,8 @@ public:
     int getCost();
     
     //SLOT SPEC
-    void setSlotSpecNbr(cocos2d::Vec3 slotListNbr);
-    cocos2d::Vec3 getSlotListNbr();
+    void setSlotSpec(std::string slotSpec);
+    std::string getSlotSpec();
     
     //move
     void setStartTag(int startTag);
@@ -33,8 +33,11 @@ public:
     int getEndTag();
     
     //strike
+    void setCharStrikedList(std::vector<std::vector<int>> strikedList);
+    std::vector<std::vector<int>> getCharStrikedList();
     
-    
+    void setCharAttackForce(int charForce);
+    int getCharAttackForce();
     //spell
     
     
@@ -47,14 +50,15 @@ protected:
     
     int m_crystalCost;
     
-    cocos2d::Vec3 m_slotListNbr;
+    std::string m_slotSpec;
     
     //move
     int m_startTag;
     int m_endTag;
     
     //stike
-    
+    std::vector<std::vector<int>> m_strikedList;
+    int m_charForce;
     
     //spell
     

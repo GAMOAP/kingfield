@@ -190,7 +190,7 @@ void GameCharacters::setAction(std::vector<KFAction*> actionSequence)
         
         m_SharedGameCharacters->m_sequenceState = 0;
         m_SharedGameCharacters->m_actionSequence = actionSequence;
-        m_SharedGameCharacters->setActionSequence();
+        m_SharedGameCharacters->setActionSequence(character);
     });
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
     eventDispatcher->addEventListenerWithSceneGraphPriority(charIsPlace, character);
@@ -201,17 +201,18 @@ void GameCharacters::setAction(std::vector<KFAction*> actionSequence)
         eventDispatcher->removeCustomEventListeners("NODE_char" + std::to_string(character->getTag())+"_IS_PLACE");
     }
 }
-void GameCharacters::setActionSequence()
+void GameCharacters::setActionSequence(Character* character)
 {
     if(m_sequenceState >= m_actionSequence.size())
     {
         m_actionSequence.clear();
+        character->setIsMove(false);
         GameDirector::endTurn();
     }
     else
     {
         auto action = m_actionSequence[m_sequenceState];
-        auto character = MainObject::getCharByNumber(action->getCharNbr());
+        character->setIsMove(true);
         character->setAction(action);
         
         auto charIsActionEnd = EventListenerCustom::create("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION", [=](EventCustom* event)
@@ -220,7 +221,7 @@ void GameCharacters::setActionSequence()
             action->~KFAction();
             
             m_sequenceState++;
-            setActionSequence();
+            setActionSequence(character);
         });
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
         eventDispatcher->addEventListenerWithSceneGraphPriority(charIsActionEnd, character);
