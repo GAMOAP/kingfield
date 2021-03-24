@@ -45,7 +45,7 @@ private:
     
     void setAnimation(std::string animation, int nbrLoop = 0);
     void setState(std::string state);
-    void playAnimation();
+    bool playAnimation();
     
     void displayInfo();
     void createInfo();

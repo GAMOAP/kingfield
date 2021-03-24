@@ -76,7 +76,7 @@ std::vector<std::vector<std::vector<std::string>>> MainUser::getUserTeam()
     {
         std::stringstream stream;
         std::vector<std::vector<std::vector<int>>> cList;
-        for(int c = 0; c < CHAR_NUMBER; c++)
+        for(int c = 0; c < CHAR_NUMBER / 2; c++)
         {
             stream << 'c';
             srand((unsigned)time(NULL) + c);
@@ -107,6 +107,7 @@ std::vector<std::vector<std::vector<std::string>>> MainUser::getUserTeam()
 bool MainUser::setOpposingTeam(std::string opposingTeamStr)
 {
     std::vector<std::vector<std::vector<std::string>>> opposingTeam = getTeamVec(opposingTeamStr);
+    
     for(int c = 0; c < opposingTeam.size(); c++)
     {
         for(int t = 0; t < opposingTeam[c].size(); t++)
@@ -116,9 +117,11 @@ bool MainUser::setOpposingTeam(std::string opposingTeamStr)
             std::string object = opposingTeam[c][t][2];
             
             int enemyCharNumber = c + CHAR_NUMBER / 2;
+            
             MainStuff::setStuff(enemyCharNumber, type, breed, object);
         }
     }
+    
     return true;
 }
 

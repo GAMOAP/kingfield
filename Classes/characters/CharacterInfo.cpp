@@ -34,15 +34,11 @@ CharacterInfo* CharacterInfo::create()
 bool CharacterInfo::init()
 {
     
-    
     return true;
 }
 
 bool CharacterInfo::addToInfoList(std::string infoName, int infoValue, int characterNbr)
 {
-    
-    printf("infoName = %s, infoValue = %i\n", infoName.c_str(), infoValue);
-    
     for(int u = 0; u < m_typeNameUpList.size(); u++)
     {
         if(infoName == m_typeNameUpList[u])
@@ -105,11 +101,11 @@ void CharacterInfo::displayPop()
             default:
                 break;
         }
-        float popUpTime = 0.2;
-        auto scaleUp = ScaleTo::create(popUpTime, 2.5);
-        auto scaleDown = ScaleTo::create(popUpTime, 1);
+        float popUpTime = 0.3;
+        auto scaleUp = ScaleTo::create(popUpTime, 2);
+        auto moveTo = MoveTo::create(popUpTime, Vec2(0, -38));
         auto scaleUpEase = EaseOut::create(scaleUp, 0.5);
-        auto scaleDownEase = EaseIn::create(scaleDown, 0.5);
+        auto spawn = Spawn::createWithTwoActions(scaleUpEase, moveTo);
         auto callFunc = CallFunc::create([=]()
         {
             m_popDisplay->removeFromParent();
@@ -117,7 +113,7 @@ void CharacterInfo::displayPop()
             m_popList.erase(m_popList.begin());
             displayPop();
         });
-        auto popUpSeq = Sequence::create(scaleUpEase, callFunc, scaleDownEase, NULL);
+        auto popUpSeq = Sequence::create(spawn, callFunc, NULL);
         m_popDisplay->runAction(popUpSeq);
     }
 }
@@ -184,7 +180,6 @@ cocos2d::Node* CharacterInfo::createPopInfo(std::vector<int> info)
     
     std::string infoPopName = m_typeNamePopList[info[0]];
     int infoPopValue = info[1];
-    printf("infoPopValue = %i\n", infoPopValue);
     
     cocos2d::Color3B color;
     switch (info[0]) {

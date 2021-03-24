@@ -155,24 +155,34 @@ void Character::setAction(KFAction* action)
         
         std::vector<std::vector<int>> strikedList = action->getCharStrikedList();
         
-        auto delayStrike = DelayTime::create(0.85);
+        
+        auto delayStrike = DelayTime::create(0.9);
         auto strikeFunc = CallFunc::create([this, strikedList, strikeAttack]()
         {
             for(int c = 0; c < strikedList.size(); c++)
             {
                 const auto strikedChar = MainObject::getCharByNumber(strikedList[c][0]);
+                const int strikedHealth = MainStuff::getCharSpec(strikedList[c][0])["health"];
                 const int strikedDefence = strikedList[c][1];
                 if(strikedChar)
                 {
                     strikedChar->setInfo("defense", strikedDefence);
                     if(strikeAttack >= strikedDefence)
-                        strikedChar->setReaction("pain");
+                    {
+                       
+                        if(strikedHealth <= 0)
+                            strikedChar->setReaction("death");
+                        else
+                            strikedChar->setReaction("pain");
+                    }
                     else
+                    {
                         strikedChar->setReaction("block");
+                    }
                 }
             }
         });
-        auto delayEnd = DelayTime::create(0.3);
+        auto delayEnd = DelayTime::create(0.4);
         auto endFunc = CallFunc::create([this]()
         {
             _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
@@ -184,14 +194,18 @@ void Character::setAction(KFAction* action)
 
 void Character::setReaction(std::string reaction)
 {
+    if(reaction == "block")
+    {
+        m_characterDisplay->setAction("block", 1);
+    }
     if(reaction == "pain")
     {
         MainStuff::setCharSpec(m_number, "health", -1);
         m_characterDisplay->setAction("pain", 1);
     }
-    if(reaction == "block")
+    if(reaction == "death")
     {
-        m_characterDisplay->setAction("block", 1);
+        m_characterDisplay->setAction("death", 1);
     }
 }
 //------------------INFO----------------

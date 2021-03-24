@@ -157,16 +157,27 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
     {
         
     }
+    
     return actionSequence;
 }
 std::vector<KFAction*> MainAction::getEnemyActionSequence(int charSelectNbr, int cardSelectNbr, int touchedBoxTag)
 {
-    int charEnemyNbr = charSelectNbr + 5;
-    int l = touchedBoxTag / 10;
-    int c = (touchedBoxTag - l * 10) * -1 + 6;
-    int enemyTouchedBoxTag = l * 10 + c;
+    printf("touchedBoxTag = %i\n",touchedBoxTag);
     
-    return getActionSequence(charEnemyNbr, cardSelectNbr, enemyTouchedBoxTag);
+    std::vector<KFAction*> actionSequence;
+    
+    int charEnemyNbr = charSelectNbr + 5;
+    int l = floor(touchedBoxTag / 10);
+    int c = (touchedBoxTag - l * 10);
+    int enemyTouchedBoxTag = (-l + 8) * 10 - c + 6;
+    
+    printf("l = %i, c = %i\n",l,c);
+    
+    printf("enemyTouchedBoxTag = %i\n",enemyTouchedBoxTag);
+    
+    actionSequence = getActionSequence(charEnemyNbr, cardSelectNbr, enemyTouchedBoxTag);
+    
+    return actionSequence;
 }
 
 bool MainAction::isInBoardTag(int tag)

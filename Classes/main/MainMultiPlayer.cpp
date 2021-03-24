@@ -9,6 +9,8 @@
 
 #include "Constants.h"
 
+#include "KFAction.hpp"
+
 #include "MainUser.hpp"
 #include "MainObject.hpp"
 #include "MainAction.hpp"
@@ -291,6 +293,7 @@ void MainMultiPlayer::onChatReceived(AppWarp::chat chatEvent)
 {
     if(chatEvent.sender != m_userName)
     {
+        
         if(TEST_NET_ON)printf("\nonChatReceived..");
         std::string zstr = chatEvent.chat.substr(0,1);
         if(zstr == "c")
@@ -307,11 +310,17 @@ void MainMultiPlayer::onChatReceived(AppWarp::chat chatEvent)
         {
             if(TEST_NET_ON)printf("characterActionDataStr");
             std::string actionData = chatEvent.chat;
+            
+            printf("actionData = %s\n", actionData.c_str());
+            
             int charNbr = stoi(actionData.substr(actionData.find('p') + 1, 1));
             int cardNbr = stoi(actionData.substr(actionData.find('c') + 1, 1));
             int boxTag = stoi(actionData.substr(actionData.find('a') + 1, 2));
                                
-            auto actionSequence = MainAction::getEnemyActionSequence(charNbr, cardNbr, boxTag);
+            std::vector<KFAction*> actionSequence = MainAction::getEnemyActionSequence(charNbr, cardNbr, boxTag);
+            
+            printf("multiPlayer::actionSequence.size() =%lu\n", actionSequence.size());
+            
             GameCharacters::setAction(actionSequence);
             GameDirector::setActionInProgress(true);
         }

@@ -123,10 +123,9 @@ bool SceneFight::endTurn()
     //select char, card and actionBoxes.
     m_SharedSceneFight->allNodeIsIn();
     
-    
-    
     return true;
 }
+
 
 //----------------------------TOUCH---------------------------------
 bool SceneFight::touchBox(int tag)
@@ -176,6 +175,7 @@ bool SceneFight::unTouchBox(int tag)
             
             GameCharacters::setAction(actionSequence);
         }
+        
     }
     cancelTouchObject();
     m_touchedBox = NAN;

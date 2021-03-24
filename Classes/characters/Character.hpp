@@ -52,6 +52,6 @@ protected:
     const float m_actionTime = 0.5;
     
     //const std::vector<int> m_originTagList= {21, 31, 41, 51, 61, 25, 35, 45, 55, 65};
-    const std::vector<int> m_originTagList= {21, 22, 23, 24, 25, 61, 62, 63, 64, 65};
+    const std::vector<int> m_originTagList= {21, 22, 23, 24, 25, 65, 64, 63, 62, 61};
 };
 #endif /* Character_hpp */

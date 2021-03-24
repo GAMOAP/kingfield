@@ -74,7 +74,7 @@ bool CharacterDisplay::createFactory()
     m_armatureDisplay = m_factory->buildArmatureDisplay("Armature");
     
     //animation start delay.
-    float randDelay = rand()%10;
+    float randDelay = rand()%50;
     auto delay = DelayTime::create(randDelay);
     auto callFunc = CallFunc::create([this](){ this->playAnimation();;});
     auto seq = Sequence::create(delay, callFunc, NULL);
@@ -244,6 +244,8 @@ void CharacterDisplay::setUnselect()
 //action.
 void CharacterDisplay::setAction(std::string actionType, int nbrLoop)
 {
+    if(actionType == "death"){printf("DEATH");}
+    if(actionType == "pain"){printf("PAIN");}
     setAnimation(actionType, nbrLoop);
 }
 
@@ -259,7 +261,7 @@ void CharacterDisplay::setState(std::string state)
     m_animationVector[1] = state;
     playAnimation();
 }
-void CharacterDisplay::playAnimation()
+bool CharacterDisplay::playAnimation()
 {
     std::string animationName = m_animationVector[0] + "_" + m_animationVector[1];
     dragonBones::Animation* animation = m_armatureDisplay->getAnimation();
@@ -269,16 +271,29 @@ void CharacterDisplay::playAnimation()
         m_armatureDisplay->getEventDispatcher()->setEnabled(true);
         m_armatureDisplay->getEventDispatcher()->addCustomEventListener(dragonBones::EventObject::LOOP_COMPLETE, [=](EventCustom* event)
         {
-            m_animationLoopNumber -= 1;
-            if(m_animationLoopNumber <= 0)
+            if(m_animationVector[0] == "death")
             {
-                m_animationVector[0] = m_oldAnimationVector[0];
-                m_animationVector[1] = m_oldAnimationVector[1];
-                m_animationLoopNumber = 0;
+                
+                m_armatureDisplay->getAnimation()->stop(animationName);
+                _eventDispatcher->dispatchCustomEvent("CHAR_" + std::to_string(m_number) + "_DEAD");
+                _eventDispatcher->removeCustomEventListeners("CHAR_" + std::to_string(m_number) + "_DEAD");
             }
-            _eventDispatcher->removeCustomEventListeners(dragonBones::EventObject::LOOP_COMPLETE);
-            m_armatureDisplay->getEventDispatcher()->setEnabled(false);
-            playAnimation();
+            else
+            {
+                m_animationLoopNumber -= 1;
+                if(m_animationLoopNumber <= 0)
+                {
+                    m_animationVector[0] = m_oldAnimationVector[0];
+                    m_animationVector[1] = m_oldAnimationVector[1];
+                    m_animationLoopNumber = 0;
+                    
+                    _eventDispatcher->dispatchCustomEvent("CHAR_" + std::to_string(m_number) + "_ANIM_" + m_animationVector[0] + "_END");
+                    _eventDispatcher->removeCustomEventListeners("CHAR_" + std::to_string(m_number) + "_ANIM_" + m_animationVector[0] + "_END");
+                }
+                _eventDispatcher->removeCustomEventListeners(dragonBones::EventObject::LOOP_COMPLETE);
+                m_armatureDisplay->getEventDispatcher()->setEnabled(false);
+                playAnimation();
+            }
         });
     }
     else
@@ -286,6 +301,8 @@ void CharacterDisplay::playAnimation()
         m_oldAnimationVector[0] = m_animationVector[0];
         m_oldAnimationVector[1] = m_animationVector[1];
     }
+    
+    return true;
 }
 void CharacterDisplay::stopAnimation()
 {
