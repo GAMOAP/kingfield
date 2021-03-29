@@ -44,17 +44,20 @@ void GameInfoLayer::initIntroTitle(bool addRemove)
 {
     if(!addRemove)
     {
-        auto scale = ScaleTo::create(1.2, 5);
-        auto fadeOut = FadeOut::create(1);
-        auto spawn = Spawn::createWithTwoActions(scale, fadeOut);
-        auto easeIn = EaseIn::create(spawn, 0.4);
-        auto callFunc = CallFunc::create([=]()
+        if(m_introLogo)
         {
-            m_introLogo->removeFromParent();
-            m_introLogo = nullptr;
-        });
-        auto seq = Sequence::create(easeIn, callFunc, NULL);
-        m_introLogo->runAction(seq);
+            auto scale = ScaleTo::create(1.2, 5);
+            auto fadeOut = FadeOut::create(1);
+            auto spawn = Spawn::createWithTwoActions(scale, fadeOut);
+            auto easeIn = EaseIn::create(spawn, 0.4);
+            auto callFunc = CallFunc::create([=]()
+            {
+                m_introLogo->removeFromParent();
+                m_introLogo = nullptr;
+            });
+            auto seq = Sequence::create(easeIn, callFunc, NULL);
+            m_introLogo->runAction(seq);
+        }
     }
     else
     {
@@ -121,5 +124,42 @@ void GameInfoLayer::initConnectSprite(bool addRemove)
         auto animate = Animate::create(animation);
         
         m_spriteConnect->runAction(RepeatForever::create(animate));
+    }
+}
+
+//------------------------FIGHT LOGO------------------------------
+void GameInfoLayer::addFightLogo()
+{
+    m_SharedGameInfoLayer->initFightLogo(true);
+}
+void GameInfoLayer::removeFightLogo()
+{
+    m_SharedGameInfoLayer->initFightLogo(false);
+}
+void GameInfoLayer::initFightLogo(bool addRemove)
+{
+    if(!addRemove)
+    {
+        if(m_fightLogo)
+        {
+            auto scale = ScaleTo::create(1.2, 5);
+            auto fadeOut = FadeOut::create(1);
+            auto spawn = Spawn::createWithTwoActions(scale, fadeOut);
+            auto easeIn = EaseIn::create(spawn, 0.4);
+            auto callFunc = CallFunc::create([=]()
+            {
+                m_fightLogo->removeFromParent();
+                m_fightLogo = nullptr;
+            });
+            auto seq = Sequence::create(easeIn, callFunc, NULL);
+            m_fightLogo->runAction(seq);
+        }
+    }
+    else
+    {
+        m_fightLogo = Sprite::create(KFSprite::getFile("screen_fight_logo"));
+        Vec2 visibleSize = MainGrid::getVisibleSize();
+        m_fightLogo->setPosition(Vec2(visibleSize.x/2, visibleSize.y/2));
+        m_infoLayer->addChild(m_fightLogo);
     }
 }

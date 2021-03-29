@@ -9,7 +9,7 @@
 #define Constants_h
 
 //------------------------------GLOBAL CONSTANT---------------------------
-const bool TEST_CHAR_ANIM_ON = true;
+const bool TEST_CHAR_ANIM_ON = false;
 
 const bool TEST_NET_ON = false;
 const bool MULTI_PLAYER_ON = false;

@@ -44,6 +44,8 @@ bool SceneFight::init()
 
 void SceneFight::addToStage()
 {
+    GameInfoLayer::addFightLogo();
+    
     GameBoxes::setBoxes();
     
     auto gameCharacters = GameCharacters::getInstance();
@@ -75,6 +77,8 @@ void SceneFight::removeToStage()
 
 bool SceneFight::allNodeIsIn()
 {
+    GameInfoLayer::removeFightLogo();
+    
     if(!GameCharacters::getCharIsSelected())
     {
         GameCharacters::setCharSelect();
