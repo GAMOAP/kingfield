@@ -43,6 +43,7 @@ private:
     void setActionSequence();
     
     void setReaction(std::string reaction);
+    bool setActionToChar(Character* character, std::string actionName, int actionForce = 0);
     
 protected:
     bool m_isPlayerTeam;

@@ -30,16 +30,20 @@ public:
     virtual bool longTouchBox(int tag);
     
 private:
+    void addFightButton();
+    void removeFightButton();
+    
     void addLibraryButton();
     void removeLibraryButton();
     void pushLibraryButton(int tag);
     void cancelPushLibraryButton();
     
 protected:
-    const int m_fightButtonTag = 65;
+    const int m_fightButtonTag = 33;
     const int m_libraryLeftButtonTag = 32;
     const int m_libraryRightButtonTag = 34;
     
+    cocos2d::Sprite* m_buttonFight = nullptr;
     cocos2d::Sprite* m_libraryButtonLeft = nullptr;
     cocos2d::Sprite* m_libraryButtonRight = nullptr;
     

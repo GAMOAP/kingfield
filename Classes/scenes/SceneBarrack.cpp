@@ -53,12 +53,14 @@ void SceneBarrack::addToStage()
     gameCards->addLibrary();
     gameCards->unselectAll();
     
+    addFightButton();
     addLibraryButton();
 }
 
 void SceneBarrack::removeToStage()
 {
     removeLibraryButton();
+    removeFightButton();
     
     GameDirector::setScene("fight");
 }
@@ -78,7 +80,7 @@ bool SceneBarrack::allNodeIsIn()
 
 bool SceneBarrack::touchBox(int tag)
 {
-    if(getIsUsedBox(tag) || (tag == 65) || (tag == 31) || (tag == 35))
+    if(getIsUsedBox(tag) || (tag == 41) || (tag == 31) || (tag == 35))
     {
         setTouchObject(tag);
         m_touchedBox = tag;
@@ -87,6 +89,11 @@ bool SceneBarrack::touchBox(int tag)
     {
         pushLibraryButton(tag);
         m_touchedBox = tag;
+    }
+    else if(tag == m_fightButtonTag)
+    {
+        m_touchedBox = tag;
+        m_buttonFight->setTexture(KFSprite::getFile("screen_start_fight_button_down"));
     }
     else
         m_touchedBox = NAN;
@@ -117,12 +124,7 @@ bool SceneBarrack::unTouchBox(int tag)
         //fight button
         if(tag == m_fightButtonTag)
         {
-            auto boxFightIsOutEvent = EventListenerCustom::create("NODE_box" + std::to_string(m_fightButtonTag) + "_IS_PLACE", [=](EventCustom* event)
-            {
                 removeToStage();
-            });
-            auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-            eventDispatcher->addEventListenerWithSceneGraphPriority(boxFightIsOutEvent, MainObject::getBoxByTag(m_fightButtonTag));
         }
         //library buttons.
         if(tag == m_libraryLeftButtonTag || tag == m_libraryRightButtonTag)
@@ -134,6 +136,8 @@ bool SceneBarrack::unTouchBox(int tag)
             GameCards::setLibraryPage(pagePlus);
         }
     }
+    m_buttonFight->setTexture(KFSprite::getFile("screen_start_fight_button_up"));
+    
     cancelPushLibraryButton();
     
     cancelTouchObject();
@@ -144,6 +148,7 @@ bool SceneBarrack::unTouchBox(int tag)
 
 bool SceneBarrack::cancelTouchBox(int tag)
 {
+    m_buttonFight->setTexture(KFSprite::getFile("screen_start_fight_button_up"));
     cancelTouchObject();
     return true;
 }
@@ -156,6 +161,37 @@ bool SceneBarrack::longTouchBox(int tag)
         GameDirector::setScene("option", tag);
     }
     return true;
+}
+//Fight button
+void SceneBarrack::addFightButton()
+{
+    auto box33 = MainObject::getBoxByTag(33);
+    
+    auto box33isOutEvent = EventListenerCustom::create("NODE_box33_IS_OUT", [=](EventCustom* event)
+    {
+        if(!m_buttonFight)
+        {
+            m_buttonFight = Sprite::create(KFSprite::getFile("screen_start_fight_button_up"));
+            m_buttonFight->setPositionY(24);
+            m_buttonFight->setTag(33);
+            box33->addChild(m_buttonFight);
+        }
+    });
+    auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+    eventDispatcher->addEventListenerWithSceneGraphPriority(box33isOutEvent, box33);
+}
+void SceneBarrack::removeFightButton()
+{
+    auto box33isOutEvent = EventListenerCustom::create("NODE_box33_IS_OUT", [=](EventCustom* event)
+    {
+        if(m_buttonFight)
+        {
+            m_buttonFight->removeFromParent();
+            m_buttonFight = nullptr;
+        }
+    });
+    auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+    eventDispatcher->addEventListenerWithSceneGraphPriority(box33isOutEvent, MainObject::getBoxByTag(33));
 }
 
 //Library button .............

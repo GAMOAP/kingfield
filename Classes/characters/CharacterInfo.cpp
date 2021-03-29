@@ -39,6 +39,8 @@ bool CharacterInfo::init()
 
 bool CharacterInfo::addToInfoList(std::string infoName, int infoValue, int characterNbr)
 {
+    m_characterNbr = characterNbr;
+    
     for(int u = 0; u < m_typeNameUpList.size(); u++)
     {
         if(infoName == m_typeNameUpList[u])
@@ -91,21 +93,25 @@ void CharacterInfo::displayPop()
         this->addChild(m_popDisplay);
         m_popDisplay->setAnchorPoint(Vec2( 0.5, 0.5));
         
+        Vec2 popPosition;
+        
         switch (m_popList[0][0]) {
             case 0:
-                m_popDisplay->setPosition(m_defensePosition);
+                popPosition = m_defensePosition;
                 break;
             case 1:
-                m_popDisplay->setPosition(m_attackPosition);
+                popPosition = m_attackPosition;
                 break;
             default:
                 break;
         }
-        float popUpTime = 0.3;
-        auto scaleUp = ScaleTo::create(popUpTime, 2);
-        auto moveTo = MoveTo::create(popUpTime, Vec2(0, -38));
+        m_popDisplay->setPosition(popPosition);
+        
+        float popUpTime = 0.2;
+        auto scaleUp = ScaleTo::create(popUpTime, 2.5);
+        auto scaleDown = ScaleTo::create(popUpTime/2, 1);
         auto scaleUpEase = EaseOut::create(scaleUp, 0.5);
-        auto spawn = Spawn::createWithTwoActions(scaleUpEase, moveTo);
+        auto scaleDownEase = EaseIn::create(scaleDown, 0.5);
         auto callFunc = CallFunc::create([=]()
         {
             m_popDisplay->removeFromParent();
@@ -113,7 +119,7 @@ void CharacterInfo::displayPop()
             m_popList.erase(m_popList.begin());
             displayPop();
         });
-        auto popUpSeq = Sequence::create(spawn, callFunc, NULL);
+        auto popUpSeq = Sequence::create(scaleUpEase, scaleDownEase, callFunc, NULL);
         m_popDisplay->runAction(popUpSeq);
     }
 }

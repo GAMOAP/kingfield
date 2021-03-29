@@ -24,6 +24,7 @@ public:
     static bool startFight(int teamNumber);
     static bool stopFight(bool isWin);
     
+    static bool startTurn();
     static bool endTurn();
     
     virtual bool touchBox(int tag);

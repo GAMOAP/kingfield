@@ -138,56 +138,77 @@ void Character::setAction(KFAction* action)
         auto endFunc = CallFunc::create([this]()
         {
             setNodePosition();
-            m_characterDisplay->setAction("stand");
+            m_characterDisplay->setAnimation("stand");
             _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
         });
         auto seq = Sequence::create(move, endFunc, NULL);
         this->runAction(seq);
         
-        m_characterDisplay->setAction("walk");
+        m_characterDisplay->setAnimation("walk");
     }
     //character strike...
     if(actionType == 1)
     {
-        m_characterDisplay->setAction("attack_" + mainStuff->getStuffByName(m_number, 2)[1], 1);
+        this->setLocalZOrder(32);
+        m_characterDisplay->setAnimation("attack_" + mainStuff->getStuffByName(m_number, 2)[1], 1);
         const int strikeAttack = action->getCharAttackForce();
         setInfo("attack", strikeAttack);
         
         std::vector<std::vector<int>> strikedList = action->getCharStrikedList();
         
         
-        auto delayStrike = DelayTime::create(0.9);
+        auto delayStrike = DelayTime::create(1);
         auto strikeFunc = CallFunc::create([this, strikedList, strikeAttack]()
         {
+            this->setLocalZOrder(m_index);
             for(int c = 0; c < strikedList.size(); c++)
             {
+                //strikeChar
                 const auto strikedChar = MainObject::getCharByNumber(strikedList[c][0]);
                 const int strikedHealth = MainStuff::getCharSpec(strikedList[c][0])["health"];
                 const int strikedDefence = strikedList[c][1];
+                
                 if(strikedChar)
                 {
+                    strikedChar->setLocalZOrder(32);
                     strikedChar->setInfo("defense", strikedDefence);
+                    std::string reactionName = "block";
+                    
                     if(strikeAttack >= strikedDefence)
                     {
-                       
                         if(strikedHealth <= 0)
-                            strikedChar->setReaction("death");
+                        {
+                            reactionName = "death";
+                        }
                         else
-                            strikedChar->setReaction("pain");
+                        {
+                            reactionName = "pain";
+                        }
                     }
-                    else
+                    strikedChar->setReaction(reactionName);
+                    
+                    auto reactionEndEvent = EventListenerCustom::create("CHAR_" + std::to_string(strikedChar->getNumber()) + "_ANIM_" + reactionName + "_END", [=](EventCustom* event)
                     {
-                        strikedChar->setReaction("block");
-                    }
+                        if(reactionName == "death")
+                        {
+                            strikedChar->removeToStage();
+                            _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
+                            _eventDispatcher->removeCustomEventListeners("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
+                        }
+                        strikedChar->setLocalZOrder(strikedChar->m_index);
+                        _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
+                    });
+                    auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+                    eventDispatcher->addEventListenerWithSceneGraphPriority(reactionEndEvent, strikedChar);
+                }
+                else
+                {
+                    _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
                 }
             }
         });
-        auto delayEnd = DelayTime::create(0.4);
-        auto endFunc = CallFunc::create([this]()
-        {
-            _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
-        });
-        auto seq = Sequence::create(delayStrike, strikeFunc, delayEnd, endFunc, NULL);
+        
+        auto seq = Sequence::create(delayStrike, strikeFunc, NULL);
         this->runAction(seq);
     }
 }
@@ -196,16 +217,16 @@ void Character::setReaction(std::string reaction)
 {
     if(reaction == "block")
     {
-        m_characterDisplay->setAction("block", 1);
+        m_characterDisplay->setAnimation("block", 1);
     }
     if(reaction == "pain")
     {
         MainStuff::setCharSpec(m_number, "health", -1);
-        m_characterDisplay->setAction("pain", 1);
+        m_characterDisplay->setAnimation("pain", 1);
     }
     if(reaction == "death")
     {
-        m_characterDisplay->setAction("death", 1);
+        m_characterDisplay->setAnimation("death", 1, false);
     }
 }
 //------------------INFO----------------

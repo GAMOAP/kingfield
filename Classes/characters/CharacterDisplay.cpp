@@ -41,6 +41,7 @@ bool CharacterDisplay::init(int number)
     
     //init number, stuff and dragonBones factory.
     m_number = number;
+    m_alive = true;
     setStuffList();
     createFactory();
     
@@ -74,15 +75,23 @@ bool CharacterDisplay::createFactory()
     m_armatureDisplay = m_factory->buildArmatureDisplay("Armature");
     
     //animation start delay.
-    float randDelay = rand()%50;
-    auto delay = DelayTime::create(randDelay);
-    auto callFunc = CallFunc::create([this](){ this->playAnimation();;});
+    float randDelay = rand()%100;
+    auto delay = DelayTime::create(randDelay/100);
+    auto callFunc = CallFunc::create([this](){ this->playAnimation();});
     auto seq = Sequence::create(delay, callFunc, NULL);
     this->runAction(seq);
+    
     //animation init.
     setAnimation("stand");
     this->setScale(1.2);
     this->setColor(m_colorUnselect);
+    
+    //animation event init.
+    m_armatureDisplay->getEventDispatcher()->setEnabled(true);
+    m_armatureDisplay->getEventDispatcher()->addCustomEventListener(dragonBones::EventObject::COMPLETE, [=](cocos2d::Event* event)
+    {
+        animationEnd(event);
+    });
     
     //position init.
     m_armatureDisplay->setPosition(0.0f, 0.0f);
@@ -241,69 +250,74 @@ void CharacterDisplay::setUnselect()
     this->setColor(m_colorUnselect);
     m_selected = false;
 }
-//action.
-void CharacterDisplay::setAction(std::string actionType, int nbrLoop)
-{
-    if(actionType == "death"){printf("DEATH");}
-    if(actionType == "pain"){printf("PAIN");}
-    setAnimation(actionType, nbrLoop);
-}
 
 //----------------ANIMATION-------------------
-void CharacterDisplay::setAnimation(std::string animation, int nbrLoop)
+bool CharacterDisplay::setAnimation(std::string animation, int nbrLoop, bool playLastAnimation)
 {
     m_animationLoopNumber = nbrLoop;
     m_animationVector[0] = animation;
+    m_playLastAnimation = playLastAnimation;
     playAnimation();
-}
-void CharacterDisplay::setState(std::string state)
-{
-    m_animationVector[1] = state;
-    playAnimation();
-}
-bool CharacterDisplay::playAnimation()
-{
-    std::string animationName = m_animationVector[0] + "_" + m_animationVector[1];
-    dragonBones::Animation* animation = m_armatureDisplay->getAnimation();
-    animation->fadeIn(animationName, 0.2);
-    
-    if(m_animationLoopNumber > 0){
-        m_armatureDisplay->getEventDispatcher()->setEnabled(true);
-        m_armatureDisplay->getEventDispatcher()->addCustomEventListener(dragonBones::EventObject::LOOP_COMPLETE, [=](EventCustom* event)
-        {
-            if(m_animationVector[0] == "death")
-            {
-                
-                m_armatureDisplay->getAnimation()->stop(animationName);
-                _eventDispatcher->dispatchCustomEvent("CHAR_" + std::to_string(m_number) + "_DEAD");
-                _eventDispatcher->removeCustomEventListeners("CHAR_" + std::to_string(m_number) + "_DEAD");
-            }
-            else
-            {
-                m_animationLoopNumber -= 1;
-                if(m_animationLoopNumber <= 0)
-                {
-                    m_animationVector[0] = m_oldAnimationVector[0];
-                    m_animationVector[1] = m_oldAnimationVector[1];
-                    m_animationLoopNumber = 0;
-                    
-                    _eventDispatcher->dispatchCustomEvent("CHAR_" + std::to_string(m_number) + "_ANIM_" + m_animationVector[0] + "_END");
-                    _eventDispatcher->removeCustomEventListeners("CHAR_" + std::to_string(m_number) + "_ANIM_" + m_animationVector[0] + "_END");
-                }
-                _eventDispatcher->removeCustomEventListeners(dragonBones::EventObject::LOOP_COMPLETE);
-                m_armatureDisplay->getEventDispatcher()->setEnabled(false);
-                playAnimation();
-            }
-        });
-    }
-    else
-    {
-        m_oldAnimationVector[0] = m_animationVector[0];
-        m_oldAnimationVector[1] = m_animationVector[1];
-    }
     
     return true;
 }
+
+bool CharacterDisplay::setState(std::string state)
+{
+    m_animationVector[1] = state;
+    playAnimation();
+    
+    return true;
+}
+
+bool CharacterDisplay::playAnimation()
+{
+    dragonBones::Animation* animation = m_armatureDisplay->getAnimation();
+    
+    m_lastAnimationName = animation->getLastAnimationName();
+    std::string animationName = m_animationVector[0] + "_" + m_animationVector[1];
+    
+    if(animationName != m_lastAnimationName && m_alive)
+    {
+        if(TEST_CHAR_ANIM_ON)printf("ANIMATION_START :: char#%i, name = %s\n", m_number, animationName.c_str());
+        
+        if(m_animationVector[0] == "death")
+            m_alive = false;
+        
+        animation->fadeIn(animationName, 0.2, m_animationLoopNumber);
+        m_animationLoopNumber = 0;
+    }
+        
+    return true;
+}
+
+bool CharacterDisplay::animationEnd(cocos2d::Event* event)
+{
+    dragonBones::Animation* animation = m_armatureDisplay->getAnimation();
+    
+    //get animation an supprim state part.
+    std::string lastAnimationName = animation->getLastAnimationName();
+    std::string name = lastAnimationName.substr(0, lastAnimationName.find("_"));
+    
+    //dispatch end of animation.
+    _eventDispatcher->dispatchCustomEvent("CHAR_" + std::to_string(m_number) + "_ANIM_" + name + "_END");
+    _eventDispatcher->removeCustomEventListeners("CHAR_" + std::to_string(m_number) + "_ANIM_" + name + "_END");
+    
+    //run the animation before this animation end.
+    if(!m_playLastAnimation)
+    {
+        animation->gotoAndStopByFrame(lastAnimationName, 60);
+        m_playLastAnimation = false;
+    }
+    else if(lastAnimationName != m_lastAnimationName)
+    {
+        if(TEST_CHAR_ANIM_ON)printf("ANIMATION_END :: char#%i, endName = %s, startName = %s\n", m_number, lastAnimationName.c_str() ,m_lastAnimationName.c_str());
+        
+        animation->fadeIn(m_lastAnimationName, 0.2);
+    }
+    return true;
+}
+
 void CharacterDisplay::stopAnimation()
 {
     m_armatureDisplay->getAnimation()->reset();

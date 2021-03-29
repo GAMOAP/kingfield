@@ -46,6 +46,7 @@ private:
     bool init();
     
     void setActionSequence(Character* character);
+    void endActionSequence(Character* character);
         
 protected:
     Character* m_charSelected = nullptr;

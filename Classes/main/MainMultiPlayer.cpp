@@ -277,10 +277,10 @@ void MainMultiPlayer::sendStartGameData(int userNbr)
     });
     _eventDispatcher->addEventListenerWithSceneGraphPriority(teamReceived, this);
 }
-void MainMultiPlayer::sendCharacterActionData(int charNbr, int cardNbr, int actionBoxTag)
+void MainMultiPlayer::sendCharacterActionData(int charNbr, int cardNbr, int actionBoxTag, uint sRandom)
 {
     std::stringstream actionData;
-    actionData <<"p"<< charNbr << "c" <<cardNbr << "a" << actionBoxTag;
+    actionData <<"p"<< charNbr << "c" <<cardNbr << "a" << actionBoxTag << "r" << sRandom;
     AppWarp::Client::getInstance()->sendChat(actionData.str());
 }
 void MainMultiPlayer::echo(std::string message)
@@ -311,15 +311,15 @@ void MainMultiPlayer::onChatReceived(AppWarp::chat chatEvent)
             if(TEST_NET_ON)printf("characterActionDataStr");
             std::string actionData = chatEvent.chat;
             
-            printf("actionData = %s\n", actionData.c_str());
+            if(TEST_NET_ON)printf("actionData = %s\n", actionData.c_str());
             
             int charNbr = stoi(actionData.substr(actionData.find('p') + 1, 1));
             int cardNbr = stoi(actionData.substr(actionData.find('c') + 1, 1));
             int boxTag = stoi(actionData.substr(actionData.find('a') + 1, 2));
+            uint sRandom = stoi(actionData.substr(actionData.find('r') + 1, 10));
                                
-            std::vector<KFAction*> actionSequence = MainAction::getEnemyActionSequence(charNbr, cardNbr, boxTag);
+            std::vector<KFAction*> actionSequence = MainAction::getEnemyActionSequence(charNbr, cardNbr, boxTag, sRandom);
             
-            printf("multiPlayer::actionSequence.size() =%lu\n", actionSequence.size());
             
             GameCharacters::setAction(actionSequence);
             GameDirector::setActionInProgress(true);

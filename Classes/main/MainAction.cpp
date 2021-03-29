@@ -68,8 +68,10 @@ std::vector<Vec3> MainAction::getActionBoxesTags(int charSelectNbr, int cardSele
     return actionBoxesTags;
 }
 
-std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int cardSelectNbr, int touchedBoxTag)
+std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int cardSelectNbr, int touchedBoxTag, uint sRandom)
 {
+    srand(sRandom);
+    
     std::vector<std::string> cardName = MainStuff::getStuffByName(charSelectNbr, cardSelectNbr);
     KFSpecCard* specCard = MainStuff::getCardSpec(CARD_TYPE[cardSelectNbr], cardName[0], cardName[1]);
     int crystalCost = specCard->getMana(false);
@@ -116,8 +118,6 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
     {        
         auto mainStuff = MainStuff::getInstance();
         
-        srand((unsigned)time(NULL));
-        
         for(int s = 0; s < 3; s++)
         {
             std::string slotName = specCard->getSlot(s);
@@ -158,12 +158,13 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
         
     }
     
+    //init random after random was controled
+    srand((unsigned)time(NULL));
+    
     return actionSequence;
 }
-std::vector<KFAction*> MainAction::getEnemyActionSequence(int charSelectNbr, int cardSelectNbr, int touchedBoxTag)
+std::vector<KFAction*> MainAction::getEnemyActionSequence(int charSelectNbr, int cardSelectNbr, int touchedBoxTag, uint sRandom)
 {
-    printf("touchedBoxTag = %i\n",touchedBoxTag);
-    
     std::vector<KFAction*> actionSequence;
     
     int charEnemyNbr = charSelectNbr + 5;
@@ -171,11 +172,7 @@ std::vector<KFAction*> MainAction::getEnemyActionSequence(int charSelectNbr, int
     int c = (touchedBoxTag - l * 10);
     int enemyTouchedBoxTag = (-l + 8) * 10 - c + 6;
     
-    printf("l = %i, c = %i\n",l,c);
-    
-    printf("enemyTouchedBoxTag = %i\n",enemyTouchedBoxTag);
-    
-    actionSequence = getActionSequence(charEnemyNbr, cardSelectNbr, enemyTouchedBoxTag);
+    actionSequence = getActionSequence(charEnemyNbr, cardSelectNbr, enemyTouchedBoxTag, sRandom);
     
     return actionSequence;
 }

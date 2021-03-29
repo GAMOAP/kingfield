@@ -183,16 +183,24 @@ void GameCharacters::setAction(std::vector<KFAction*> actionSequence)
     GameCards::unselectAll();
     GameBoxes::unselectAll();
     
+    
+    
     auto character = MainObject::getCharByNumber(actionSequence[0]->getCharNbr());
+    
+    auto endActionSequence = EventListenerCustom::create("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION_SEQUENCE", [=](EventCustom* event)
+    {
+        m_SharedGameCharacters->endActionSequence(character);
+    });
+    
     auto charIsPlace = EventListenerCustom::create("NODE_char" + std::to_string(character->getTag())+"_IS_PLACE", [=](EventCustom* event)
     {
-        MainStuff::setCharSpec(character->getNumber(), "crystal", -actionSequence[0]->getCost());
-        
         m_SharedGameCharacters->m_sequenceState = 0;
         m_SharedGameCharacters->m_actionSequence = actionSequence;
         m_SharedGameCharacters->setActionSequence(character);
     });
+    
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+    eventDispatcher->addEventListenerWithSceneGraphPriority(endActionSequence, character);
     eventDispatcher->addEventListenerWithSceneGraphPriority(charIsPlace, character);
     
     if(character && character->getIsPlace())
@@ -205,9 +213,7 @@ void GameCharacters::setActionSequence(Character* character)
 {
     if(m_sequenceState >= m_actionSequence.size())
     {
-        m_actionSequence.clear();
-        character->setIsMove(false);
-        GameDirector::endTurn();
+        endActionSequence(character);
     }
     else
     {
@@ -226,6 +232,14 @@ void GameCharacters::setActionSequence(Character* character)
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
         eventDispatcher->addEventListenerWithSceneGraphPriority(charIsActionEnd, character);
     }
+}
+void GameCharacters::endActionSequence(Character* character)
+{
+    MainStuff::setCharSpec(character->getNumber(), "crystal", -m_actionSequence[0]->getCost());
+    m_actionSequence.clear();
+    character->setIsMove(false);
+    
+    GameDirector::endTurn();
 }
 
 void GameCharacters::setActionAll(std::string actionName)

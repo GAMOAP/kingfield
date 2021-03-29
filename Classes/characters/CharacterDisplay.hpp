@@ -26,7 +26,8 @@ public:
     void setSelect();
     void setUnselect();
     
-    void setAction(std::string actionType, int nbrLoop = 0);
+    bool setAnimation(std::string animation, int nbrLoop = 0, bool playLastAnimation = true);
+    bool setState(std::string state);
     
     int getOriginTag();
     int getNumber();
@@ -43,9 +44,8 @@ private:
     void setStuffList();
     void setStuffDisplay();
     
-    void setAnimation(std::string animation, int nbrLoop = 0);
-    void setState(std::string state);
     bool playAnimation();
+    bool animationEnd(cocos2d::Event* event);
     
     void displayInfo();
     void createInfo();
@@ -67,6 +67,8 @@ protected:
     int m_number;
     int m_team;
     
+    bool m_alive = true;
+    
     std::map<std::string, std::vector<std::string>> m_stuffList;
     
     cocos2d::Sprite* m_flag = nullptr;
@@ -74,9 +76,10 @@ protected:
     cocos2d::Vec2 m_flagPos = {20, 68};
     
     bool m_selected = false;
-    std::vector<std::string> m_oldAnimationVector = {"stand", "ok"};
     std::vector<std::string> m_animationVector = {"stand", "ok"};
+    std::string m_lastAnimationName = "";
     int m_animationLoopNumber = 0;
+    bool m_playLastAnimation = true;
     
     
     CharacterInfo* m_charInfo = nullptr;

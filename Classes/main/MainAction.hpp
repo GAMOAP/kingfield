@@ -15,8 +15,8 @@ class MainAction
 public:
     static std::vector<cocos2d::Vec3> getActionBoxesTags(int charSelectNbr, int cardSelectNbr);
     
-    static std::vector<KFAction*> getActionSequence(int charSelectNbr, int cardSelectNbr, int touchedBoxTag);
-    static std::vector<KFAction*> getEnemyActionSequence(int charSelectNbr, int cardSelectNbr, int touchedBoxTag);
+    static std::vector<KFAction*> getActionSequence(int charSelectNbr, int cardSelectNbr, int touchedBoxTag, uint sRandom);
+    static std::vector<KFAction*> getEnemyActionSequence(int charSelectNbr, int cardSelectNbr, int touchedBoxTag, uint sRandom);
     
 private:
     static bool isInBoardTag(int tag);

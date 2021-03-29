@@ -24,7 +24,8 @@ public:
     void update(float dt);
     
     //CHAT----
-    static void sendCharacterActionData(int charNbr, int cardNbr, int actionBoxTag);
+    static void sendCharacterActionData(int charNbr, int cardNbr, int actionBoxTag, uint sRandom);
+    static void sendCharacterRandomData(int charNbr);
     
 private:
     bool init();

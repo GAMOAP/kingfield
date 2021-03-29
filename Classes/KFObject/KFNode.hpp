@@ -121,7 +121,7 @@ protected:
     const int m_centerHeigth = -240;
     const int m_moveInOutRange = 320 ;
     
-    const int m_moveRange = 16;
+    const int m_moveRange = 8;
     const float m_moveTime = 0.2 ;
     
     std::string m_currentAction = "";

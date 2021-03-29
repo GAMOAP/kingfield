@@ -87,7 +87,7 @@ bool SceneFight::allNodeIsIn()
     else
         GameCards::CardsReseted();
     
-    setActionBoxTags();
+    m_SharedSceneFight->setActionBoxTags();
     
     return true;
 }
@@ -113,6 +113,12 @@ bool SceneFight::stopFight(bool isWin)
     
     return true;
 }
+bool SceneFight::startTurn()
+{
+    
+    
+    return true;
+}
 bool SceneFight::endTurn()
 {
     m_SharedSceneFight->m_turnNumber++;
@@ -120,7 +126,6 @@ bool SceneFight::endTurn()
     
     GameDirector::setActionInProgress(false);
     
-    //select char, card and actionBoxes.
     m_SharedSceneFight->allNodeIsIn();
     
     return true;
@@ -168,10 +173,13 @@ bool SceneFight::unTouchBox(int tag)
             int charSelectNbr = GameCharacters::getCharSelect()->getNumber();
             int cardSelectNbr = GameCards::getCardSelect()->getNumber();
             
-            if(MULTI_PLAYER_ON)
-                MainMultiPlayer::sendCharacterActionData(charSelectNbr, cardSelectNbr, tag);
+            srand((unsigned)time(NULL));
+            uint sRandom = rand() % (UINT_MAX);
             
-            std::vector<KFAction*> actionSequence = MainAction::getActionSequence(charSelectNbr, cardSelectNbr, tag);
+            if(MULTI_PLAYER_ON)
+                MainMultiPlayer::sendCharacterActionData(charSelectNbr, cardSelectNbr, tag, sRandom);
+            
+            std::vector<KFAction*> actionSequence = MainAction::getActionSequence(charSelectNbr, cardSelectNbr, tag, sRandom);
             
             GameCharacters::setAction(actionSequence);
         }
