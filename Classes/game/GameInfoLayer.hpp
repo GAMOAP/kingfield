@@ -23,16 +23,13 @@ public:
     static void removeConnectSprite();
     
     static void addFightLogo();
-    static void removeFightLogo();
-    
-    
     
 private:
     virtual bool init();
     
     void initConnectSprite(bool addRemove);
     void initIntroTitle(bool addRemove);
-    void initFightLogo(bool addRemove);
+    void initFightLogo();
     
 protected:
     cocos2d::Node* m_infoLayer = nullptr;

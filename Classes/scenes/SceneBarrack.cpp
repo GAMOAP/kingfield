@@ -59,6 +59,8 @@ void SceneBarrack::addToStage()
 
 void SceneBarrack::removeToStage()
 {
+    GameInfoLayer::addFightLogo();
+    
     removeLibraryButton();
     removeFightButton();
     

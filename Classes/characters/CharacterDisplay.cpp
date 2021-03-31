@@ -299,6 +299,8 @@ bool CharacterDisplay::animationEnd(cocos2d::Event* event)
     std::string lastAnimationName = animation->getLastAnimationName();
     std::string name = lastAnimationName.substr(0, lastAnimationName.find("_"));
     
+    if(TEST_CHAR_ANIM_ON)printf("ANIMATION_END :: char#%i, endName = %s", m_number, lastAnimationName.c_str());
+    
     //dispatch end of animation.
     _eventDispatcher->dispatchCustomEvent("CHAR_" + std::to_string(m_number) + "_ANIM_" + name + "_END");
     _eventDispatcher->removeCustomEventListeners("CHAR_" + std::to_string(m_number) + "_ANIM_" + name + "_END");
@@ -311,10 +313,13 @@ bool CharacterDisplay::animationEnd(cocos2d::Event* event)
     }
     else if(lastAnimationName != m_lastAnimationName)
     {
-        if(TEST_CHAR_ANIM_ON)printf("ANIMATION_END :: char#%i, endName = %s, startName = %s\n", m_number, lastAnimationName.c_str() ,m_lastAnimationName.c_str());
+        if(TEST_CHAR_ANIM_ON)printf(", startName = %s", m_lastAnimationName.c_str());
         
         animation->fadeIn(m_lastAnimationName, 0.2);
     }
+    
+    if(TEST_CHAR_ANIM_ON)printf(", event = CHAR_%i_ANIM_%s_END\n", m_number, name.c_str());
+    
     return true;
 }
 

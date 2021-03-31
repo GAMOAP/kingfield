@@ -140,8 +140,8 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
                     if(touchedBox.x == actionBoxesTags[a].x)
                     {
                         int charStrikedNbr = MainObject::getInstance()->getCharByTag(actionBoxesTags[a].y)->getNumber();
-                        int charForce = rand() % (mainStuff->getCharSpec(charStrikedNbr)["shield"] + 1);
-                        std::vector<int> strikeValue = {charStrikedNbr, charForce};
+                        int charDefence = rand() % (mainStuff->getCharSpec(charStrikedNbr)["shield"] + 1);
+                        std::vector<int> strikeValue = {charStrikedNbr, charDefence};
                         strikedList.push_back(strikeValue);
                         
                         action->setCharStrikedList(strikedList);

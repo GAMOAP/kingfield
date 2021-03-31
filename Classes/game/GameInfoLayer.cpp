@@ -130,36 +130,30 @@ void GameInfoLayer::initConnectSprite(bool addRemove)
 //------------------------FIGHT LOGO------------------------------
 void GameInfoLayer::addFightLogo()
 {
-    m_SharedGameInfoLayer->initFightLogo(true);
+    m_SharedGameInfoLayer->initFightLogo();
 }
-void GameInfoLayer::removeFightLogo()
+void GameInfoLayer::initFightLogo()
 {
-    m_SharedGameInfoLayer->initFightLogo(false);
-}
-void GameInfoLayer::initFightLogo(bool addRemove)
-{
-    if(!addRemove)
+    m_fightLogo = Sprite::create(KFSprite::getFile("screen_fight_logo"));
+    Vec3 logoPos = MainGrid::getPositionXYZ(1, 2);
+    Vec2 visibleSize = MainGrid::getVisibleSize();
+    m_fightLogo->setPosition(Vec2(logoPos.x, logoPos.y));
+    m_fightLogo->setScale(0.3);
+    m_infoLayer->addChild(m_fightLogo);
+    
+    if(m_fightLogo)
     {
-        if(m_fightLogo)
+        auto scale = ScaleTo::create(1.2, 5);
+        auto move = MoveTo::create(1.2, Vec2(visibleSize.x/2, visibleSize.y/2));
+        auto fadeOut = FadeOut::create(1);
+        auto spawn = Spawn::create(scale, move, fadeOut, NULL);
+        auto easeIn = EaseIn::create(spawn, 0.4);
+        auto callFunc = CallFunc::create([=]()
         {
-            auto scale = ScaleTo::create(1.2, 5);
-            auto fadeOut = FadeOut::create(1);
-            auto spawn = Spawn::createWithTwoActions(scale, fadeOut);
-            auto easeIn = EaseIn::create(spawn, 0.4);
-            auto callFunc = CallFunc::create([=]()
-            {
-                m_fightLogo->removeFromParent();
-                m_fightLogo = nullptr;
-            });
-            auto seq = Sequence::create(easeIn, callFunc, NULL);
-            m_fightLogo->runAction(seq);
-        }
-    }
-    else
-    {
-        m_fightLogo = Sprite::create(KFSprite::getFile("screen_fight_logo"));
-        Vec2 visibleSize = MainGrid::getVisibleSize();
-        m_fightLogo->setPosition(Vec2(visibleSize.x/2, visibleSize.y/2));
-        m_infoLayer->addChild(m_fightLogo);
+            m_fightLogo->removeFromParent();
+            m_fightLogo = nullptr;
+        });
+        auto seq = Sequence::create(easeIn, callFunc, NULL);
+        m_fightLogo->runAction(seq);
     }
 }

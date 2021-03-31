@@ -183,8 +183,6 @@ void GameCharacters::setAction(std::vector<KFAction*> actionSequence)
     GameCards::unselectAll();
     GameBoxes::unselectAll();
     
-    
-    
     auto character = MainObject::getCharByNumber(actionSequence[0]->getCharNbr());
     
     auto endActionSequence = EventListenerCustom::create("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION_SEQUENCE", [=](EventCustom* event)
@@ -213,7 +211,8 @@ void GameCharacters::setActionSequence(Character* character)
 {
     if(m_sequenceState >= m_actionSequence.size())
     {
-        endActionSequence(character);
+        character->getEventDispatcher()->dispatchCustomEvent("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION_SEQUENCE");
+        character->getEventDispatcher()->removeCustomEventListeners("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION_SEQUENCE");
     }
     else
     {
@@ -235,6 +234,8 @@ void GameCharacters::setActionSequence(Character* character)
 }
 void GameCharacters::endActionSequence(Character* character)
 {
+    character->getEventDispatcher()->removeCustomEventListeners("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION_SEQUENCE");
+    
     MainStuff::setCharSpec(character->getNumber(), "crystal", -m_actionSequence[0]->getCost());
     m_actionSequence.clear();
     character->setIsMove(false);

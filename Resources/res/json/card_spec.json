@@ -748,7 +748,7 @@
     "time" : {
       "sun" : {
         "mana" : 2,
-        "slot0" : "attack",
+        "slot0" : "strike",
         "slot1" : "NULL",
         "slot2" : "NULL",
         "board" : [

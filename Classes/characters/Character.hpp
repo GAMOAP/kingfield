@@ -25,7 +25,7 @@ public:
     
     void setStuff();
     
-    void setAction(KFAction* action);
+    bool setAction(KFAction* action);
     
     void setSelect(bool isTurn = true);
     void setUnselect();
@@ -42,8 +42,14 @@ private:
     
     void setActionSequence();
     
-    void setReaction(std::string reaction);
-    bool setActionToChar(Character* character, std::string actionName, int actionForce = 0);
+    enum m_reaction{block, pain, death, heal};
+    std::string setReaction(m_reaction reaction);
+    
+    bool setMove(int endTag);
+    bool strikeChar(std::vector<std::vector<int>> strikedList, int force);
+    bool healChar(std::vector<std::vector<int>> healList);
+    
+    
     
 protected:
     bool m_isPlayerTeam;
