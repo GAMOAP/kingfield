@@ -112,7 +112,6 @@ bool SceneBarrack::unTouchBox(int tag)
         if(character)
         {
             GameCharacters::setCharSelect(character->getNumber());
-            MainStuff::resetCardSpecManaCost();
         }
         //select card.
         auto card = GameCards::getCardByTag(tag);

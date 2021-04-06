@@ -42,14 +42,13 @@ private:
     
     void setActionSequence();
     
-    enum m_reaction{block, pain, death, heal};
-    std::string setReaction(m_reaction reaction);
-    
     bool setMove(int endTag);
-    bool strikeChar(std::vector<std::vector<int>> strikedList, int force);
-    bool healChar(std::vector<std::vector<int>> healList);
+    bool setStrike(std::vector<std::vector<int>> strikedList, std::string actionSlotType, int force);
+    bool setSpell(std::vector<std::vector<int>> bewitchedList, std::string actionSlotType, int force);
     
     
+    enum m_reaction{fail, block, pain, death, heal, crystal_break};
+    std::string setReaction(m_reaction reaction);
     
 protected:
     bool m_isPlayerTeam;
@@ -58,7 +57,6 @@ protected:
     
     const float m_actionTime = 0.5;
     
-    //const std::vector<int> m_originTagList= {21, 31, 41, 51, 61, 25, 35, 45, 55, 65};
     const std::vector<int> m_originTagList= {21, 22, 23, 24, 25, 65, 64, 63, 62, 61};
 };
 #endif /* Character_hpp */

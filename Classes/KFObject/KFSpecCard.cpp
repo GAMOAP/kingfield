@@ -41,7 +41,7 @@ bool KFSpecCard::init(std::string type, std::string breed, std::string object)
     }
     else
     {
-        resetMana();
+        setMana();
         
         setSlotList();
         
@@ -70,7 +70,18 @@ void KFSpecCard::setKFcardSpec()
     }
 }
 
-
+bool KFSpecCard::setCardBuff(BuffName buffName, int value)
+{
+    switch (buffName) {
+        case mana:
+            m_mana = m_manaOrigin + value;
+            break;
+            
+        default:
+            break;
+    }
+    return true;
+}
 
 std::string KFSpecCard::getType()
 {
@@ -86,23 +97,14 @@ std::string KFSpecCard::getObject()
 }
 
 //Mana-------------------------------
-void KFSpecCard::setMana(int addChange)
-{
-    m_mana += addChange;
-}
-void KFSpecCard::resetMana()
+void KFSpecCard::setMana()
 {
     if(m_object != "" && m_KFcardSpec[m_type.c_str()][m_breed.c_str()][m_object.c_str()].HasMember("mana"))
     {
         const rapidjson::Value& spec = m_KFcardSpec[m_type.c_str()][m_breed.c_str()][m_object.c_str()]["mana"];
-        m_mana = cocos2d::Value(spec.GetInt()).asInt();
         m_manaOrigin = cocos2d::Value(spec.GetInt()).asInt();
     }
-    else
-    {
-        m_mana = NAN;
-        m_manaOrigin = NAN;
-    }
+    m_mana = m_manaOrigin;
 }
 int KFSpecCard::getMana(bool isOrigin)
 {

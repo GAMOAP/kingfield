@@ -86,11 +86,14 @@ bool MainStuff::setStuff(int charNumber, std::string typeString, std::string bre
     {
         m_SharedMainStuff->m_charStuffList[charNumber][typeInt][2] = object;
     }
+    
     MainUser::setUserTeam(m_SharedMainStuff->m_charStuffList);
     
     initCharSpec(charNumber);
+    initCharBuff(charNumber);
     return true;
 }
+
 std::vector<std::string> MainStuff::getStuffByName(int charNumber, int cardNumber)
 {
     std::vector<std::string> stuffCard;
@@ -184,7 +187,7 @@ void MainStuff::initCharSpec(int charNbr)
         for(int s = 0; s < nbrSlot; s++)
         {
             std::vector<std::string> stuff = getStuffByName(charNbr, t);
-            std::string cardSlotName  = getCardSpec(CARD_TYPE[t], stuff[0], stuff[1])->getSlot("slot" + std::to_string(s));
+            std::string cardSlotName  = getCardSpec(CARD_TYPE[t], stuff[0], stuff[1], charNbr)->getSlot("slot" + std::to_string(s));
             
             for(csIt = charSpec.begin(); csIt != charSpec.end(); csIt++)
             {
@@ -218,7 +221,7 @@ void MainStuff::setCharSpec(int charNbr, std::string specName, int value)
     const int cRedBlue = charSpec["crystal_red"] + charSpec["crystal_blue"];
     if(specName == "crystal" && specValue > cRedBlue){specValue = cRedBlue;}
     if(specName == "health" && specValue > charSpec["life"]){specValue = charSpec["life"];}
-    if(specName == "shiel" && specValue > 12){specValue = 12;}
+    if(specName == "shield" && specValue > 12){specValue = 12;}
     if(specName == "strike" && specValue > 12){specValue = 12;}
     
     if(m_SharedMainStuff->m_charactersSpec[charNbr][specName] != specValue)
@@ -236,8 +239,67 @@ std::map<std::string, int> MainStuff::getCharSpec(int charNbr)
     return m_SharedMainStuff->m_charactersSpec[charNbr];
 }
 
+//---------------------------CHARACTER BUFF----------------------------------
+bool MainStuff::initCharBuff(int charNbr)
+{
+    std::map<std::string, int>::iterator scbIt;
+    for(scbIt = m_SharedMainStuff->m_charactersBuff[charNbr].begin(); scbIt != m_SharedMainStuff->m_charactersBuff[charNbr].end(); scbIt++)
+    {
+        //remove character's crystal buffs.
+        std::size_t crystal = scbIt->first.find("crystal");
+        if(crystal != std::string::npos)
+        {
+            scbIt->second = NULL;
+        }
+    }
+    for(int t = 0; t < m_SharedMainStuff->m_charStuffList[charNbr].size(); t++)
+    {
+        KFSpecCard* specCard = getCardSpec(CARD_TYPE[t], m_SharedMainStuff->m_charStuffList[charNbr][t][1], m_SharedMainStuff->m_charStuffList[charNbr][t][2], charNbr);
+        if(specCard)
+        {
+            int nbrSlot = 3;
+            for(int s = 0; s < nbrSlot ; s++)
+            {
+                //add cards crystal buffs
+                std::string slotName = specCard->getSlot("slot" + std::to_string(s));
+                std::size_t crystal = slotName.find("crystal");
+                
+                if(crystal != std::string::npos &&
+                   slotName.compare(8,4,"blue") != 0 &&
+                   slotName.compare(8,3,"red") != 0 &&
+                   slotName.compare(8,5,"break") != 0)
+                {
+                    m_SharedMainStuff->setCharBuff(charNbr, slotName, -1);
+                }
+            }
+        }
+    }
+    return true;
+}
+bool MainStuff::setCharBuff(int charNbr, std::string buffName, int value)
+{
+    std::map<std::string, int>::iterator cbIt = m_SharedMainStuff->m_charactersBuff[charNbr].find(buffName);
+    if(cbIt != m_SharedMainStuff->m_charactersBuff[charNbr].end() && value >= 1)
+    {
+        cbIt->second += value;
+        if(cbIt->second <= 0)
+        {
+            m_SharedMainStuff->m_charactersBuff[charNbr].erase(cbIt);
+        }
+    }
+    else
+    {
+        m_SharedMainStuff->m_charactersBuff[charNbr][buffName] = value;
+    }
+    return true;
+}
+std::map<std::string, int> MainStuff::getCharBuff(int charNbr)
+{
+    return m_SharedMainStuff->m_charactersBuff[charNbr];
+}
+
 //---------------------------CARD SPEC----------------------------------
-KFSpecCard* MainStuff::getCardSpec(std::string type, std::string breed, std::string object)
+KFSpecCard* MainStuff::getCardSpec(std::string type, std::string breed, std::string object, int charNbr)
 {
     KFSpecCard* specCard = nullptr;
     
@@ -246,32 +308,20 @@ KFSpecCard* MainStuff::getCardSpec(std::string type, std::string breed, std::str
     {
         KFSpecCard* sc = *cslIt;
         if(sc->getType() == type && sc->getBreed() == breed && sc->getObject() == object)
+        {
             specCard = sc;
+        }
+    }
+    
+    std::map<std::string, int>::iterator cblIt;
+    for(cblIt = m_SharedMainStuff->m_charactersBuff[charNbr].begin(); cblIt != m_SharedMainStuff->m_charactersBuff[charNbr].end(); cblIt++)
+    {
+        std::size_t crystal = cblIt->first.find("crystal");
+        if(crystal != std::string::npos && cblIt->first.compare(8, cblIt->first.size() -8, type) ==0)
+        {
+            specCard->setCardBuff(KFSpecCard::mana, cblIt->second);
+        }
     }
     
     return specCard;
-}
-void MainStuff::setCardSpecChangeManaCost(std::string type, bool reset)
-{
-    Vector<KFSpecCard*>::iterator cslIt;
-    for(cslIt = m_SharedMainStuff->m_cardSpecLibrary.begin(); cslIt != m_SharedMainStuff->m_cardSpecLibrary.end(); cslIt++)
-    {
-        KFSpecCard* stuffCard = *cslIt;
-        if(stuffCard->getType() == type)
-        {
-            if(!reset)
-                stuffCard->setMana(-1);
-            else
-                stuffCard->resetMana();
-        }
-    }
-}
-void MainStuff::resetCardSpecManaCost()
-{
-    const std::vector<std::string> cardType= {"move","spell","weapon","object"};
-    for(int t = 0; t < cardType.size(); t++)
-    {
-        std::string type = cardType[t];
-        setCardSpecChangeManaCost(type, true);
-    }
 }

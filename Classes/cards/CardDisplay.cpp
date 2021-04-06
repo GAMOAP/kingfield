@@ -116,7 +116,8 @@ void CardDisplay::setMana()
     if(m_board == "library")
         getOrigin = true;
     
-    int manaNbr = MainStuff::getCardSpec(m_type, m_breed, m_object)->getMana(getOrigin);
+    int charNbr = GameCharacters::getCharSelect()->getNumber();
+    int manaNbr = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getMana(getOrigin);
     std::string manaNbrFileName = KFSprite::getFile("cardUI_number_" + std::to_string(manaNbr));
     if(!m_manaNbr)
     {
@@ -170,7 +171,8 @@ void CardDisplay::setSlots()
     for(int s = 0; s < m_nbrSlot ; s++)
     {
         auto slot = m_slotList[s];
-        std::string slotName = MainStuff::getCardSpec(m_type, m_breed, m_object)->getSlot("slot" + std::to_string(s));
+        int charNbr = GameCharacters::getCharSelect()->getNumber();
+        std::string slotName = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getSlot("slot" + std::to_string(s));
         std::string slotFileName = KFSprite::getFile("cardUI_" + slotName);
         if(!slot)
         {
@@ -198,7 +200,8 @@ void CardDisplay::setSlots()
 }
 void CardDisplay::setChessBoard()
 {
-    std::vector<std::vector<int>> board = MainStuff::getCardSpec(m_type, m_breed, m_object)->getBoard();
+    int charNbr = GameCharacters::getCharSelect()->getNumber();
+    std::vector<std::vector<int>> board = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getBoard();
     
     std::string checkBoardFileName = KFSprite::getFile("cardUI_chess_board");
     if(!m_chessBoard)
@@ -292,7 +295,8 @@ bool CardDisplay::isCardAvailable()
     bool getOrigin = false;
        if(m_board == "library")
            getOrigin = true;
-    int cardCost = MainStuff::getCardSpec(m_type, m_breed, m_object)->getMana(getOrigin);
+    int charNbr = GameCharacters::getCharSelect()->getNumber();
+    int cardCost = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getMana(getOrigin);
     
     if(charCrystal >= cardCost && charCrystal > charCrystalRed)
         cardAvailable = true;
@@ -301,8 +305,11 @@ bool CardDisplay::isCardAvailable()
 }
 bool CardDisplay::isCardChanged()
 {
-    int manaOrigin = MainStuff::getCardSpec(m_type, m_breed, m_object)->getMana(true);
-    int mana = MainStuff::getCardSpec(m_type, m_breed, m_object)->getMana(false);
+    int charNbr = GameCharacters::getCharSelect()->getNumber();
+    KFSpecCard* specCard = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr);
+    int manaOrigin = specCard->getMana(true);
+    int mana = specCard->getMana(false);
+    
     if(manaOrigin != mana)
         return true;
     else

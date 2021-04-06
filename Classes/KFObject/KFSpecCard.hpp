@@ -17,13 +17,11 @@ class KFSpecCard
 public:
     static KFSpecCard* createCard(std::string type, std::string breed, std::string object = "");
     
-    
     std::string getType();
     std::string getBreed();
     std::string getObject();
     
-    void setMana(int addChange = 0);
-    void resetMana();
+    void setMana();
     int getMana(bool isOrigin);
     
     void setSlotList();
@@ -34,8 +32,12 @@ public:
     void setBoard();
     std::vector<std::vector<int>> getBoard();
     
+    enum BuffName{mana};
+    bool setCardBuff(BuffName name, int value);
+    
 private:
     bool init(std::string type, std::string breed, std::string object);
+    
     void setKFcardSpec();
     
 protected:

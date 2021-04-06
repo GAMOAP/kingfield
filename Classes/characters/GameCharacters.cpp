@@ -54,6 +54,7 @@ void GameCharacters::setCharacters(int charNbr)
             if(c == 7){m_SharedGameCharacters->m_kingEnemy = character;}
             
             MainStuff::initCharSpec(c);
+            MainStuff::initCharBuff(c);
         }
     }
 }

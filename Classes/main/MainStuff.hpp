@@ -36,10 +36,13 @@ public:
     static void setCharSpec(int charNbr, std::string specName, int value);
     static std::map<std::string, int> getCharSpec(int charNbr);
     
+    //Buff.
+    static bool initCharBuff(int charNbr);
+    static bool setCharBuff(int charNbr, std::string buffName, int value);
+    static std::map<std::string, int> getCharBuff(int charNbr);
+    
     //Card.
-    static KFSpecCard* getCardSpec(std::string type, std::string breed, std::string object);
-    static void setCardSpecChangeManaCost(std::string type, bool reset = false);
-    static void resetCardSpecManaCost();
+    static KFSpecCard* getCardSpec(std::string type, std::string breed, std::string object, int charNbr);
     
 private:
     
@@ -47,7 +50,9 @@ private:
 protected:
     std::map<std::string, int> m_charactersSpec[CHAR_NUMBER];
     
-    std::vector<KFSpecCard*>m_cardSpecLibrary;
+    std::map<std::string, int> m_charactersBuff[CHAR_NUMBER];
+    
+    std::vector<KFSpecCard*> m_cardSpecLibrary;
     
     std::vector<std::vector<std::vector<std::string>>> m_charStuffList;
 };

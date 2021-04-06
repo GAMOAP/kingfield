@@ -113,6 +113,19 @@ void GameCards::setCardSelect(int number, std::string board)
         }
     }
 }
+void GameCards::setCardsChange()
+{
+    auto nodeList = MainObject::getMainLayer()->getChildren();
+    std::vector<Node*>::iterator nlIt;
+    for(nlIt = nodeList.begin(); nlIt != nodeList.end(); nlIt++)
+    {
+        auto card = dynamic_cast<DeckCard*>(*nlIt);
+        if(card)
+        {
+            card->setTexture(true);
+        }
+    }
+}
 //library-------------
 void GameCards::setCardSelectLibrary(Card* cardCliqued)
 {
@@ -143,7 +156,26 @@ void GameCards::setCardSelectLibrary(Card* cardCliqued)
             {
                 card->setUnselect();
                 card->place(0);
+                setCardsChange();
             }
+            
+            /*
+            auto deckCard = dynamic_cast<DeckCard*>(*nlIt);
+            if(deckCard)
+            {
+                if(TEST_CARD)printf("setCardSelectLibrary type = %s\n",cardCliqued->getType().c_str());
+                
+                
+                
+                auto cardIsIn = EventListenerCustom::create("NODE_card_" + std::to_string(deckCard->getNumber())+"_IS_UP", [=](EventCustom* event)
+                {
+                    
+                });
+                auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+                eventDispatcher->addEventListenerWithSceneGraphPriority(cardIsIn, deckCard);
+                 
+            }
+            */
         }
     }
 }
@@ -204,53 +236,6 @@ void GameCards::resetLibrary()
                 card->setSelect();
             
             card->initDisplay();
-        }
-    }
-}
-
-//change crad spec
-//when card select is up in Card->setSelect.
-void GameCards::setCardsChange()
-{
-    auto mainStuff = MainStuff::getInstance();
-    
-    mainStuff->resetCardSpecManaCost();
-    
-    auto nodeList = MainObject::getMainLayer()->getChildren();
-    std::vector<Node*>::iterator nlIt;
-    for(nlIt = nodeList.begin(); nlIt != nodeList.end(); nlIt++)
-    {
-        auto card = dynamic_cast<Card*>(*nlIt);
-        if(card && card->getBoard() != "library")
-        {
-            int nbrSlot = 3;
-            for(int s = 0; s < nbrSlot ; s++)
-            {
-                std::string slotName = mainStuff->getCardSpec(card->getType(), card->getBreed(), card->getObject())->getSlot("slot" + std::to_string(s));
-                
-                //Change cards crystals.
-                std::size_t crystal = slotName.find("crystal");
-                std::string type = slotName.erase(0, 8);
-                if(crystal != std::string::npos && type != "blue" && type != "red" && type != "break")
-                {
-                    mainStuff->setCardSpecChangeManaCost(type);
-                }
-            }
-        }
-    }
-    for(nlIt = nodeList.begin(); nlIt != nodeList.end(); nlIt++)
-    {
-        auto card = dynamic_cast<DeckCard*>(*nlIt);
-        if(card)
-        {
-            /*if(card->getBoard() == "deck")
-            {
-                card->setTexture(true);
-            }
-            if(card->getBoard() == "library" && mainStuff->getIsCardChange(card->getType(), card->getBreed(), card->getObject()))
-            {*/
-                card->setTexture(true);
-            //}
         }
     }
 }

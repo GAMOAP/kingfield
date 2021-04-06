@@ -107,8 +107,6 @@ void Character::setStuff()
 //---------------------------ACTION--------------------------
 bool Character::setAction(KFAction* action)
 {
-    auto mainStuff = MainStuff::getInstance();
-    
     //init action.
     int actionType = action->getType();
     
@@ -121,14 +119,13 @@ bool Character::setAction(KFAction* action)
         setMove(endTag);
     }
     //character strike...
-    if(actionType == 1)
+    if(actionType == 1 || actionType == 2)
     {
         const std::string actionSlotType = action->getSlotSpec();
-        std::vector<std::vector<int>> strikedList = action->getCharStrikedList();
+        std::vector<std::vector<int>> charList = action->getCharStrikedList();
         const int force = action->getCharAttackForce();
         if(force <=0)
         {
-            printf("fail");
             m_characterDisplay->setAnimation("fail", 1);
             auto delayFail = DelayTime::create(1);
             auto failFunc = CallFunc::create([this]()
@@ -139,16 +136,22 @@ bool Character::setAction(KFAction* action)
             this->runAction(seq);
             return false;
         }
-        
-        if(actionSlotType == "strike")
+        else
         {
-            strikeChar(strikedList, force);
-        }
-        if(actionSlotType == "heal")
-        {
-            healChar(strikedList);
+            switch (actionType) {
+                case 1:
+                    setStrike(charList, actionSlotType, force);
+                    break;
+                case 2:
+                    setSpell(charList, actionSlotType, force);
+                    break;
+                    
+                default:
+                    break;
+            }
         }
     }
+    
     return true;
 }
 
@@ -188,33 +191,44 @@ bool Character::setMove(int endTag)
     return true;
 }
 //------------------ACTION STRIKE CHAR----------------
-bool Character::strikeChar(std::vector<std::vector<int>> strikedList, int force)
+bool Character::setStrike(std::vector<std::vector<int>> strikedList, std::string actionSlotType, int force)
 {
     auto mainStuff = MainStuff::getInstance();
     
     this->setLocalZOrder(32);
-    m_characterDisplay->setAnimation("attack_" + mainStuff->getStuffByName(m_number, 2)[1], 1);
-    setInfo("attack", force);
+    
+    if(actionSlotType == "strike")
+    {
+        m_characterDisplay->setAnimation("attack_" + mainStuff->getStuffByName(m_number, 2)[1], 1);
+        setInfo("attack", force);
+    }
+    else
+    {
+        m_characterDisplay->setAnimation("spell", 1);
+    }
     
     auto delayStrike = DelayTime::create(1);
-    auto strikeFunc = CallFunc::create([this, strikedList, force]()
+    auto strikeFunc = CallFunc::create([this, strikedList, actionSlotType, force]()
     {
         this->setLocalZOrder(m_index);
         for(int c = 0; c < strikedList.size(); c++)
         {
-            //strikeChar
             const auto strikedChar = MainObject::getCharByNumber(strikedList[c][0]);
-            const int health = MainStuff::getCharSpec(strikedList[c][0])["health"];
-            const int defence = strikedList[c][1];
-            
-            if(strikedChar)
+            m_reaction reactionName;
+            if(!strikedChar)
             {
-                strikedChar->setLocalZOrder(32);
-                
-                strikedChar->setInfo("defense", defence);
-                
-                m_reaction reactionName = block;
-                if(force >= defence)
+                printf("ERROR :: strike char missing");
+            }
+            
+            strikedChar->setLocalZOrder(32);
+            const int defense = strikedList[c][1];
+            strikedChar->setInfo("defense", defense);
+            
+            if(actionSlotType == "strike")
+            {
+                const int health = MainStuff::getCharSpec(strikedList[c][0])["health"];
+                reactionName = block;
+                if(force >= defense)
                 {
                     if(health <= 1)
                     {
@@ -225,28 +239,41 @@ bool Character::strikeChar(std::vector<std::vector<int>> strikedList, int force)
                         reactionName = pain;
                     }
                 }
-                
-                std::string endEventName = strikedChar->setReaction(reactionName);
-                auto reactionEndEvent = EventListenerCustom::create(endEventName, [=](EventCustom* event)
+            }
+            else if(actionSlotType == "heal")
+            {
+                if(defense <= 0)
+                    reactionName = fail;
+                else
+                    reactionName = heal;
+            }
+            else if(actionSlotType == "crystal_break")
+            {
+                reactionName = block;
+                if(force >= defense)
                 {
-                    if(reactionName == death)
-                    {
-                        strikedChar->removeToStage();
-                        _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
-                        _eventDispatcher->removeCustomEventListeners("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
-                    }
-                    strikedChar->setLocalZOrder(strikedChar->m_index);
-                    _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
-                });
-                auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-                eventDispatcher->addEventListenerWithSceneGraphPriority(reactionEndEvent, strikedChar);
-                
-                
+                    reactionName = crystal_break;
+                }
             }
             else
             {
-                _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
+                printf("ERROR :: actionSlotType missing");
             }
+            
+            std::string endEventName = strikedChar->setReaction(reactionName);
+            auto reactionEndEvent = EventListenerCustom::create(endEventName, [=](EventCustom* event)
+            {
+                if(reactionName == death)
+                {
+                    strikedChar->removeToStage();
+                    _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
+                    _eventDispatcher->removeCustomEventListeners("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
+                }
+                strikedChar->setLocalZOrder(strikedChar->m_index);
+                _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
+            });
+            auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+            eventDispatcher->addEventListenerWithSceneGraphPriority(reactionEndEvent, strikedChar);
         }
     });
     
@@ -255,47 +282,15 @@ bool Character::strikeChar(std::vector<std::vector<int>> strikedList, int force)
     
     return true;
 }
-//------------------ACTION HEAL CHAR----------------
-bool Character::healChar(std::vector<std::vector<int>> healList)
+
+//------------------ACTION SPELL CHAR----------------
+bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::string actionSlotType, int force)
 {
-    this->setLocalZOrder(32);
-    m_characterDisplay->setAnimation("spell", 1);
     
-    auto delayHeal = DelayTime::create(1);
-    auto healFunc = CallFunc::create([this, healList]()
-    {
-        
-        this->setLocalZOrder(m_index);
-        for(int c = 0; c < healList.size(); c++)
-        {
-            const auto healedChar = MainObject::getCharByNumber(healList[c][0]);
-            
-            if(healedChar)
-            {
-                healedChar->setLocalZOrder(32);
-                std::string endEventName = healedChar->setReaction(heal);
-                auto reactionEndEvent = EventListenerCustom::create(endEventName, [=](EventCustom* event)
-                {
-                    printf("heal_end");
-                    healedChar->setLocalZOrder(healedChar->m_index);
-                    _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
-                });
-                auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-                eventDispatcher->addEventListenerWithSceneGraphPriority(reactionEndEvent, healedChar);
-            }
-            else
-            {
-                _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
-            }
-        }
-    });
-    auto seq = Sequence::create(delayHeal, healFunc, NULL);
-    this->runAction(seq);
-    
-    return false;
+    return true;
 }
 
-
+//------------------REACTION----------------
 std::string Character::setReaction(m_reaction reaction)
 {
     std::string animationName = "";
@@ -303,6 +298,9 @@ std::string Character::setReaction(m_reaction reaction)
     bool playLastAnimation = true;
     
     switch (reaction) {
+        case fail:
+            animationName = "fail";
+            break;
         case block:
             animationName = "block";
             break;
@@ -317,6 +315,10 @@ std::string Character::setReaction(m_reaction reaction)
         case heal:
             MainStuff::setCharSpec(m_number, "health", 1);
             animationName = "happy";
+            break;
+        case crystal_break:
+            MainStuff::setCharSpec(m_number, "crystal", -1);
+            animationName = "sad";
             break;
             
         default:

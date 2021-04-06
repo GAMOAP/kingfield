@@ -13,7 +13,6 @@
 
 #include "GameBoxes.hpp"
 #include "GameCharacters.hpp"
-#include "GameCards.hpp"
 
 #include "Card.hpp"
 
@@ -66,7 +65,6 @@ void Card::setSelect()
         auto charIsOutUp = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_UP", [this](EventCustom* event)
         {
             m_cardDisplay->setScale(m_scaleArray[1]);
-            GameCards::setCardsChange();
             m_select = true;
         });
         m_cardDisplay->setSelect();
@@ -109,7 +107,8 @@ std::string Card::getObject(){ return m_object;}
 
 int Card::getCost()
 {
-    return MainStuff::getCardSpec(m_type, m_breed, m_object)->getMana(false);
+    int charNbr = GameCharacters::getCharSelect()->getNumber();
+    return MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getMana(false);
 }
 
 bool Card::isEqual(const Card* b)const
