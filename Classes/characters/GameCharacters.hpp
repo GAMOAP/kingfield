@@ -39,6 +39,9 @@ public:
     static void setAction(std::vector<KFAction*> actionSequence);
     static void setActionAll(std::string actionName);
     
+    //buffs
+    static void setBuffs(int turnNumber);
+    
     //character UI
     static CharacterUI* getCharUI();
     

@@ -277,6 +277,14 @@ bool CharacterDisplay::playAnimation()
     m_lastAnimationName = animation->getLastAnimationName();
     std::string animationName = m_animationVector[0] + "_" + m_animationVector[1];
     
+    //check if animation exist in animation list and replace if not.
+    std::vector<std::string> animationsNames = animation->getAnimationNames();
+    std::vector<std::string>::iterator anIt = std::find(animationsNames.begin(), animationsNames.end(), animationName);
+    if(anIt == animationsNames.end())
+    {
+        animationName = m_animationVector[0] + "_ok";
+    }
+    
     if(animationName != m_lastAnimationName && m_alive)
     {
         if(TEST_CHAR_ANIM_ON)printf("ANIMATION_START :: char#%i, name = %s\n", m_number, animationName.c_str());

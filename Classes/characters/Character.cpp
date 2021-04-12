@@ -190,7 +190,7 @@ bool Character::setMove(int endTag)
     
     return true;
 }
-//------------------ACTION STRIKE CHAR----------------
+//------------------ACTION STRIKE----------------
 bool Character::setStrike(std::vector<std::vector<int>> strikedList, std::string actionSlotType, int force)
 {
     auto mainStuff = MainStuff::getInstance();
@@ -283,9 +283,50 @@ bool Character::setStrike(std::vector<std::vector<int>> strikedList, std::string
     return true;
 }
 
-//------------------ACTION SPELL CHAR----------------
+//------------------ACTION SPELL----------------
 bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::string actionSlotType, int force)
 {
+    this->setLocalZOrder(32);
+    m_characterDisplay->setAnimation("spell", 1);
+    
+    auto delayStrike = DelayTime::create(1);
+    auto strikeFunc = CallFunc::create([this, bewitchedList, actionSlotType, force]()
+    {
+        this->setLocalZOrder(m_index);
+        for(int c = 0; c < bewitchedList.size(); c++)
+        {
+            const auto bewitchedChar = MainObject::getCharByNumber(bewitchedList[c][0]);
+            m_reaction reactionName;
+            reactionName = block;
+            if(actionSlotType == "defense_more"){reactionName = defense_more;}
+            if(actionSlotType == "attack_more"){reactionName = attack_more;}
+            if(actionSlotType == "defense_less"){reactionName = defense_less;}
+            if(actionSlotType == "attack_less"){reactionName = attack_less;}
+            if(actionSlotType == "poison"){reactionName = poison;}
+            if(actionSlotType == "sleep"){reactionName = sleep;}
+            if(actionSlotType == "block"){reactionName = blocking;}
+            
+            std::string endEventName = bewitchedChar->setReaction(reactionName);
+            auto reactionEndEvent = EventListenerCustom::create(endEventName, [=](EventCustom* event)
+            {
+                /*
+                if(actionSlotType == "poison" || actionSlotType == "sleep" || actionSlotType == "block")
+                {
+                    printf("char_%i->setState(%s)\n",bewitchedChar->m_number, actionSlotType.c_str());
+                    bewitchedChar->m_characterDisplay->setState(actionSlotType);
+                }
+                */
+                
+                bewitchedChar->setLocalZOrder(bewitchedChar->m_index);
+                _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
+            });
+            auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+            eventDispatcher->addEventListenerWithSceneGraphPriority(reactionEndEvent, bewitchedChar);
+        }
+    });
+    
+    auto seq = Sequence::create(delayStrike, strikeFunc, NULL);
+    this->runAction(seq);
     
     return true;
 }
@@ -293,11 +334,13 @@ bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::strin
 //------------------REACTION----------------
 std::string Character::setReaction(m_reaction reaction)
 {
-    std::string animationName = "";
+    std::string animationName = "stand";
     int nbrLoop = 1;
     bool playLastAnimation = true;
     
     switch (reaction) {
+            
+        //strike
         case fail:
             animationName = "fail";
             break;
@@ -316,15 +359,44 @@ std::string Character::setReaction(m_reaction reaction)
             MainStuff::setCharSpec(m_number, "health", 1);
             animationName = "happy";
             break;
+    
+        //Spell
         case crystal_break:
             MainStuff::setCharSpec(m_number, "crystal", -1);
             animationName = "sad";
+            break;
+        case defense_more:
+            MainStuff::setCharBuff(m_number, "defense_more", 1);
+            animationName = "happy";
+            break;
+        case attack_more:
+            MainStuff::setCharBuff(m_number, "attack_more", 1);
+            animationName = "happy";
+            break;
+        case defense_less:
+            MainStuff::setCharBuff(m_number, "defense_less", 1);
+            animationName = "sad";
+            break;
+        case attack_less:
+            MainStuff::setCharBuff(m_number, "attack_less", 1);
+            animationName = "sad";
+            break;
+        case poison:
+            MainStuff::setCharBuff(m_number, "poison", 1);
+            animationName = "sad";
+            break;
+        case sleep:
+            MainStuff::setCharBuff(m_number, "sleep", 1);
+            animationName = "sad";
+            break;
+        case blocking:
+            MainStuff::setCharBuff(m_number, "block", 1);
+            animationName = "happy";
             break;
             
         default:
             break;
     }
-    
     m_characterDisplay->setAnimation(animationName, nbrLoop, playLastAnimation);
     
     return "CHAR_" + std::to_string(m_number) + "_ANIM_" + animationName + "_END";

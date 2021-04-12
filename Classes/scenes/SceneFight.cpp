@@ -121,6 +121,8 @@ bool SceneFight::startTurn()
 }
 bool SceneFight::endTurn()
 {
+    GameCharacters::setBuffs(m_SharedSceneFight->m_turnNumber);
+    
     m_SharedSceneFight->m_turnNumber++;
     GameCharacters::setActionAll("give_crystals");
     

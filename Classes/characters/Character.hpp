@@ -47,7 +47,7 @@ private:
     bool setSpell(std::vector<std::vector<int>> bewitchedList, std::string actionSlotType, int force);
     
     
-    enum m_reaction{fail, block, pain, death, heal, crystal_break};
+    enum m_reaction{fail, block, pain, death, heal, crystal_break, defense_more, attack_more, defense_less, attack_less, poison, sleep, blocking};
     std::string setReaction(m_reaction reaction);
     
 protected:

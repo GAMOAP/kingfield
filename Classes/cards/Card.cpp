@@ -105,6 +105,11 @@ std::string Card::getType(){ return m_type;}
 std::string Card::getBreed(){ return m_breed;}
 std::string Card::getObject(){ return m_object;}
 
+std::string Card::getType_Breed_object()
+{
+    return m_type + "_" + m_breed + "_" + m_object;
+}
+
 int Card::getCost()
 {
     int charNbr = GameCharacters::getCharSelect()->getNumber();

@@ -35,6 +35,7 @@ public:
     virtual std::string getType();
     virtual std::string getBreed();
     virtual std::string getObject();
+    virtual std::string getType_Breed_object();
     virtual int getCost();
     
     virtual bool isEqual(const Card* b)const;

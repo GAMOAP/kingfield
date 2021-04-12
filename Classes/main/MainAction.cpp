@@ -72,8 +72,10 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
 {
     srand(sRandom);
     
-    std::vector<std::string> cardName = MainStuff::getStuffByName(charSelectNbr, cardSelectNbr);
-    KFSpecCard* specCard = MainStuff::getCardSpec(CARD_TYPE[cardSelectNbr], cardName[0], cardName[1], charSelectNbr);
+    auto mainStuff = MainStuff::getInstance();
+    
+    std::vector<std::string> cardName = mainStuff->getStuffByName(charSelectNbr, cardSelectNbr);
+    KFSpecCard* specCard = mainStuff->getCardSpec(CARD_TYPE[cardSelectNbr], cardName[0], cardName[1], charSelectNbr);
     int crystalCost = specCard->getMana(false);
     
     std::vector<KFAction*> actionSequence;
@@ -114,10 +116,8 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
     }
     
     //strike.
-    if(actionType == 1)
-    {        
-        auto mainStuff = MainStuff::getInstance();
-        
+    if(actionType == 1 || actionType == 2)
+    {
         for(int s = 0; s < 3; s++)
         {
             std::string slotName = specCard->getSlot(s);

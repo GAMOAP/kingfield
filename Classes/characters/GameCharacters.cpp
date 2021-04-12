@@ -262,6 +262,11 @@ void GameCharacters::setActionAll(std::string actionName)
     }
 }
 //---------------------------------CHARACTER UI------------------------------
+void GameCharacters::setBuffs(int turnNumber)
+{
+    
+}
+//---------------------------------CHARACTER UI------------------------------
 CharacterUI* GameCharacters::getCharUI()
 {
     return m_SharedGameCharacters->m_characterUI;

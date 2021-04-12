@@ -134,7 +134,10 @@ void GameCards::setCardSelectLibrary(Card* cardCliqued)
     const auto charUI = GameCharacters::getCharUI();
     const auto cardSelect = getCardSelect();
     
-    if(charSelect && cardSelect && cardCliqued && cardCliqued->isVisible())
+    std::string cardCliquedTBO = cardCliqued->getType_Breed_object();
+    std::string cardSelectTBO = cardSelect->getType_Breed_object();
+    
+    if(charSelect && cardSelect && cardCliqued && cardCliqued->isVisible() && cardCliquedTBO != cardSelectTBO)
     {
         const int charNumber = charSelect->getNumber();
         const std::string type = cardCliqued->getType();
@@ -158,24 +161,6 @@ void GameCards::setCardSelectLibrary(Card* cardCliqued)
                 card->place(0);
                 setCardsChange();
             }
-            
-            /*
-            auto deckCard = dynamic_cast<DeckCard*>(*nlIt);
-            if(deckCard)
-            {
-                if(TEST_CARD)printf("setCardSelectLibrary type = %s\n",cardCliqued->getType().c_str());
-                
-                
-                
-                auto cardIsIn = EventListenerCustom::create("NODE_card_" + std::to_string(deckCard->getNumber())+"_IS_UP", [=](EventCustom* event)
-                {
-                    
-                });
-                auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-                eventDispatcher->addEventListenerWithSceneGraphPriority(cardIsIn, deckCard);
-                 
-            }
-            */
         }
     }
 }

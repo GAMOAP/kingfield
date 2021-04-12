@@ -242,14 +242,14 @@ std::map<std::string, int> MainStuff::getCharSpec(int charNbr)
 //---------------------------CHARACTER BUFF----------------------------------
 bool MainStuff::initCharBuff(int charNbr)
 {
-    std::map<std::string, int>::iterator scbIt;
+    std::vector<StuffBuff>::iterator scbIt;
     for(scbIt = m_SharedMainStuff->m_charactersBuff[charNbr].begin(); scbIt != m_SharedMainStuff->m_charactersBuff[charNbr].end(); scbIt++)
     {
         //remove character's crystal buffs.
-        std::size_t crystal = scbIt->first.find("crystal");
+        std::size_t crystal = scbIt->name.find("crystal");
         if(crystal != std::string::npos)
         {
-            scbIt->second = NULL;
+            scbIt->value = NULL;
         }
     }
     for(int t = 0; t < m_SharedMainStuff->m_charStuffList[charNbr].size(); t++)
@@ -269,31 +269,43 @@ bool MainStuff::initCharBuff(int charNbr)
                    slotName.compare(8,3,"red") != 0 &&
                    slotName.compare(8,5,"break") != 0)
                 {
-                    m_SharedMainStuff->setCharBuff(charNbr, slotName, -1);
+                    m_SharedMainStuff->setCharBuff(charNbr, slotName, 1);
                 }
             }
         }
     }
     return true;
 }
-bool MainStuff::setCharBuff(int charNbr, std::string buffName, int value)
+bool MainStuff::setCharBuff(int charNbr, std::string buffName, int value, int turn)
 {
-    std::map<std::string, int>::iterator cbIt = m_SharedMainStuff->m_charactersBuff[charNbr].find(buffName);
-    if(cbIt != m_SharedMainStuff->m_charactersBuff[charNbr].end() && value >= 1)
+    bool buffFinded = false;
+    for(int i = 0; i < m_SharedMainStuff->m_charactersBuff[charNbr].size(); i++)
     {
-        cbIt->second += value;
-        if(cbIt->second <= 0)
+        StuffBuff stuffBuff = m_SharedMainStuff->m_charactersBuff[charNbr][i];
+        
+        if(stuffBuff.name == buffName)
         {
-            m_SharedMainStuff->m_charactersBuff[charNbr].erase(cbIt);
+            stuffBuff.value += value;
+            buffFinded = true;
+        }
+        if(stuffBuff.value <= 0)
+        {
+            m_SharedMainStuff->m_charactersBuff[charNbr].erase(m_SharedMainStuff->m_charactersBuff[charNbr].begin() + i);
         }
     }
-    else
+    
+    if(!buffFinded)
     {
-        m_SharedMainStuff->m_charactersBuff[charNbr][buffName] = value;
+        StuffBuff newStuffBuff;
+        newStuffBuff.name = buffName;
+        newStuffBuff.value = value;
+        newStuffBuff.turn = turn;
+    
+        m_SharedMainStuff->m_charactersBuff[charNbr].push_back(newStuffBuff);
     }
     return true;
 }
-std::map<std::string, int> MainStuff::getCharBuff(int charNbr)
+std::vector<StuffBuff> MainStuff::getCharBuff(int charNbr)
 {
     return m_SharedMainStuff->m_charactersBuff[charNbr];
 }
@@ -313,13 +325,13 @@ KFSpecCard* MainStuff::getCardSpec(std::string type, std::string breed, std::str
         }
     }
     
-    std::map<std::string, int>::iterator cblIt;
+    std::vector<StuffBuff>::iterator cblIt;
     for(cblIt = m_SharedMainStuff->m_charactersBuff[charNbr].begin(); cblIt != m_SharedMainStuff->m_charactersBuff[charNbr].end(); cblIt++)
     {
-        std::size_t crystal = cblIt->first.find("crystal");
-        if(crystal != std::string::npos && cblIt->first.compare(8, cblIt->first.size() -8, type) ==0)
+        std::size_t crystal = cblIt->name.find("crystal");
+        if(crystal != std::string::npos && cblIt->name.compare(8, cblIt->name.size() -8, type) == 0)
         {
-            specCard->setCardBuff(KFSpecCard::mana, cblIt->second);
+            specCard->setCardBuff(KFSpecCard::mana, cblIt->value);
         }
     }
     
