@@ -31,6 +31,7 @@ public:
     
     virtual bool getIsPlayerTurn();
     virtual bool getIsTeamTurn(int charNbr);
+    virtual int getTurnNumber();
        
     virtual bool getIsUsedBox(int tag);
     virtual void setTouchObject(int tag);

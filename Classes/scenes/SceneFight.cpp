@@ -100,10 +100,10 @@ bool SceneFight::startFight(int teamNumber)
     
     GameBoxes::stopRumbleBox();
     
-    GameBoxes::setBoxes();
-    
     GameCharacters::setCharacters(10);
     GameCards::addDeck();
+    
+    GameBoxes::setBoxes();
     
     return true;
 }
@@ -115,20 +115,37 @@ bool SceneFight::stopFight(bool isWin)
 }
 bool SceneFight::startTurn()
 {
+    printf("TURN_%i\n", m_SharedSceneFight->m_turnNumber);
     
+    GameCharacters::setActionAll("give_crystals");
+    GameCharacters::setActionAll("manage_buffs");
+    
+    if(!GameCharacters::getCharIsSelected())
+    {
+        GameCharacters::setCharSelect();
+    }
+        
+    if(!GameCards::getCardSelect())
+    {
+        GameCards::setCardSelect(0, "deck");
+    }
+    else
+        GameCards::CardsReseted();
+    
+    m_SharedSceneFight->setActionBoxTags();
     
     return true;
 }
 bool SceneFight::endTurn()
 {
-    GameCharacters::setBuffs(m_SharedSceneFight->m_turnNumber);
+    auto gameCharacters = GameCharacters::getInstance();
+    gameCharacters->setActionAll("give_crystals");
     
     m_SharedSceneFight->m_turnNumber++;
-    GameCharacters::setActionAll("give_crystals");
     
     GameDirector::setActionInProgress(false);
     
-    m_SharedSceneFight->allNodeIsIn();
+    startTurn();
     
     return true;
 }
@@ -210,7 +227,7 @@ bool SceneFight::getIsPlayerTurn()
 {
     int charSelectNbr;
     auto character = GameCharacters::getCharSelect();
-    if(character)
+    if(character && !character->isSleeping())
         charSelectNbr = character->getNumber();
     else
         return false;
@@ -240,6 +257,10 @@ bool SceneFight::getIsTeamTurn(int charNbr)
         return false;
     else
         return true;
+}
+int SceneFight::getTurnNumber()
+{
+    return m_turnNumber;
 }
 
 bool SceneFight::setActionBoxTags()

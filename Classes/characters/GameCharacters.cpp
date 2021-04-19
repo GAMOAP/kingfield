@@ -107,7 +107,9 @@ void GameCharacters::setCharSelect(int number)
                     m_SharedGameCharacters->m_charSelected = character;
                     bool isPlayerTurn = GameDirector::getScene()->getIsPlayerTurn();
                     if(isPlayerTurn)
+                    {
                         GameBoxes::setBoxSelect(character->getTag());
+                    }
                     
                     character->setSelect(isPlayerTurn);
                     m_SharedGameCharacters->m_characterUI = CharacterUI::setCharacterUI(number);
@@ -258,13 +260,12 @@ void GameCharacters::setActionAll(std::string actionName)
             {
                 MainStuff::setCharSpec(character->getNumber(), "crystal", +1);
             }
+            if(actionName == "manage_buffs")
+            {
+                character->manageBuffs();
+            }
         }
     }
-}
-//---------------------------------CHARACTER UI------------------------------
-void GameCharacters::setBuffs(int turnNumber)
-{
-    
 }
 //---------------------------------CHARACTER UI------------------------------
 CharacterUI* GameCharacters::getCharUI()

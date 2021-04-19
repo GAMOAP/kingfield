@@ -39,9 +39,6 @@ public:
     static void setAction(std::vector<KFAction*> actionSequence);
     static void setActionAll(std::string actionName);
     
-    //buffs
-    static void setBuffs(int turnNumber);
-    
     //character UI
     static CharacterUI* getCharUI();
     
@@ -57,6 +54,8 @@ protected:
     
     Character* m_kingFriend = nullptr;
     Character* m_kingEnemy = nullptr;
+    
+    std::vector<Character*> m_characterList;
     
     std::vector<KFAction*> m_actionSequence;
     int m_sequenceState;

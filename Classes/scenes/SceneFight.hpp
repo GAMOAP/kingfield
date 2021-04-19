@@ -36,6 +36,8 @@ public:
     virtual bool getIsPlayerTurn();
     virtual bool getIsTeamTurn(int charNbr);
     
+    virtual int getTurnNumber();
+    
 private:
     bool setActionBoxTags();
     

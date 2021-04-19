@@ -24,6 +24,6 @@ const std::vector<std::string> BREED_TYPE = {"sun","night","time"};
 
 const std::vector<std::string> CHAR_SLOTS = {"head","face","hand","helmet","armor","arm","frontLeg","backLeg","weapon","item_arm","item_armor","item_hand"};
 
-const std::vector<std::string> SPECS = {"crystal_red","crystal_blue","life","defense","attack","crystal_move","crystal_spell","crystal_weapon","crystal_object","defense_more","attack_more","defense_less","attack_less","poison","sleep","block","heal"};
+const std::vector<std::string> SPECS = {"crystal_red","crystal_blue","life","defense","attack","crystal_move","crystal_spell","crystal_weapon","crystal_object","crystal_break","defense_more","attack_more","defense_less","attack_less","poison","sleep","block","heal"};
 
 #endif /* Constants_h */

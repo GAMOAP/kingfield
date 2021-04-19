@@ -9,6 +9,8 @@
 #include "MainAction.hpp"
 #include "MainStuff.hpp"
 
+#include "GameDirector.hpp"
+
 #include "Character.hpp"
 
 #include "CharacterUI.hpp"
@@ -334,6 +336,8 @@ bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::strin
 //------------------REACTION----------------
 std::string Character::setReaction(m_reaction reaction)
 {
+    
+    
     std::string animationName = "stand";
     int nbrLoop = 1;
     bool playLastAnimation = true;
@@ -366,31 +370,31 @@ std::string Character::setReaction(m_reaction reaction)
             animationName = "sad";
             break;
         case defense_more:
-            MainStuff::setCharBuff(m_number, "defense_more", 1);
+            
             animationName = "happy";
             break;
         case attack_more:
-            MainStuff::setCharBuff(m_number, "attack_more", 1);
+            setBuff("attack_more");
             animationName = "happy";
             break;
         case defense_less:
-            MainStuff::setCharBuff(m_number, "defense_less", 1);
+            
             animationName = "sad";
             break;
         case attack_less:
-            MainStuff::setCharBuff(m_number, "attack_less", 1);
+            
             animationName = "sad";
             break;
         case poison:
-            MainStuff::setCharBuff(m_number, "poison", 1);
+            
             animationName = "sad";
             break;
         case sleep:
-            MainStuff::setCharBuff(m_number, "sleep", 1);
+            setBuff("sleep");
             animationName = "sad";
             break;
         case blocking:
-            MainStuff::setCharBuff(m_number, "block", 1);
+            
             animationName = "happy";
             break;
             
@@ -401,6 +405,7 @@ std::string Character::setReaction(m_reaction reaction)
     
     return "CHAR_" + std::to_string(m_number) + "_ANIM_" + animationName + "_END";
 }
+
 //------------------INFO----------------
 void Character::setInfo(std::string infoName, int infoValue)
 {
@@ -427,6 +432,86 @@ void Character::setUnselect()
     m_select = false;
     m_characterDisplay->setUnselect();
     this->setLocalZOrder(m_index);
+}
+//------------------BUFF----------------
+void Character::setBuff(std::string buffName)
+{
+    int turnNbr = GameDirector::getScene()->getTurnNumber();
+    
+    m_buffList.name = buffName;
+    if(m_buffList.startTurn == turnNbr)
+    {
+        m_buffList.endTurn += 2;
+    }
+    else
+    {
+        m_buffList.endTurn = turnNbr;
+    }
+    m_buffList.startTurn = turnNbr;
+    
+    printf("turnNbr = %i, m_buffList{name = %s, startTurn = %i, endTurn = %i}\n",turnNbr ,m_buffList.name.c_str(), m_buffList.startTurn, m_buffList.endTurn);
+    
+    applyBuff(buffName);
+}
+void Character::manageBuffs()
+{
+    int turnNbr = GameDirector::getScene()->getTurnNumber();
+    if(m_buffList.endTurn < turnNbr)
+    {
+        m_buffList.name = "";
+        m_buffList.startTurn = 0;
+        m_buffList.endTurn = 0;
+        applyBuff("NULL");
+    }
+}
+bool Character::applyBuff(std::string buffName)
+{
+    std::map<std::string, int> charSpec = MainStuff::getInstance()->getCharSpec(m_number);
+    
+    if(buffName == "NULL");
+    {
+        m_characterDisplay->setState("ok");
+    }
+    if(buffName == "crystal_break")
+    {
+        
+    }
+    if(buffName == "attack_more")
+    {
+        
+    }
+    if(buffName == "defense_more")
+    {
+        
+    }
+    if(buffName == "attack_less")
+    {
+        
+    }
+    if(buffName == "defense_less")
+    {
+        
+    }
+    if(buffName == "sleep")
+    {
+        m_characterDisplay->setState("sleep");
+    }
+    if(buffName == "poison")
+    {
+        m_characterDisplay->setState("poison");
+    }
+    if(buffName == "block")
+    {
+        m_characterDisplay->setState("block");
+    }
+    return true;
+}
+bool Character::isSleeping()
+{
+    if(m_characterDisplay->getStateName() == "sleep")
+        return true;
+    else
+        return false;
 }
 //-----------------KING-------------------------
 void Character::setFlag()

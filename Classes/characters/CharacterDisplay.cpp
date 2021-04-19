@@ -265,7 +265,6 @@ bool CharacterDisplay::setAnimation(std::string animation, int nbrLoop, bool pla
 bool CharacterDisplay::setState(std::string state)
 {
     m_animationVector[1] = state;
-    playAnimation();
     
     return true;
 }
@@ -351,3 +350,6 @@ void CharacterDisplay::setInfo(std::string infoName, int infoValue)
 //----------------RETURN FUNCTION-------------------
 int CharacterDisplay::getOriginTag(){ return m_originTag;}
 int CharacterDisplay::getNumber(){ return m_number;}
+
+std::string CharacterDisplay::getAnimationName(){ return m_animationVector[0];}
+std::string CharacterDisplay::getStateName(){ return m_animationVector[1];}

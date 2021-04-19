@@ -70,6 +70,10 @@ bool KFScene::getIsTeamTurn(int charNbr)
 {
     return true;
 }
+int KFScene::getTurnNumber()
+{
+    return 0;
+}
 
 void KFScene::setName(std::string sceneName)
 {

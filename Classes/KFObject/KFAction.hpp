@@ -25,6 +25,10 @@ public:
     void setSlotSpec(std::string slotSpec);
     std::string getSlotSpec();
     
+    //TURN NUMBER
+    void setFightTurn(int turnNbr);
+    int getFightTurn();
+    
     //move
     void setStartTag(int startTag);
     int getSartTag();
@@ -38,6 +42,7 @@ public:
     
     void setCharAttackForce(int charForce);
     int getCharAttackForce();
+    
     //spell
     
     
@@ -51,6 +56,8 @@ protected:
     int m_crystalCost;
     
     std::string m_slotSpec;
+    
+    int m_turnNbr;
     
     //move
     int m_startTag;

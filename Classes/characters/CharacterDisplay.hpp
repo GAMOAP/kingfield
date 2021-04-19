@@ -29,6 +29,9 @@ public:
     bool setAnimation(std::string animation, int nbrLoop = 0, bool playLastAnimation = true);
     bool setState(std::string state);
     
+    std::string getAnimationName();
+    std::string getStateName();
+    
     int getOriginTag();
     int getNumber();
     

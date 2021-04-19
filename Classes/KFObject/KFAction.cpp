@@ -62,6 +62,10 @@ std::string KFAction::getSlotSpec()
     return m_slotSpec;
 }
 
+//------------------TURN NUMBER---------------------
+void KFAction::setFightTurn(int turnNbr){m_turnNbr = turnNbr;}
+int KFAction::getFightTurn(){return m_turnNbr;}
+
 //Move
 void KFAction::setStartTag(int startTag){ m_startTag = startTag;}
 int KFAction::getSartTag(){ return m_startTag;}
@@ -77,4 +81,5 @@ void KFAction::setCharAttackForce(int charForce){ m_charForce = charForce;}
 int KFAction::getCharAttackForce(){ return m_charForce;}
 
 //Striked
+
 

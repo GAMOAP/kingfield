@@ -436,7 +436,7 @@
       },
       "night" : {
         "mana" : 4,
-        "slot0" : "strike",
+        "slot0" : "attack_more",
         "slot1" : "NULL",
         "slot2" : "NULL",
         "board" : [
@@ -481,14 +481,14 @@
     "night" : {
       "sun" : {
         "mana" : 1,
-        "slot0" : "strike",
+        "slot0" : "attack_more",
         "slot1" : "NULL",
         "slot2" : "NULL",
         "board" : [
           [
             0,
             0,
-            1,
+            2,
             0
           ]
         ]
