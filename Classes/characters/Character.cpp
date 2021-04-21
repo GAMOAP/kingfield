@@ -370,7 +370,7 @@ std::string Character::setReaction(m_reaction reaction)
             animationName = "sad";
             break;
         case defense_more:
-            
+            setBuff("defense_more");
             animationName = "happy";
             break;
         case attack_more:
@@ -378,11 +378,11 @@ std::string Character::setReaction(m_reaction reaction)
             animationName = "happy";
             break;
         case defense_less:
-            
+            setBuff("defense_less");
             animationName = "sad";
             break;
         case attack_less:
-            
+            setBuff("attack_less");
             animationName = "sad";
             break;
         case poison:
@@ -445,7 +445,7 @@ void Character::setBuff(std::string buffName)
     }
     else
     {
-        m_buffList.endTurn = turnNbr;
+        m_buffList.endTurn = turnNbr + 2;
     }
     m_buffList.startTurn = turnNbr;
     
@@ -466,10 +466,11 @@ void Character::manageBuffs()
 }
 bool Character::applyBuff(std::string buffName)
 {
-    std::map<std::string, int> charSpec = MainStuff::getInstance()->getCharSpec(m_number);
+    auto mainStuff = MainStuff::getInstance();
     
     if(buffName == "NULL");
     {
+        mainStuff->initCharSpec(m_number);
         m_characterDisplay->setState("ok");
     }
     if(buffName == "crystal_break")
@@ -478,19 +479,19 @@ bool Character::applyBuff(std::string buffName)
     }
     if(buffName == "attack_more")
     {
-        
+        mainStuff->setCharSpec(m_number, "force", 4);
     }
     if(buffName == "defense_more")
     {
-        
+        mainStuff->setCharSpec(m_number, "sheild", 4);
     }
     if(buffName == "attack_less")
     {
-        
+        mainStuff->setCharSpec(m_number, "force", -4);
     }
     if(buffName == "defense_less")
     {
-        
+        mainStuff->setCharSpec(m_number, "sheild", -4);
     }
     if(buffName == "sleep")
     {

@@ -127,7 +127,7 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
                 auto action = KFAction::setAction(actionType, charSelectNbr);
                 action->setCost(crystalCost);
                 
-                int attack = mainStuff->getCharSpec(charSelectNbr)["strike"] + 1;
+                int attack = mainStuff->getCharSpec(charSelectNbr)["force"] + 1;
                 
                 int charForce = rand() % (attack);
                 action->setCharAttackForce(charForce);

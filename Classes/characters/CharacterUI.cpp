@@ -194,50 +194,84 @@ void CharacterUI::createDefense()
     {
         m_defense = Node::create();
         m_defense_picture = Sprite::create(KFSprite::getFile("charUI_defense_picture"));
-        m_defense_value = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec["defense"])));
+        m_defense_value = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec["shield"])));
         m_defense_value->setColor(m_colorDefense);
         m_defense->addChild(m_defense_picture);
         m_defense->addChild(m_defense_value);
         
-        m_defense->setName("charUI_defense_" + std:: to_string(m_charSpec["defense"]));
+        m_defense->setName("charUI_defense_" + std:: to_string(m_charSpec["shield"]));
         m_defense->setAnchorPoint(Vec2( 0.5, 0.5));
         m_defense->setPosition(m_defensePosition);
         this->addChild(m_defense);
     }
     else
     {
-        if(m_defense_value->getName() != "charUI_attributes_background_" + std:: to_string(m_charSpec["defense"]))
+        if(m_defense_value->getName() != "charUI_attributes_background_" + std:: to_string(m_charSpec["shield"]))
         {
             popUp(m_defense_picture, "charUI_defense_picture");
         }
-        popUp(m_defense_value, "charUI_attributes_background_" + std:: to_string(m_charSpec["defense"]));
+        popUp(m_defense_value, "charUI_attributes_background_" + std:: to_string(m_charSpec["shield"]));
     }
 }
 
 //Attack
 void CharacterUI::createAttack()
 {
+    std::string specName = "force";
+    
+    //buffed or unbuffed attack
+    int specAttack = m_charSpec["attack"];
+    int specForce = m_charSpec["force"];
+    if(specForce != specAttack)
+    {
+        if(!m_attack_buff)
+        {
+            std::string specBuffedName = "attack";
+            std::string attributeName = "front";
+            cocos2d::Color3B buffedColor = Color3B::BLACK;
+            
+            if(specForce > specAttack)
+            {
+                specName = "attack";
+                specBuffedName = "force";
+                attributeName = "background";
+                buffedColor = Color3B::GREEN;
+            }
+            m_attack_buff = Sprite::create(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+            m_attack_buff->setColor(buffedColor);
+            m_attack->addChild(m_attack_buff, 0);
+        }
+    }
+    else
+    {
+        if(m_attack_buff)
+        {
+            m_attack_buff->removeFromParent();
+            m_attack_buff = nullptr;
+        }
+    }
+    
     if(!m_attack)
     {
         m_attack = Node::create();
         m_attack_picture = Sprite::create(KFSprite::getFile("charUI_attack_picture"));
-        m_attack_value = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec["attack"])));
+        m_attack_value = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec[specName])));
         m_attack_value->setColor(m_colorAttack);
-        m_attack->addChild(m_attack_picture);
-        m_attack->addChild(m_attack_value);
+        m_attack->addChild(m_attack_picture, 0);
+        m_attack->addChild(m_attack_value, 1);
         
-        m_attack->setName("charUI_attack_" + std:: to_string(m_charSpec["attack"]));
+        m_attack->setName("charUI_attack_" + std:: to_string(m_charSpec[specName]));
         m_attack->setAnchorPoint(Vec2( 0.5, 0.5));
         m_attack->setPosition(m_attackPosition);
         this->addChild(m_attack);
     }
     else
     {
-        if(m_attack_value->getName() != "charUI_attributes_background_" + std:: to_string(m_charSpec["attack"]))
+        if(m_attack_value->getName() != "charUI_attributes_background_" + std:: to_string(m_charSpec[specName]))
         {
             popUp(m_attack_picture, "charUI_attack_picture");
         }
-        popUp(m_attack_value, "charUI_attributes_background_" + std:: to_string(m_charSpec["attack"]));
+        popUp(m_attack_value, "charUI_attributes_background_" + std:: to_string(m_charSpec[specName]));
     }
 }
 

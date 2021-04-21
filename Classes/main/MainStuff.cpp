@@ -206,7 +206,7 @@ void MainStuff::initCharSpec(int charNbr)
     charSpec["crystal"] = charSpec["crystal_red"] + charSpec["crystal_blue"];
     charSpec["health"] = charSpec["life"];
     charSpec["shield"] = charSpec["defense"];
-    charSpec["strike"] = charSpec["attack"];
+    charSpec["force"] = charSpec["attack"];
     
     m_SharedMainStuff->m_charactersSpec[charNbr] = charSpec;
 }
@@ -216,13 +216,13 @@ void MainStuff::setCharSpec(int charNbr, std::string specName, int value)
     
     int specValue = charSpec[specName] + value;
     
-    if(charSpec[specName] + value < 0){specValue = 0;}
+    if(charSpec[specName] + value < 0){specValue = 1;}
     
     const int cRedBlue = charSpec["crystal_red"] + charSpec["crystal_blue"];
     if(specName == "crystal" && specValue > cRedBlue){specValue = cRedBlue;}
     if(specName == "health" && specValue > charSpec["life"]){specValue = charSpec["life"];}
     if(specName == "shield" && specValue > 12){specValue = 12;}
-    if(specName == "strike" && specValue > 12){specValue = 12;}
+    if(specName == "force" && specValue > 12){specValue = 12;}
     
     if(m_SharedMainStuff->m_charactersSpec[charNbr][specName] != specValue)
     {

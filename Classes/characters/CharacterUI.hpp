@@ -65,6 +65,7 @@ protected:
     cocos2d::Node* m_defense = nullptr;
     cocos2d::Sprite* m_defense_picture = nullptr;
     cocos2d::Sprite* m_defense_value = nullptr;
+    cocos2d::Sprite* m_defense_buff = nullptr;
     const cocos2d::Color3B m_colorDefense = {60, 36, 21};
     const cocos2d::Vec2 m_defensePosition = {-40, -38};
     
@@ -72,6 +73,7 @@ protected:
     cocos2d::Node* m_attack = nullptr;
     cocos2d::Sprite* m_attack_picture = nullptr;
     cocos2d::Sprite* m_attack_value = nullptr;
+    cocos2d::Sprite* m_attack_buff = nullptr;
     const cocos2d::Color3B m_colorAttack = {237, 28, 36};
     const cocos2d::Vec2 m_attackPosition = {40, -38};
     
