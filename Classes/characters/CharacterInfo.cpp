@@ -188,18 +188,21 @@ cocos2d::Node* CharacterInfo::createPopInfo(std::vector<int> info)
     int infoPopValue = info[1];
     
     cocos2d::Color3B color;
+    std::string backgroundValueName;
     switch (info[0]) {
         case 0:
             color = m_colorDefense;
+            backgroundValueName = "shield";
             break;
         case 1:
             color = m_colorAttack;
+            backgroundValueName = "force";
             break;
         default:
             break;
     }
     
-    int charSpecTotal = MainStuff::getCharSpec(m_characterNbr)[infoPopName];
+    int charSpecTotal = MainStuff::getCharSpec(m_characterNbr)[backgroundValueName];
     
     //add picture
     m_pop_picture = Sprite::create(KFSprite::getFile("charUI_" + infoPopName + "_picture"));

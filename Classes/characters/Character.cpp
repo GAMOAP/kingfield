@@ -483,7 +483,7 @@ bool Character::applyBuff(std::string buffName)
     }
     if(buffName == "defense_more")
     {
-        mainStuff->setCharSpec(m_number, "sheild", 4);
+        mainStuff->setCharSpec(m_number, "shield", 4);
     }
     if(buffName == "attack_less")
     {
@@ -491,7 +491,7 @@ bool Character::applyBuff(std::string buffName)
     }
     if(buffName == "defense_less")
     {
-        mainStuff->setCharSpec(m_number, "sheild", -4);
+        mainStuff->setCharSpec(m_number, "shield", -4);
     }
     if(buffName == "sleep")
     {
