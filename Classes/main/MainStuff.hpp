@@ -12,12 +12,6 @@
 
 #include "KFSpecCard.hpp"
 
-struct StuffBuff
-{
-    std::string name;
-    int value;
-    int turn = -1;
-};
 
 class  MainStuff
 {
@@ -44,9 +38,9 @@ public:
     static std::map<std::string, int> getCharSpec(int charNbr);
     
     //Buff.
-    static bool initCharBuff(int charNbr);
-    static bool setCharBuff(int charNbr, std::string buffName, int value, int turn = -1);
-    static std::vector<StuffBuff> getCharBuff(int charNbr);
+    static bool initCardBuff(int charNbr);
+    static bool setCardBuff(int charNbr, std::string buffName, int value);
+    static std::map<std::string, int> getCardBuff(int charNbr);
     
     //Card.
     static KFSpecCard* getCardSpec(std::string type, std::string breed, std::string object, int charNbr);
@@ -57,7 +51,7 @@ private:
 protected:
     std::map<std::string, int> m_charactersSpec[CHAR_NUMBER];
     
-    std::vector<StuffBuff> m_charactersBuff[CHAR_NUMBER];
+    std::map<std::string, int> m_cardBuff[CHAR_NUMBER];
     
     std::vector<KFSpecCard*> m_cardSpecLibrary;
     

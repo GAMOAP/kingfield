@@ -198,7 +198,9 @@ void GameCards::resetCards()
         if(card)
         {
             if(card->getBoard() != "library")
+            {
                 card->initDisplay();
+            }
             else if(m_SharedGameCards->m_cardSelected)
             {
                 card->setUnselect();

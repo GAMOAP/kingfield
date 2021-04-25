@@ -74,7 +74,7 @@ bool KFSpecCard::setCardBuff(BuffName buffName, int value)
 {
     switch (buffName) {
         case mana:
-            m_mana = m_manaOrigin - value;
+            m_mana = m_manaOrigin + value;
             break;
             
         default:

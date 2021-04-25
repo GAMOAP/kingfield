@@ -90,6 +90,10 @@ bool DeckCard::initDisplay()
         });
         _eventDispatcher->addEventListenerWithSceneGraphPriority(charIsOutEvent, this);
     }
+    else
+    {
+        setTexture(true);
+    }
     
     return true;
 }

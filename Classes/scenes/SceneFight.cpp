@@ -138,9 +138,6 @@ bool SceneFight::startTurn()
 }
 bool SceneFight::endTurn()
 {
-    auto gameCharacters = GameCharacters::getInstance();
-    gameCharacters->setActionAll("give_crystals");
-    
     m_SharedSceneFight->m_turnNumber++;
     
     GameDirector::setActionInProgress(false);

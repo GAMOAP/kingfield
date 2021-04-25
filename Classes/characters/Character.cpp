@@ -386,7 +386,7 @@ std::string Character::setReaction(m_reaction reaction)
             animationName = "sad";
             break;
         case poison:
-            
+            setBuff("poison");
             animationName = "sad";
             break;
         case sleep:
@@ -471,6 +471,7 @@ bool Character::applyBuff(std::string buffName)
     if(buffName == "NULL");
     {
         mainStuff->initCharSpec(m_number);
+        mainStuff->initCardBuff(m_number);
         m_characterDisplay->setState("ok");
     }
     if(buffName == "crystal_break")
@@ -500,6 +501,8 @@ bool Character::applyBuff(std::string buffName)
     if(buffName == "poison")
     {
         m_characterDisplay->setState("poison");
+        mainStuff->setCardBuff(m_number, "crystal_move", 1);
+        mainStuff->setCardBuff(m_number, "crystal_weapon", 1);
     }
     if(buffName == "block")
     {
