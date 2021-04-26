@@ -36,6 +36,7 @@ public:
     static void initCharSpec(int charNbr);
     static void setCharSpec(int charNbr, std::string specName, int value);
     static std::map<std::string, int> getCharSpec(int charNbr);
+    static bool initCombatSpecs(int charNbr);
     
     //Buff.
     static bool initCardBuff(int charNbr);

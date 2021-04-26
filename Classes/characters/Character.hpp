@@ -41,6 +41,7 @@ public:
     bool getIsPlayerTeam();
     
     bool isSleeping();
+    bool isBlocking();
     
 private:
     virtual bool init(int number);

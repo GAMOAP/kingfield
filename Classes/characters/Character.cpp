@@ -230,7 +230,7 @@ bool Character::setStrike(std::vector<std::vector<int>> strikedList, std::string
             {
                 const int health = MainStuff::getCharSpec(strikedList[c][0])["health"];
                 reactionName = block;
-                if(force >= defense)
+                if(force >= defense && !strikedChar->isBlocking())
                 {
                     if(health <= 1)
                     {
@@ -394,7 +394,7 @@ std::string Character::setReaction(m_reaction reaction)
             animationName = "sad";
             break;
         case blocking:
-            
+            setBuff("block");
             animationName = "happy";
             break;
             
@@ -470,7 +470,7 @@ bool Character::applyBuff(std::string buffName)
     
     if(buffName == "NULL");
     {
-        mainStuff->initCharSpec(m_number);
+        mainStuff->initCombatSpecs(m_number);
         mainStuff->initCardBuff(m_number);
         m_characterDisplay->setState("ok");
     }
@@ -513,6 +513,13 @@ bool Character::applyBuff(std::string buffName)
 bool Character::isSleeping()
 {
     if(m_characterDisplay->getStateName() == "sleep")
+        return true;
+    else
+        return false;
+}
+bool Character::isBlocking()
+{
+    if(m_characterDisplay->getStateName() == "block")
         return true;
     else
         return false;

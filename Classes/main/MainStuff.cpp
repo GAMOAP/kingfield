@@ -238,6 +238,13 @@ std::map<std::string, int> MainStuff::getCharSpec(int charNbr)
     }
     return m_SharedMainStuff->m_charactersSpec[charNbr];
 }
+bool MainStuff::initCombatSpecs(int charNbr)
+{
+    m_SharedMainStuff->m_charactersSpec[charNbr]["shield"] = m_SharedMainStuff->m_charactersSpec[charNbr]["defense"];
+    m_SharedMainStuff->m_charactersSpec[charNbr]["force"] = m_SharedMainStuff->m_charactersSpec[charNbr]["attack"];
+    
+    return true;
+}
 
 //---------------------------CHARACTER BUFF----------------------------------
 bool MainStuff::initCardBuff(int charNbr)
@@ -250,7 +257,6 @@ bool MainStuff::initCardBuff(int charNbr)
         if(crystal != std::string::npos)
         {
             cbIt->second = 0;
-            printf("REMOVE:: %s char %i", cbIt->first.c_str(), charNbr);
         }
     }
     
