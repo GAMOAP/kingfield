@@ -308,19 +308,11 @@ bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::strin
             if(actionSlotType == "sleep"){reactionName = sleep;}
             if(actionSlotType == "block"){reactionName = blocking;}
             
-            setInfo(actionSlotType);
+            bewitchedChar->setInfo(actionSlotType);
             
             std::string endEventName = bewitchedChar->setReaction(reactionName);
             auto reactionEndEvent = EventListenerCustom::create(endEventName, [=](EventCustom* event)
             {
-                /*
-                if(actionSlotType == "poison" || actionSlotType == "sleep" || actionSlotType == "block")
-                {
-                    printf("char_%i->setState(%s)\n",bewitchedChar->m_number, actionSlotType.c_str());
-                    bewitchedChar->m_characterDisplay->setState(actionSlotType);
-                }
-                */
-                
                 bewitchedChar->setLocalZOrder(bewitchedChar->m_index);
                 _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
             });

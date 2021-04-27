@@ -93,7 +93,7 @@ void CharacterInfo::displayPop()
         this->addChild(m_popDisplay);
         m_popDisplay->setAnchorPoint(Vec2( 0.5, 0.5));
         
-        Vec2 popPosition;
+        Vec2 popPosition = Vec2{0, -38};
         
         switch (m_popList[0][0]) {
             case 0:
