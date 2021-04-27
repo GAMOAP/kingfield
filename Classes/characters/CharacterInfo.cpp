@@ -37,7 +37,7 @@ bool CharacterInfo::init()
     return true;
 }
 
-bool CharacterInfo::addToInfoList(std::string infoName, int infoValue, int characterNbr)
+bool CharacterInfo::addToInfoList(int characterNbr, std::string infoName, int infoValue)
 {
     m_characterNbr = characterNbr;
     
@@ -187,43 +187,34 @@ cocos2d::Node* CharacterInfo::createPopInfo(std::vector<int> info)
     std::string infoPopName = m_typeNamePopList[info[0]];
     int infoPopValue = info[1];
     
-    cocos2d::Color3B color;
-    std::string backgroundValueName;
-    switch (info[0]) {
-        case 0:
-            color = m_colorDefense;
-            backgroundValueName = "shield";
-            break;
-        case 1:
-            color = m_colorAttack;
-            backgroundValueName = "force";
-            break;
-        default:
-            break;
-    }
-    
-    int charSpecTotal = MainStuff::getCharSpec(m_characterNbr)[backgroundValueName];
-    
     //add picture
     m_pop_picture = Sprite::create(KFSprite::getFile("charUI_" + infoPopName + "_picture"));
     infoDisplay->addChild(m_pop_picture);
     
-    //add background
-    m_popValueTotalBackgroud = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std::to_string(charSpecTotal)));
-    infoDisplay->addChild(m_popValueTotalBackgroud);
-    
-    //add value
-    if(infoPopValue > 0)
+    if(infoPopValue >= 0)
     {
+        cocos2d::Color3B color = m_colorDefense;
+        if(infoPopName == "force")
+        {
+            color = m_colorAttack;
+        }
+        
+        int charSpecTotal = MainStuff::getCharSpec(m_characterNbr)[infoPopName];
+        
+        //add background
+        m_popValueTotalBackgroud = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std::to_string(charSpecTotal)));
+        infoDisplay->addChild(m_popValueTotalBackgroud);
+        
+        //add value
         m_popValue = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std::to_string(infoPopValue)));
         m_popValue->setColor(color);
         infoDisplay->addChild(m_popValue);
+        
+        //add front
+        m_popValueTotalfront = Sprite::create(KFSprite::getFile("charUI_attributes_front_" + std:: to_string(charSpecTotal)));
+        m_popValueTotalfront->setColor(color);
+        infoDisplay->addChild(m_popValueTotalfront);
     }
-    
-    //add front
-    m_popValueTotalfront = Sprite::create(KFSprite::getFile("charUI_attributes_front_" + std:: to_string(charSpecTotal)));
-    m_popValueTotalfront->setColor(color);
-    infoDisplay->addChild(m_popValueTotalfront);
     
     return infoDisplay;
 }

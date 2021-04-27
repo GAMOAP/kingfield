@@ -308,6 +308,8 @@ bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::strin
             if(actionSlotType == "sleep"){reactionName = sleep;}
             if(actionSlotType == "block"){reactionName = blocking;}
             
+            setInfo(actionSlotType);
+            
             std::string endEventName = bewitchedChar->setReaction(reactionName);
             auto reactionEndEvent = EventListenerCustom::create(endEventName, [=](EventCustom* event)
             {

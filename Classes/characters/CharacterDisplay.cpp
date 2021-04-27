@@ -344,7 +344,7 @@ void CharacterDisplay::setInfo(std::string infoName, int infoValue)
         if(m_number >= 5){ m_charInfo->setScaleX(-1);}
         this->addChild(m_charInfo, 32);
     }
-    m_charInfo->addToInfoList(infoName, infoValue, m_number);
+    m_charInfo->addToInfoList(m_number, infoName, infoValue);
 }
 
 //----------------RETURN FUNCTION-------------------

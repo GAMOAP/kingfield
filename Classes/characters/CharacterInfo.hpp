@@ -16,7 +16,7 @@ public:
     static CharacterInfo* create();
     virtual bool init();
     
-    bool addToInfoList(std::string infoName, int infoValue, int characterNbr);
+    bool addToInfoList(int characterNbr, std::string infoName, int infoValue);
     
 private:
        
@@ -35,7 +35,7 @@ private:
     std::vector<std::vector<int>> m_popList;
     
     std::vector<std::string> m_typeNameUpList = {"crystal", "health"};
-    std::vector<std::string> m_typeNamePopList = {"defense", "attack"};
+    std::vector<std::string> m_typeNamePopList = {"defense", "attack", "defense_more","attack_more","defense_less","attack_less","poison","sleep","block"};
     
     cocos2d::Sprite* m_pop_picture = nullptr;
     cocos2d::Sprite* m_popValueTotalBackgroud = nullptr;

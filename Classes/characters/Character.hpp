@@ -36,7 +36,7 @@ public:
     
     void setFlag();
     
-    void setInfo(std::string infoName, int infoValue);
+    void setInfo(std::string infoName, int infoValue = -1);
     
     bool getIsPlayerTeam();
     
