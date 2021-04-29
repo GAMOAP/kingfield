@@ -518,6 +518,21 @@ bool Character::isBlocking()
     else
         return false;
 }
+std::string Character::getBuffName()
+{
+    return m_buffList.name;
+}
+int Character::getBuffTurnLeft()
+{
+    int gameTurn = GameDirector::getScene()->getTurnNumber();
+    
+    int turnLeft = (m_buffList.endTurn - gameTurn)/2 + 1;
+    
+    printf("turnLeft = %i = (%i- %i)/2\n",turnLeft, m_buffList.endTurn, gameTurn);
+    
+    return turnLeft;
+}
+
 //-----------------KING-------------------------
 void Character::setFlag()
 {

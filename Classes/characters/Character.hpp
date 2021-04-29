@@ -33,6 +33,8 @@ public:
     
     void setBuff(std::string buffName);
     void manageBuffs();
+    std::string getBuffName();
+    int getBuffTurnLeft();
     
     void setFlag();
     

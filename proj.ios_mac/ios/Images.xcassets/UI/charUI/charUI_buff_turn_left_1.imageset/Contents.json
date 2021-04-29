@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "charUI_box_move_green_gray.png",
+      "filename" : "charUI_buff_turn_left_1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "charUI_box_move_green_gray@2x.png",
+      "filename" : "charUI_buff_turn_left_1@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "charUI_box_move_green_gray@3x.png",
+      "filename" : "charUI_buff_turn_left_1@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

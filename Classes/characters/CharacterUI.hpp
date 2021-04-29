@@ -26,6 +26,7 @@ private:
     void createKarma();
     void createDefense();
     void createAttack();
+    void createBuff();
     void createUnderlight();
     
     void addToStage();
@@ -40,6 +41,7 @@ protected:
     
     int m_charNumber;
     std::map<std::string, int> m_charSpec;
+    std::map<std::string, int> m_charBuff;
     std::string m_karmaBreed;
     
     const int m_indexUnderlight = 2;
@@ -76,6 +78,13 @@ protected:
     cocos2d::Sprite* m_attack_buff = nullptr;
     const cocos2d::Color3B m_colorAttack = {237, 28, 36};
     const cocos2d::Vec2 m_attackPosition = {40, -38};
+    
+    //Buff
+    cocos2d::Node* m_buff = nullptr;
+    cocos2d::Sprite* m_buff_picture = nullptr;
+    const cocos2d::Vec2 m_buffPosition = {0, -50};
+    cocos2d::Sprite* m_buff_turnLeft = nullptr;
+    const cocos2d::Vec2 m_buffTurnLeftPosition = {0, -62};
     
     //Underlight
     cocos2d::Sprite* m_underlight = nullptr;

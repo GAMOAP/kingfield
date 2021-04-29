@@ -48,6 +48,7 @@ bool CharacterUI::initStage(int charNumber)
     createKarma();
     createDefense();
     createAttack();
+    createBuff();
     createUnderlight();
     
     if(!m_popUpActived)
@@ -79,6 +80,7 @@ bool CharacterUI::initOption(int charNumber)
     createKarma();
     createDefense();
     createAttack();
+    createBuff();
     
     return true;
 }
@@ -314,6 +316,49 @@ void CharacterUI::createAttack()
     if(m_attack_buff && specForce != specAttack)
     {
         m_attack->addChild(m_attack_buff, 0);
+    }
+}
+//Buff
+void CharacterUI::createBuff()
+{
+    auto character = MainObject::getCharByNumber(m_charNumber);
+    std::string buffName = character->getBuffName();
+    int turnLeft = character->getBuffTurnLeft();
+    
+    if(buffName != "")
+    {
+        if(!m_buff)
+        {
+            m_buff = Node::create();
+            m_buff_picture = Sprite::create(KFSprite::getFile("charUI_" + buffName + "_picture"));
+            m_buff_picture->setAnchorPoint(Vec2(0.5, 0.5));
+            m_buff_picture->setPosition(m_buffPosition);
+            m_buff_picture->setScale(0.75);
+            m_buff->addChild(m_buff_picture, 0);
+            
+            m_buff_turnLeft = Sprite::create(KFSprite::getFile("charUI_buff_turn_left_" + std::to_string(turnLeft)));
+            m_buff_turnLeft->setAnchorPoint(Vec2(0.5, 0.5));
+            m_buff_turnLeft->setPosition(m_buffTurnLeftPosition);
+            m_buff->addChild(m_buff_turnLeft, 1);
+            this->addChild(m_buff);
+            m_buff->setVisible(true);
+        }
+        else
+        {
+            m_buff_picture->setTexture(KFSprite::getFile(buffName + "_picture"));
+            m_buff_turnLeft->setTexture(KFSprite::getFile("charUI_buff_turn_left_" + std::to_string(turnLeft)) );
+            m_buff->setVisible(true);
+        }
+        
+        printf("CharacterUI:: character_%i, buffName = %s, turnLeft = %i \n", m_charNumber, buffName.c_str(), turnLeft);
+        
+    }
+    else
+    {
+        if(m_buff)
+        {
+            m_buff->setVisible(false);
+        }
     }
 }
 
