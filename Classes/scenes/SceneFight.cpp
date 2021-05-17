@@ -9,6 +9,7 @@
 
 #include "Constants.h"
 
+#include "MainGrid.hpp"
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
 #include "MainMultiPlayer.hpp"
@@ -75,19 +76,24 @@ void SceneFight::removeToStage()
 
 bool SceneFight::allNodeIsIn()
 {
-    if(!GameCharacters::getCharIsSelected())
+    if(!GameCharacters::getIsActionRun())
     {
-        GameCharacters::setCharSelect();
-    }
+        if(!GameCharacters::getCharIsSelected())
+        {
+            GameCharacters::setCharSelect();
+        }
+            
+        if(!GameCards::getCardSelect())
+        {
+            GameCards::setCardSelect(0, "deck");
+        }
+        else
+        {
+            GameCards::CardsReseted();
+        }
         
-    if(!GameCards::getCardSelect())
-    {
-        GameCards::setCardSelect(0, "deck");
+        m_SharedSceneFight->setActionBoxTags();
     }
-    else
-        GameCards::CardsReseted();
-    
-    m_SharedSceneFight->setActionBoxTags();
     
     return true;
 }
@@ -109,14 +115,24 @@ bool SceneFight::startFight(int teamNumber)
 }
 bool SceneFight::stopFight(bool isWin)
 {
+    printf("END_GAME\n");
+    
+    std::string winOrFail = "victory";
+    int kingDeadTag = GameCharacters::getCharTagMemory(7);
+    if(!isWin)
+    {
+        winOrFail = "defeat";
+        kingDeadTag = GameCharacters::getCharTagMemory(2);
+    }
+    cocos2d::Vec2 kingLC = MainGrid::getLineCollumnByTag(kingDeadTag);
+    GameInfoLayer::addInfoLogo(winOrFail, kingLC.x, kingLC.y);
+    
     m_SharedSceneFight->removeToStage();
     
     return true;
 }
 bool SceneFight::startTurn()
 {
-    printf("TURN_%i\n", m_SharedSceneFight->m_turnNumber);
-    
     GameCharacters::setActionAll("give_crystals");
     GameCharacters::setActionAll("manage_buffs");
     
@@ -132,7 +148,11 @@ bool SceneFight::startTurn()
     else
         GameCards::CardsReseted();
     
-    m_SharedSceneFight->setActionBoxTags();
+    if(!GameCharacters::getIsActionRun())
+    {
+        m_SharedSceneFight->setActionBoxTags();
+    }
+    
     
     return true;
 }

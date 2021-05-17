@@ -39,7 +39,7 @@ Character* Character::setCharacter(int number)
     }
     else
     {
-        character->initDisplay();
+        character->initPosition(number);
         return character;
     }
 }
@@ -48,16 +48,37 @@ bool Character::init(int number)
 {
     //Create identity.
     setNumber(number);
+    m_className = "char";
+    setName(m_className + "_" + std::to_string(number));
+    
+    if(number >= 5)
+    {
+        this->setFlip();
+        m_isPlayerTeam = false;
+    }
+    else
+    {
+        m_isPlayerTeam = true;
+    }
+    
+    initPosition(number);
+    
+    return true;
+    
+    
+    //Create identity.
+    
+    /*setNumber(number);
     setTag(m_originTagList[number]);
     Vec2 positionLC = MainGrid::getLineCollumnByTag(_tag);
     
     m_className = "char";
     setName(m_className + "_" + std::to_string(number));
-    
+     
     m_line = positionLC.x;
     m_collumn = positionLC.y;
     
-    if(m_originTagList[number] >= 60)
+    if(number >= 5)
     {
         this->setFlip();
         m_isPlayerTeam = false;
@@ -68,6 +89,7 @@ bool Character::init(int number)
     }
     
     addToStage();
+     
     
     remove();
     auto IsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
@@ -76,16 +98,64 @@ bool Character::init(int number)
     });
     _eventDispatcher->addEventListenerWithSceneGraphPriority(IsOutEvent, this);
     
-    return true;
+    return true;*/
+     
+    
 }
 
-void Character::initDisplay()
+bool Character::initPosition(int number)
 {
-    if(!m_characterDisplay)
+    int originTag = m_originTagList[number];
+    
+    Vec2 positionLC = MainGrid::getLineCollumnByTag(originTag);
+    m_line = positionLC.x;
+    m_collumn = positionLC.y;
+    
+    //remove origin box
+    
+    printf("charNbr = %i, _tag = %i, originTag = %i\n",m_number, _tag, originTag);
+    
+    if(_tag == originTag)
     {
-        m_characterDisplay = CharacterDisplay::create(m_number);
-        this->addChild(m_characterDisplay, 1);
+        return true;
     }
+    
+    if(_tag == -1)
+    {
+        addToStage();
+        setTag(originTag);
+    }
+    
+    //remove character
+    remove();
+    
+    auto IsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag) + "_IS_OUT", [this,originTag](EventCustom* event)
+    {
+        if(!m_characterDisplay)
+        {
+            m_characterDisplay = CharacterDisplay::create(m_number);
+            this->addChild(m_characterDisplay, 1);
+        }
+        else
+        {
+            printf("%i_isOUt\n", _tag);
+            setNodePosition();
+            setVisible(false);
+            auto originBox = MainObject::getBoxByTag(originTag);
+            originBox->remove();
+            auto IsOriginOutEvent = EventListenerCustom::create("NODE_box" +  std::to_string(originTag) + "_IS_OUT", [this, originTag](EventCustom* event)
+            {
+                MainStuff::initCharSpec(m_number);
+                MainStuff::initCardBuff(m_number);
+                setVisible(true);
+                setTag(originTag);
+            });
+            _eventDispatcher->addEventListenerWithSceneGraphPriority(IsOriginOutEvent, originBox);
+        }
+    });
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(IsOutEvent, this);
+    
+    return true;
 }
 
 bool Character::removeToStage()
@@ -94,7 +164,10 @@ bool Character::removeToStage()
     auto boxIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
     {
         m_characterDisplay->stopAnimation();
-        if(m_SharedCharacterUI){m_SharedCharacterUI = nullptr;}
+        if(m_SharedCharacterUI)
+        {
+            m_SharedCharacterUI = nullptr;
+        }
         this->removeFromParent();
     });
     _eventDispatcher->addEventListenerWithSceneGraphPriority(boxIsOutEvent, this);
@@ -267,12 +340,27 @@ bool Character::setStrike(std::vector<std::vector<int>> strikedList, std::string
             {
                 if(reactionName == death)
                 {
+                    std::string inOut = "IN";
+                    if(strikedChar->getNumber() == 2 || strikedChar->getNumber() == 7)
+                    {
+                        inOut = "OUT";
+                    }
                     strikedChar->removeToStage();
-                    _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
-                    _eventDispatcher->removeCustomEventListeners("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
+                    int strikedTag = strikedChar->getTag();
+                    auto strikeddBox = MainObject::getBoxByTag(strikedTag);
+                    auto isIn = EventListenerCustom::create("NODE_box"+ std::to_string(strikedTag)+"_IS_" + inOut, [=](EventCustom* event)
+                    {
+                        _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
+                        _eventDispatcher->removeCustomEventListeners("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
+                    });
+                    auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+                    eventDispatcher->addEventListenerWithSceneGraphPriority(isIn,strikeddBox);
+                }
+                else
+                {
+                    _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
                 }
                 strikedChar->setLocalZOrder(strikedChar->m_index);
-                _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
             });
             auto eventDispatcher = Director::getInstance()->getEventDispatcher();
             eventDispatcher->addEventListenerWithSceneGraphPriority(reactionEndEvent, strikedChar);
@@ -527,8 +615,6 @@ int Character::getBuffTurnLeft()
     int gameTurn = GameDirector::getScene()->getTurnNumber();
     
     int turnLeft = (m_buffList.endTurn - gameTurn)/2 + 1;
-    
-    printf("turnLeft = %i = (%i- %i)/2\n",turnLeft, m_buffList.endTurn, gameTurn);
     
     return turnLeft;
 }

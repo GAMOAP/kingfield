@@ -128,14 +128,14 @@ void GameInfoLayer::initConnectSprite(bool addRemove)
 }
 
 //------------------------FIGHT LOGO------------------------------
-void GameInfoLayer::addFightLogo()
+void GameInfoLayer::addInfoLogo(std::string name, int line, int collumn)
 {
-    m_SharedGameInfoLayer->initFightLogo();
+    m_SharedGameInfoLayer->initInfoLogo(name, line, collumn);
 }
-void GameInfoLayer::initFightLogo()
+void GameInfoLayer::initInfoLogo(std::string name, int line, int collumn)
 {
-    m_fightLogo = Sprite::create(KFSprite::getFile("screen_fight_logo"));
-    Vec3 logoPos = MainGrid::getPositionXYZ(1, 2);
+    m_fightLogo = Sprite::create(KFSprite::getFile("screen_" + name + "_logo"));
+    Vec3 logoPos = MainGrid::getPositionXYZ(line, collumn);
     Vec2 visibleSize = MainGrid::getVisibleSize();
     m_fightLogo->setPosition(Vec2(logoPos.x, logoPos.y));
     m_fightLogo->setScale(0.3);
@@ -157,3 +157,4 @@ void GameInfoLayer::initFightLogo()
         m_fightLogo->runAction(seq);
     }
 }
+

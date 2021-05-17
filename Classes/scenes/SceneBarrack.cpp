@@ -44,8 +44,8 @@ void SceneBarrack::addToStage()
     GameBoxes::setBoxes();
     
     auto gameCharacters = GameCharacters::getInstance();
+    gameCharacters->unselectAll(true);
     gameCharacters->setCharacters(5);
-    gameCharacters->unselectAll();
     
     auto gameCards = GameCards::getInstance();
     gameCards->addDeck();
@@ -59,7 +59,7 @@ void SceneBarrack::addToStage()
 
 void SceneBarrack::removeToStage()
 {
-    GameInfoLayer::addFightLogo();
+    GameInfoLayer::addInfoLogo("fight", 1, 2);
     
     removeLibraryButton();
     removeFightButton();
@@ -70,12 +70,18 @@ void SceneBarrack::removeToStage()
 bool SceneBarrack::allNodeIsIn()
 {
     if(!GameCharacters::getCharIsSelected())
+    {
         GameCharacters::setCharSelect();
+    }
         
     if(!GameCards::getCardSelect())
+    {
         GameCards::setCardSelect(8, "sheet");
+    }
     else
+    {
         GameCards::CardsReseted();
+    }
     
     return true;
 }

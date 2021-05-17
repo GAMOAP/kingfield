@@ -10,6 +10,8 @@
 
 #include "cocos2d.h"
 
+#include "Constants.h"
+
 #include "KFAction.hpp"
 
 #include "Character.hpp"
@@ -20,30 +22,35 @@ class GameCharacters
 public:
     static GameCharacters* getInstance();
     
-    static void setCharacters(int charNbr);
+    static void setCharacters(int charNumbers);
     static void removeAllCharacters();
+    static void removeCharacter(int charNbr);
     
     //character select
     static void setCharSelect(int number = -1);
     static Character* getCharSelect();
     static bool getCharIsSelected();
-    static void unselectAll();
+    static void unselectAll(bool eraseMemory = false);
     
     //king
     static Character* getKingFriend();
     
     //memory
     static int getCharNumberMemory();
+    static int getCharTagMemory(int charNbr);
     
     //action
     static void setAction(std::vector<KFAction*> actionSequence);
     static void setActionAll(std::string actionName);
+    static bool getIsActionRun();
     
     //character UI
     static CharacterUI* getCharUI();
     
 private:
     bool init();
+    
+    bool initChar(int charNbr);
     
     void setActionSequence(Character* character);
     void endActionSequence(Character* character);
@@ -55,12 +62,14 @@ protected:
     Character* m_kingFriend = nullptr;
     Character* m_kingEnemy = nullptr;
     
-    std::vector<Character*> m_characterList;
-    
     std::vector<KFAction*> m_actionSequence;
     int m_sequenceState;
+    bool m_isActionRun = false;
     
     int m_charNumberMemory = -1;
+    
+    int m_charactersTagsMemory[CHAR_NUMBER];
+    const int m_charactersTagsMemoryOrigin[CHAR_NUMBER] = {21, 22, 23, 24, 25, 65, 64, 63, 62, 61};
 };
 
 static GameCharacters* m_SharedGameCharacters = nullptr;

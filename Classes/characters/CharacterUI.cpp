@@ -349,9 +349,6 @@ void CharacterUI::createBuff()
             m_buff_turnLeft->setTexture(KFSprite::getFile("charUI_buff_turn_left_" + std::to_string(turnLeft)) );
             m_buff->setVisible(true);
         }
-        
-        printf("CharacterUI:: character_%i, buffName = %s, turnLeft = %i \n", m_charNumber, buffName.c_str(), turnLeft);
-        
     }
     else
     {

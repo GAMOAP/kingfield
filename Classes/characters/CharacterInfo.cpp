@@ -194,7 +194,7 @@ cocos2d::Node* CharacterInfo::createPopInfo(std::vector<int> info)
     if(infoPopValue >= 0)
     {
         cocos2d::Color3B color = m_colorDefense;
-        if(infoPopName == "force")
+        if(infoPopName == "attack")
         {
             color = m_colorAttack;
         }
@@ -206,9 +206,12 @@ cocos2d::Node* CharacterInfo::createPopInfo(std::vector<int> info)
         infoDisplay->addChild(m_popValueTotalBackgroud);
         
         //add value
-        m_popValue = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std::to_string(infoPopValue)));
-        m_popValue->setColor(color);
-        infoDisplay->addChild(m_popValue);
+        if(infoPopValue > 0)
+        {
+            m_popValue = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std::to_string(infoPopValue)));
+            m_popValue->setColor(color);
+            infoDisplay->addChild(m_popValue);
+        }
         
         //add front
         m_popValueTotalfront = Sprite::create(KFSprite::getFile("charUI_attributes_front_" + std:: to_string(charSpecTotal)));

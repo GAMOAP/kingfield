@@ -46,8 +46,9 @@ public:
     bool isBlocking();
     
 private:
+    
     virtual bool init(int number);
-    void initDisplay();
+    bool initPosition(int number);
     
     void setActionSequence();
     

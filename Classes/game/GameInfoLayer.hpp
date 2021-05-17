@@ -22,14 +22,14 @@ public:
     static void addConnectSprite();
     static void removeConnectSprite();
     
-    static void addFightLogo();
+    static void addInfoLogo(std::string name, int line, int collumn);
     
 private:
     virtual bool init();
     
     void initConnectSprite(bool addRemove);
     void initIntroTitle(bool addRemove);
-    void initFightLogo();
+    void initInfoLogo(std::string name, int line, int collumn);
     
 protected:
     cocos2d::Node* m_infoLayer = nullptr;

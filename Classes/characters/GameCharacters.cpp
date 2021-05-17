@@ -4,8 +4,6 @@
 //
 //  Created by alexandre gimeno on 05/07/2019.
 //
-#include "Constants.h"
-
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
 #include "MainAction.hpp"
@@ -36,28 +34,40 @@ bool GameCharacters::init()
     return true;
 }
 
-void GameCharacters::setCharacters(int charNbr)
+void GameCharacters::setCharacters(int charNumbers)
 {
     if(!m_SharedGameCharacters){ getInstance();}
     
     for(int c = 0; c < CHAR_NUMBER ; c++)
     {
         auto character = MainObject::getCharByNumber(c);
-        if(character && c >= charNbr)
+        if(character && c >= charNumbers)
         {
             character->removeToStage();
+            character = nullptr;
         }
-        if(!character && c < charNbr)
+        
+        if(c < charNumbers)
         {
-            auto character = Character::setCharacter(c);
-            if(c == 2){m_SharedGameCharacters->m_kingFriend = character;}
-            if(c == 7){m_SharedGameCharacters->m_kingEnemy = character;}
-            
-            MainStuff::initCharSpec(c);
-            MainStuff::initCardBuff(c);
+            m_SharedGameCharacters->initChar(c);
         }
     }
 }
+
+bool GameCharacters::initChar(int charNbr)
+{
+    auto character = Character::setCharacter(charNbr);
+    if(charNbr == 2){m_SharedGameCharacters->m_kingFriend = character;}
+    if(charNbr == 7){m_SharedGameCharacters->m_kingEnemy = character;}
+    
+    MainStuff::initCharSpec(charNbr);
+    MainStuff::initCardBuff(charNbr);
+    
+    m_SharedGameCharacters->m_charactersTagsMemory[charNbr] = m_SharedGameCharacters->m_charactersTagsMemoryOrigin[charNbr];
+    
+    return true;
+}
+
 void GameCharacters::removeAllCharacters()
 {
     auto nodeList = MainObject::getMainLayer()->getChildren();
@@ -69,6 +79,7 @@ void GameCharacters::removeAllCharacters()
         {
             GameBoxes::setBoxUnselect(character->getTag());
             character->removeToStage();
+            character = nullptr;
         }
     }
     m_SharedGameCharacters->m_charSelected = nullptr;
@@ -77,16 +88,27 @@ void GameCharacters::removeAllCharacters()
         m_SharedGameCharacters->m_characterUI->removeCharacterUI();
     }
 }
+void GameCharacters::removeCharacter(int charNbr)
+{
+    auto character = MainObject::getCharByNumber(charNbr);
+    if(character)
+    {
+        GameBoxes::setBoxUnselect(character->getTag());
+        character->removeToStage();
+        character = nullptr;
+    }
+}
 
 //----------------------------CHARACTER SELECT------------------------------------
 void GameCharacters::setCharSelect(int number)
 {
     if(number < 0)
     {
+        number = 2;
         if(m_SharedGameCharacters->m_charNumberMemory >= 0)
+        {
             number = m_SharedGameCharacters->m_charNumberMemory;
-        else
-            number = 2;
+        }
     }
     
     auto charSelected = m_SharedGameCharacters->m_charSelected;
@@ -144,13 +166,20 @@ bool GameCharacters::getCharIsSelected()
     else
         return true;
 }
-void GameCharacters::unselectAll()
+void GameCharacters::unselectAll(bool eraseMemory)
 {
     auto charSelected = m_SharedGameCharacters->m_charSelected;
+    
     if(charSelected)
     {
         m_SharedGameCharacters->m_charNumberMemory = charSelected->getNumber();
+        
         GameBoxes::setBoxUnselect(m_SharedGameCharacters->m_charSelected->getTag());
+    }
+    
+    if(eraseMemory)
+    {
+        m_SharedGameCharacters->m_charNumberMemory = -1;
     }
     
     if(m_SharedGameCharacters->m_charSelected)
@@ -171,15 +200,22 @@ Character* GameCharacters::getKingFriend()
     return m_SharedGameCharacters->m_kingFriend;
 }
 
-//-------------------------CHAR MEMEORY----------------------------
+//-------------------------CHAR MEMORY----------------------------
 int GameCharacters::getCharNumberMemory()
 {
     return m_SharedGameCharacters->m_charNumberMemory;
 }
 
+int GameCharacters::getCharTagMemory(int charNbr)
+{
+    return m_SharedGameCharacters->m_charactersTagsMemory[charNbr];
+}
+
 //---------------------------ACTION-------------------------------
 void GameCharacters::setAction(std::vector<KFAction*> actionSequence)
 {
+    m_SharedGameCharacters->m_isActionRun = true;
+    
     //unselet all, move box in place and set action when nodes are in place.
     
     m_SharedGameCharacters->unselectAll();
@@ -188,16 +224,16 @@ void GameCharacters::setAction(std::vector<KFAction*> actionSequence)
     
     auto character = MainObject::getCharByNumber(actionSequence[0]->getCharNbr());
     
-    auto endActionSequence = EventListenerCustom::create("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION_SEQUENCE", [=](EventCustom* event)
-    {
-        m_SharedGameCharacters->endActionSequence(character);
-    });
-    
     auto charIsPlace = EventListenerCustom::create("NODE_char" + std::to_string(character->getTag())+"_IS_PLACE", [=](EventCustom* event)
     {
         m_SharedGameCharacters->m_sequenceState = 0;
         m_SharedGameCharacters->m_actionSequence = actionSequence;
         m_SharedGameCharacters->setActionSequence(character);
+    });
+    
+    auto endActionSequence = EventListenerCustom::create("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION_SEQUENCE", [=](EventCustom* event)
+    {
+        m_SharedGameCharacters->endActionSequence(character);
     });
     
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -225,6 +261,8 @@ void GameCharacters::setActionSequence(Character* character)
         
         auto charIsActionEnd = EventListenerCustom::create("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION", [=](EventCustom* event)
         {
+            m_SharedGameCharacters->m_charactersTagsMemory[character->getNumber()] = character->getTag();
+            
             character->getEventDispatcher()->removeCustomEventListeners("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION");
             action->~KFAction();
             
@@ -237,11 +275,27 @@ void GameCharacters::setActionSequence(Character* character)
 }
 void GameCharacters::endActionSequence(Character* character)
 {
+    
     character->getEventDispatcher()->removeCustomEventListeners("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION_SEQUENCE");
+    
+    for(int c = 0; c < CHAR_NUMBER; c++)
+    {
+        auto deadChar = MainObject::getCharByNumber(c);
+        if(c == 2 && !deadChar)
+        {
+            GameDirector::stopFight(false);
+        }
+        else if(c == 7 && !deadChar)
+        {
+            GameDirector::stopFight(true);
+        }
+    }
     
     MainStuff::setCharSpec(character->getNumber(), "crystal", -m_actionSequence[0]->getCost());
     m_actionSequence.clear();
     character->setIsMove(false);
+    
+    m_SharedGameCharacters->m_isActionRun = false;
     
     GameDirector::endTurn();
 }
@@ -266,6 +320,10 @@ void GameCharacters::setActionAll(std::string actionName)
             }
         }
     }
+}
+bool GameCharacters::getIsActionRun()
+{
+    return m_SharedGameCharacters->m_isActionRun;
 }
 //---------------------------------CHARACTER UI------------------------------
 CharacterUI* GameCharacters::getCharUI()

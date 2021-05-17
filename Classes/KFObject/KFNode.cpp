@@ -66,6 +66,8 @@ bool KFNode::removeToStage()
     
     auto boxIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
     {
+        _eventDispatcher->dispatchCustomEvent("NODE_"+ m_className + std::to_string(_tag)+"_REMOVED", &_tag);
+        _eventDispatcher->removeCustomEventListeners("NODE_"+ m_className + std::to_string(_tag)+"_REMOVED");
         this->removeFromParent();
     });
     _eventDispatcher->addEventListenerWithSceneGraphPriority(boxIsOutEvent, this);

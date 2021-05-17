@@ -119,7 +119,7 @@ protected:
     bool m_cascadedMove = true;
     
     const int m_centerHeigth = -240;
-    const int m_moveInOutRange = 320 ;
+    const int m_moveInOutRange = 640;
     
     const int m_moveRange = 8;
     const float m_moveTime = 0.2 ;
