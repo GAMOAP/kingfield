@@ -8,6 +8,7 @@
 #include "GameDirector.hpp"
 
 #include "MainObject.hpp"
+#include "MainStuff.hpp"
 
 #include "GameBoxes.hpp"
 #include "GameCharacters.hpp"
@@ -39,7 +40,7 @@ bool GameDirector::init()
     GameCharacters::getInstance();
     GameCards::getInstance();
     
-    m_kingBreed = "sun";
+    m_kingBreed = MainStuff::getTeamKarma(0);
     
     return true;
 }
@@ -155,6 +156,9 @@ void GameDirector::longTouchBox(int tag)
 void GameDirector::setKingBreed(std::string kingBreed)
 {
     m_kingBreed = kingBreed;
+    const auto charKing = GameCharacters::getKingFriend();
+    charKing->setFlag();
+    GameBoxes::setBoxes();
 }
 KFScene* GameDirector::getScene()
 {

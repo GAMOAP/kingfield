@@ -46,7 +46,9 @@ bool CharacterDisplay::init(int number)
     createFactory();
     
     if(number == 2 || number == 7)
+    {
         setFlag();
+    }
     
     this->setCascadeColorEnabled(true);
     
@@ -183,45 +185,36 @@ bool CharacterDisplay::setStuff()
 //flag.
 bool CharacterDisplay::setFlag()
 {
-    std::string karma = MainStuff::getTeamKarma(m_team);
+    std::string flagName = MainStuff::getTeamKarma(m_team);
     
-    if(m_number != 2 && m_number != 7 && karma == m_karmaFlag)
+    if(m_flag)
     {
-        return false;
+        m_flag->removeFromParent();
+        m_flag = nullptr;
     }
-    else
+    
+    m_flag = Sprite::create(KFSprite::getFile("charUI_flag_" + flagName + "_" + std::to_string(0)));
+    m_flag->setAnchorPoint(Vec2(1,0));
+    
+    if(m_number == 7)
     {
-        m_karmaFlag = karma;
-        
-        if(m_flag)
-        {
-            m_flag->removeFromParent();
-            m_flag = nullptr;
-        }
-        
-        m_flag = Sprite::create(KFSprite::getFile("charUI_flag_" + m_karmaFlag + "_" + std::to_string(0)));
-        m_flag->setAnchorPoint(Vec2(1,0));
-        
-        if(m_number == 7)
-        {
-            m_flag->setScaleX(-1);
-            m_flagPos.x -= m_flag->getContentSize().width/2;
-        }
-        m_flag->setPosition(m_flagPos);
-        this->addChild(m_flag, 0);
-        
-        cocos2d::Vector<cocos2d::SpriteFrame*> flagFrame;
-        flagFrame.reserve(7);
-        for(int f = 0; f < 7; f++)
-        {
-            flagFrame.pushBack(SpriteFrame::create(KFSprite::getFile("charUI_flag_" + m_karmaFlag + "_" + std::to_string(f)), Rect(0,0,88,52)));
-        }
-        Animation* flagAnimation = Animation::createWithSpriteFrames(flagFrame, 0.1f);
-        Animate* flagAnimate = Animate::create(flagAnimation);
-        m_flag->runAction(RepeatForever::create(flagAnimate));
-        
-        return true;
+        m_flag->setScaleX(-1);
+        m_flagPos.x -= m_flag->getContentSize().width/2;
     }
+    m_flag->setPosition(m_flagPos);
+    this->addChild(m_flag, 0);
+    
+    cocos2d::Vector<cocos2d::SpriteFrame*> flagFrame;
+    flagFrame.reserve(7);
+    for(int f = 0; f < 7; f++)
+    {
+        flagFrame.pushBack(SpriteFrame::create(KFSprite::getFile("charUI_flag_" + flagName + "_" + std::to_string(f)), Rect(0,0,88,52)));
+    }
+    Animation* flagAnimation = Animation::createWithSpriteFrames(flagFrame, 0.1f);
+    Animate* flagAnimate = Animate::create(flagAnimation);
+    m_flag->runAction(RepeatForever::create(flagAnimate));
+    
+    return true;
 }
 //select.
 void CharacterDisplay::setSelect()

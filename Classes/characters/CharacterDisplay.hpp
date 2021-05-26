@@ -74,8 +74,7 @@ protected:
     
     std::map<std::string, std::vector<std::string>> m_stuffList;
     
-    cocos2d::Sprite* m_flag = nullptr;
-    std::string m_karmaFlag;
+    cocos2d::Sprite* m_flag = nullptr; 
     cocos2d::Vec2 m_flagPos = {20, 68};
     
     bool m_selected = false;

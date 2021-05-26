@@ -8,6 +8,8 @@
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
 
+#include "GameDirector.hpp"
+
 #include "GameBoxes.hpp"
 #include "GameCharacters.hpp"
 #include "GameCards.hpp"
@@ -130,9 +132,11 @@ void GameCards::setCardsChange()
 void GameCards::setCardSelectLibrary(Card* cardCliqued)
 {
     const auto charSelect = GameCharacters::getCharSelect();
-    const auto charKing = GameCharacters::getKingFriend();
+    
     const auto charUI = GameCharacters::getCharUI();
     const auto cardSelect = getCardSelect();
+    
+    const std::string oldKarma = MainStuff::getTeamKarma(0);
     
     std::string cardCliquedTBO = cardCliqued->getType_Breed_object();
     std::string cardSelectTBO = cardSelect->getType_Breed_object();
@@ -145,7 +149,6 @@ void GameCards::setCardSelectLibrary(Card* cardCliqued)
         const std::string object = cardCliqued->getObject();
         MainStuff::setStuff(charNumber, type, breed, object);
         charSelect->setStuff();
-        charKing->setFlag();
         charUI->setCharacterUI(charNumber);
         cardSelect->initDisplay();
         cardCliqued->setSelect();
@@ -161,6 +164,12 @@ void GameCards::setCardSelectLibrary(Card* cardCliqued)
                 card->place(0);
                 setCardsChange();
             }
+        }
+        
+        const std::string newKarma = MainStuff::getTeamKarma(0);
+        if(oldKarma != newKarma)
+        {
+            GameDirector::setKingBreed(newKarma);
         }
     }
 }

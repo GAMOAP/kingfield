@@ -64,43 +64,6 @@ bool Character::init(int number)
     initPosition(number);
     
     return true;
-    
-    
-    //Create identity.
-    
-    /*setNumber(number);
-    setTag(m_originTagList[number]);
-    Vec2 positionLC = MainGrid::getLineCollumnByTag(_tag);
-    
-    m_className = "char";
-    setName(m_className + "_" + std::to_string(number));
-     
-    m_line = positionLC.x;
-    m_collumn = positionLC.y;
-    
-    if(number >= 5)
-    {
-        this->setFlip();
-        m_isPlayerTeam = false;
-    }
-    else
-    {
-        m_isPlayerTeam = true;
-    }
-    
-    addToStage();
-     
-    
-    remove();
-    auto IsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
-    {
-        initDisplay();
-    });
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(IsOutEvent, this);
-    
-    return true;*/
-     
-    
 }
 
 bool Character::initPosition(int number)
@@ -112,9 +75,6 @@ bool Character::initPosition(int number)
     m_collumn = positionLC.y;
     
     //remove origin box
-    
-    printf("charNbr = %i, _tag = %i, originTag = %i\n",m_number, _tag, originTag);
-    
     if(_tag == originTag)
     {
         return true;
@@ -138,7 +98,6 @@ bool Character::initPosition(int number)
         }
         else
         {
-            printf("%i_isOUt\n", _tag);
             setNodePosition();
             setVisible(false);
             auto originBox = MainObject::getBoxByTag(originTag);
@@ -340,15 +299,10 @@ bool Character::setStrike(std::vector<std::vector<int>> strikedList, std::string
             {
                 if(reactionName == death)
                 {
-                    std::string inOut = "IN";
-                    if(strikedChar->getNumber() == 2 || strikedChar->getNumber() == 7)
-                    {
-                        inOut = "OUT";
-                    }
                     strikedChar->removeToStage();
                     int strikedTag = strikedChar->getTag();
                     auto strikeddBox = MainObject::getBoxByTag(strikedTag);
-                    auto isIn = EventListenerCustom::create("NODE_box"+ std::to_string(strikedTag)+"_IS_" + inOut, [=](EventCustom* event)
+                    auto isIn = EventListenerCustom::create("NODE_box" + std::to_string(strikedTag) + "_IS_IN", [=](EventCustom* event)
                     {
                         _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
                         _eventDispatcher->removeCustomEventListeners("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");

@@ -91,12 +91,6 @@ void Box::initDisplay()
                 m_type = "barrack";
             }
         }
-        for(int d = 0; d < m_barrackBarrackTagInvert.size(); d++){
-            if(_tag == m_barrackBarrackTagInvert[d]){
-                m_type = "field";
-                m_flipped = true;
-            }
-        }
     }
     else if(m_scene == "fight")
     {
@@ -108,12 +102,6 @@ void Box::initDisplay()
         for(int b = 0; b < m_fightBarrackTag.size(); b++){
             if(_tag == m_fightBarrackTag[b]){
                 m_type = "barrack";
-            }
-        }
-        for(int d = 0; d < m_fightFieldTagInvert.size(); d++){
-            if(_tag == m_fightFieldTagInvert[d]){
-                m_type = "field";
-                m_flipped = true;
             }
         }
     }

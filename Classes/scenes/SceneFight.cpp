@@ -115,8 +115,6 @@ bool SceneFight::startFight(int teamNumber)
 }
 bool SceneFight::stopFight(bool isWin)
 {
-    printf("END_GAME\n");
-    
     std::string winOrFail = "victory";
     int kingDeadTag = GameCharacters::getCharTagMemory(7);
     if(!isWin)
