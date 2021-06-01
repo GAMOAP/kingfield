@@ -51,6 +51,7 @@
 		E328E7B3233CE1F40017C1E8 /* KFSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E328E7B1233CE1F40017C1E8 /* KFSprite.cpp */; };
 		E337CC2C2386BA4D009011CF /* KFAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E337CC2A2386BA4D009011CF /* KFAction.cpp */; };
 		E36144842604B3470074F0C2 /* CharacterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E36144822604B3470074F0C2 /* CharacterInfo.cpp */; };
+		E371167A265ED7E60008714A /* BoxDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3711678265ED7E60008714A /* BoxDisplay.cpp */; };
 		E38072A423437BC500A413AC /* SceneBarrack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38072A223437BC500A413AC /* SceneBarrack.cpp */; };
 		E38072A92345B65D00A413AC /* SceneOption.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38072A72345B65D00A413AC /* SceneOption.cpp */; };
 		E38072AD2345C88D00A413AC /* SceneFight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E38072AB2345C88D00A413AC /* SceneFight.cpp */; };
@@ -217,6 +218,8 @@
 		E337CC2B2386BA4D009011CF /* KFAction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KFAction.hpp; sourceTree = "<group>"; };
 		E36144822604B3470074F0C2 /* CharacterInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterInfo.cpp; sourceTree = "<group>"; };
 		E36144832604B3470074F0C2 /* CharacterInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CharacterInfo.hpp; sourceTree = "<group>"; };
+		E3711678265ED7E60008714A /* BoxDisplay.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BoxDisplay.cpp; sourceTree = "<group>"; };
+		E3711679265ED7E60008714A /* BoxDisplay.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BoxDisplay.hpp; sourceTree = "<group>"; };
 		E38072A223437BC500A413AC /* SceneBarrack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneBarrack.cpp; sourceTree = "<group>"; };
 		E38072A323437BC500A413AC /* SceneBarrack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneBarrack.hpp; sourceTree = "<group>"; };
 		E38072A72345B65D00A413AC /* SceneOption.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneOption.cpp; sourceTree = "<group>"; };
@@ -790,6 +793,8 @@
 				E3A7BAAA2339046500960296 /* Box.hpp */,
 				E3C01C8F233E5CFA008171B3 /* BoxMask.cpp */,
 				E3C01C8E233E5CFA008171B3 /* BoxMask.hpp */,
+				E3711678265ED7E60008714A /* BoxDisplay.cpp */,
+				E3711679265ED7E60008714A /* BoxDisplay.hpp */,
 			);
 			path = boxes;
 			sourceTree = "<group>";
@@ -1005,6 +1010,7 @@
 				E3A7BAE22339F5B400960296 /* CCSlot.cpp in Sources */,
 				E328E7A6233B33AA0017C1E8 /* SceneIntro.cpp in Sources */,
 				E3A7BA9D233903C900960296 /* DisplayData.cpp in Sources */,
+				E371167A265ED7E60008714A /* BoxDisplay.cpp in Sources */,
 				E3A7BA9B233903C900960296 /* DragonBonesData.cpp in Sources */,
 				E3A7BA9C233903C900960296 /* BoundingBoxData.cpp in Sources */,
 				E3A7BA0A2338F71A00960296 /* MainGrid.cpp in Sources */,

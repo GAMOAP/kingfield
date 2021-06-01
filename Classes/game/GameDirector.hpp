@@ -45,6 +45,7 @@ public:
     //KING BREED
     static void setKingBreed(std::string kingBreed);
     static std::string getKingBreed();
+    static std::string getEnemyKingBreed();
     
 private:
     bool init();
@@ -58,5 +59,6 @@ protected:
 
 static GameDirector* m_SharedGameDirector = nullptr;
 static std::string m_kingBreed;
+static std::string m_enemyKingBreed;
 
 #endif /* GameDirector_hpp */

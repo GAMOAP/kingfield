@@ -13,6 +13,8 @@
 #include "KFNode.hpp"
 #include "KFSprite.hpp"
 
+#include "BoxDisplay.hpp"
+
 class Box : public KFNode
 {
 public:
@@ -43,14 +45,11 @@ protected:
     std::string m_scene;
     std::string m_type;
     std::string m_breed;
-    std::string m_oldFile;
-    
-    std::string m_boxFile;
-    bool m_flipped;
+    std::string m_secondBreed;
     
     bool m_isRumble;
     
-    cocos2d::Sprite* m_boxDisplay = nullptr;
+    BoxDisplay* m_boxDisplay = nullptr;
     cocos2d::Sprite* m_boxActionUI = nullptr;
     bool m_actionUI;
     bool m_touchAuth;

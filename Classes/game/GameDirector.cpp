@@ -168,3 +168,7 @@ std::string GameDirector::getKingBreed()
 {
     return m_kingBreed;
 }
+std::string GameDirector::getEnemyKingBreed()
+{
+    return m_enemyKingBreed;
+}

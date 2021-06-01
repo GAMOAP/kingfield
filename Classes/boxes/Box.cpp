@@ -70,25 +70,25 @@ void Box::initDisplay()
 {
     auto gameDirector = GameDirector::getInstance();
     m_scene = gameDirector->getScene()->getName();
-    m_breed = gameDirector->getKingBreed();
     
-    int fileLine = m_line;
-    int fileCollumn = m_collumn;
-    
-    m_flipped = false;
-    
-    m_type = "background";
+    std::string type = "background";
+    std::string breed = gameDirector->getKingBreed();
+    std::string secondBreed = "";
+    if(m_scene == "fight")
+    {
+        secondBreed = gameDirector->getEnemyKingBreed();
+    }
     
     if(m_scene == "barrack")
     {
         for(int f = 0; f < m_barrackFieldTag.size(); f++){
             if(_tag == m_barrackFieldTag[f]){
-                m_type = "field";
+                type = "field";
             }
         }
         for(int b = 0; b < m_barrackBarrackTag.size(); b++){
             if(_tag == m_barrackBarrackTag[b]){
-                m_type = "barrack";
+                type = "barrack";
             }
         }
     }
@@ -96,25 +96,22 @@ void Box::initDisplay()
     {
         for(int f = 0; f < m_fightFieldTag.size(); f++){
             if(_tag == m_fightFieldTag[f]){
-                m_type = "field";
+                type = "field";
             }
         }
         for(int b = 0; b < m_fightBarrackTag.size(); b++){
             if(_tag == m_fightBarrackTag[b]){
-                m_type = "barrack";
+                type = "barrack";
             }
         }
     }
     
-    if(m_flipped)
+   if(type != m_type || breed != m_breed || secondBreed != m_secondBreed)
     {
-        fileCollumn = 4 - m_collumn;
-    }
-    
-    m_boxFile = "box_" + m_type + "_" + m_breed + "_" + std::to_string(fileLine) + "_" + std::to_string(fileCollumn);
-    
-    if(m_oldFile != m_boxFile)
-    {
+        m_type = type;
+        m_breed = breed;
+        m_secondBreed = secondBreed;
+        
         removeBox();
     }
 }
@@ -145,8 +142,7 @@ void Box::removeBox()
     {
         if(!m_boxDisplay)
         {
-            m_boxDisplay = Sprite::create(KFSprite::getFile(m_boxFile));
-            m_boxDisplay->setAnchorPoint(Vec2( 0.5, 0));
+            m_boxDisplay = BoxDisplay::create(m_line, m_collumn, m_type, m_breed, m_secondBreed);
             m_boxDisplay->setPosition(Vec2(0, m_centerHeigth));
             this->addChild(m_boxDisplay, 0);
             
@@ -154,9 +150,8 @@ void Box::removeBox()
         }
         else
         {
-            m_boxDisplay->setTexture(KFSprite::getFile(m_boxFile));
+            m_boxDisplay->setTexture(m_line, m_collumn, m_type, m_breed, m_secondBreed);
         }
-        m_oldFile = m_boxFile;
     });
     _eventDispatcher->addEventListenerWithSceneGraphPriority(boxIsOutEvent, this);
 }
