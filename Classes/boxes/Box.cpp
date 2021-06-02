@@ -73,11 +73,7 @@ void Box::initDisplay()
     
     std::string type = "background";
     std::string breed = gameDirector->getKingBreed();
-    std::string secondBreed = "";
-    if(m_scene == "fight")
-    {
-        secondBreed = gameDirector->getEnemyKingBreed();
-    }
+    std::string secondBreed = gameDirector->getKingBreed();
     
     if(m_scene == "barrack")
     {
@@ -94,6 +90,11 @@ void Box::initDisplay()
     }
     else if(m_scene == "fight")
     {
+        if(_tag >= 31 && _tag != 36 && _tag != 40)
+        {
+            secondBreed = gameDirector->getEnemyKingBreed();
+        }
+        
         for(int f = 0; f < m_fightFieldTag.size(); f++){
             if(_tag == m_fightFieldTag[f]){
                 type = "field";
@@ -142,7 +143,7 @@ void Box::removeBox()
     {
         if(!m_boxDisplay)
         {
-            m_boxDisplay = BoxDisplay::create(m_line, m_collumn, m_type, m_breed, m_secondBreed);
+            m_boxDisplay = BoxDisplay::create(m_line, m_collumn, m_type, m_breed, m_secondBreed, m_scene);
             m_boxDisplay->setPosition(Vec2(0, m_centerHeigth));
             this->addChild(m_boxDisplay, 0);
             
@@ -150,7 +151,7 @@ void Box::removeBox()
         }
         else
         {
-            m_boxDisplay->setTexture(m_line, m_collumn, m_type, m_breed, m_secondBreed);
+            m_boxDisplay->setTexture(m_line, m_collumn, m_type, m_breed, m_secondBreed, m_scene);
         }
     });
     _eventDispatcher->addEventListenerWithSceneGraphPriority(boxIsOutEvent, this);

@@ -11,10 +11,10 @@
 
 USING_NS_CC;
 
-BoxDisplay* BoxDisplay::create(int line, int collumn, std::string type, std::string breed, std::string secondBreed)
+BoxDisplay* BoxDisplay::create(int line, int collumn, std::string type, std::string breed, std::string secondBreed, std::string scene)
 {
     BoxDisplay* ret = new (std::nothrow) BoxDisplay();
-    if(ret && ret->init (line, collumn, type, breed, secondBreed))
+    if(ret && ret->init (line, collumn, type, breed, secondBreed, scene))
     {
         ret->autorelease();
         return ret;
@@ -28,52 +28,67 @@ BoxDisplay* BoxDisplay::create(int line, int collumn, std::string type, std::str
         return ret;
 }
 
-bool BoxDisplay::init(int line, int collumn, std::string type, std::string breed, std::string secondBreed)
+bool BoxDisplay::init(int line, int collumn, std::string type, std::string breed, std::string secondBreed, std::string scene)
 {
-    const std::string frontFileName = "box_" + type + "_" + secondBreed + "_" + std::to_string(line) + "_" + std::to_string(collumn);
-    
-    const std::string backFileName = "box_" + type + "_" + breed + "_" + std::to_string(line) + "_" + std::to_string(collumn);
-    
-    if(!m_frontBox)
+    if(scene == "fight")
     {
-        m_frontBox = cocos2d::Sprite::create(KFSprite::getFile(backFileName));
-        if(secondBreed == "")
+        if(line >= 2)
         {
-            m_frontBox->setVisible(false);
+            if(line >= 0 && line <= 4 && collumn != -1 && collumn != 5)
+            {
+                if(line == 4)
+                {
+                    line = 0;
+                }
+                if(line == 3)
+                {
+                    line = 1;
+                }
+            }
+            breed = secondBreed;
         }
-        m_frontBox->setAnchorPoint(Vec2( 0.5, 0));
-        this->addChild(m_frontBox, 1);
+        
+        const std::string fileName = "box_" + type + "_" + breed + "_" + std::to_string(line) + "_" + std::to_string(collumn);
+        
+        printf("SET:: %s\n",fileName.c_str());
+        
+        setDisplayBox(m_backBox, fileName, 0);
     }
-    
-    if(!m_backBox)
+    else
     {
-        m_backBox = cocos2d::Sprite::create(KFSprite::getFile(backFileName));
-        m_backBox->setAnchorPoint(Vec2( 0.5, 0));
-        this->addChild(m_backBox, 0);
+        if(m_frontBox)
+        {
+            m_frontBox->removeFromParent();
+            m_frontBox = nullptr;
+        }
+        
+        const std::string fileName = "box_" + type + "_" + breed + "_" + std::to_string(line) + "_" + std::to_string(collumn);
+        
+        m_backBox = setDisplayBox(m_backBox, fileName, 0);
     }
     
     return true;
 }
 
-void BoxDisplay::setTexture(int line, int collumn, std::string type, std::string breed, std::string secondBreed)
+void BoxDisplay::setTexture(int line, int collumn, std::string type, std::string breed, std::string secondBreed, std::string scene)
 {
-    const std::string frontFileName = "box_" + type + "_" + secondBreed + "_" + std::to_string(line) + "_" + std::to_string(collumn);
-    
-    const std::string backFileName = "box_" + type + "_" + breed + "_" + std::to_string(line) + "_" + std::to_string(collumn);
-    
-    if(m_frontBox != nullptr)
+    init(line, collumn, type, breed, secondBreed, scene);
+}
+
+cocos2d::Sprite* BoxDisplay::setDisplayBox(Sprite* box, std::string fileName, int index)
+{
+    if(!box)
     {
-        m_frontBox->setTexture(KFSprite::getFile(backFileName));
-        if(secondBreed == "")
-        {
-            m_frontBox->setVisible(false);
-        }
+        box = cocos2d::Sprite::create(KFSprite::getFile(fileName));
+        box->setAnchorPoint(Vec2( 0.5, 0));
+        this->addChild(box, index);
+    }
+    else
+    {
+        box->setTexture(KFSprite::getFile(fileName));
     }
     
-    if(m_backBox != nullptr)
-    {
-        m_backBox->setTexture(KFSprite::getFile(backFileName));
-    }
+    return box;
 }
 
 void BoxDisplay::setColor(const cocos2d::Color3B color)
