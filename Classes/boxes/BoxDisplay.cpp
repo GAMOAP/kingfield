@@ -30,29 +30,60 @@ BoxDisplay* BoxDisplay::create(int line, int collumn, std::string type, std::str
 
 bool BoxDisplay::init(int line, int collumn, std::string type, std::string breed, std::string secondBreed, std::string scene)
 {
-    if(scene == "fight")
+    if(scene == "fight" || scene == "rumble")
     {
-        if(line >= 2)
+        int backLine = line;
+        int frontLine = line;
+        
+        std::string backBreed = breed;
+        std::string frontBreed = breed;
+        
+        bool isFrontBox = false;
+        
+        if(line>=2)
         {
-            if(line >= 0 && line <= 4 && collumn != -1 && collumn != 5)
-            {
-                if(line == 4)
-                {
-                    line = 0;
-                }
-                if(line == 3)
-                {
-                    line = 1;
-                }
-            }
-            breed = secondBreed;
+            backBreed = secondBreed;
         }
         
-        const std::string fileName = "box_" + type + "_" + breed + "_" + std::to_string(line) + "_" + std::to_string(collumn);
+        if(collumn != -1 && collumn != 5)
+        {
+            switch (line) {
+                case 4:
+                    backLine = 0;
+                    break;
+                case 3:
+                    backLine = 1;
+                    frontLine = 3;
+                    frontBreed = breed;
+                    isFrontBox = true;
+                    break;
+                case 2:
+                    backBreed = breed;
+                    frontLine = 4;
+                    frontBreed = secondBreed;
+                    isFrontBox = true;
+                    break;
+                case 1:
+                    frontLine = 3;
+                    frontBreed = secondBreed;
+                    isFrontBox = true;
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
         
-        printf("SET:: %s\n",fileName.c_str());
+        const std::string backFileName = "box_" + type + "_" + backBreed + "_" + std::to_string(backLine) + "_" + std::to_string(collumn);
+        setDisplayBox(m_backBox, backFileName, 0);
         
-        setDisplayBox(m_backBox, fileName, 0);
+        if(isFrontBox)
+        {
+            const std::string frontFileName = "box_" + type + "_" + frontBreed + "_" + std::to_string(frontLine) + "_" + std::to_string(collumn);
+            setDisplayBox(m_frontBox, frontFileName, 0);
+        }
+        
+        //printf("FRONT:: %s\n",backFileName.c_str());
     }
     else
     {

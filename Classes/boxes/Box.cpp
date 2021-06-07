@@ -194,14 +194,21 @@ void Box::rumble()
         
     auto boxIsOut = EventListenerCustom::create("NODE_box" + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
     {
-        /*
-        const std::string type = m_type;
-        const int s = BREED_TYPE.size();
-        const std::string breed = BREED_TYPE[random(0, s)];
         
-        std::string boxFile = "box_" + type + "_" + breed + "_" + std::to_string(m_line) + "_" + std::to_string(m_collumn);
-        m_boxDisplay->setTexture(KFSprite::getFile(boxFile));
-        */
+        const std::string scene = "rumble";
+        const std::string type = m_type;
+        
+        const unsigned long s = BREED_TYPE.size() - 1;
+        const int rBreed = random(0, int(s));
+        const int rSecondBreed = random(0, int(s));
+        
+        const std::string breed = BREED_TYPE[rBreed];
+        const std::string secondBreed = BREED_TYPE[rSecondBreed];
+        
+        //printf("breed = %s:%i, secondBreed = %s:%i\n",breed.c_str(),rBreed, secondBreed.c_str(),rSecondBreed);
+        
+        m_boxDisplay->setTexture(m_line, m_collumn, type, breed, secondBreed, scene);
+        
         
         auto boxIsIn = EventListenerCustom::create("NODE_box" + std::to_string(_tag)+"_IS_IN", [this](EventCustom* event)
         {

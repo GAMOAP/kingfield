@@ -59,6 +59,6 @@ protected:
 
 static GameDirector* m_SharedGameDirector = nullptr;
 static std::string m_kingBreed;
-static std::string m_enemyKingBreed = "sun";
+static std::string m_enemyKingBreed = "time";
 
 #endif /* GameDirector_hpp */
