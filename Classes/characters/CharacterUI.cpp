@@ -197,32 +197,17 @@ void CharacterUI::createDefense()
     //buffed or unbuffed defense
     int specDefense = m_charSpec["defense"];
     int specShield = m_charSpec["shield"];
-    if(specShield != specDefense)
+    
+    std::string specBuffedName = "defense";
+    std::string attributeName = "front";
+    cocos2d::Color3B buffedColor = Color3B::WHITE;
+    
+    if(specShield > specDefense)
     {
-        if(!m_defense_buff)
-        {
-            std::string specBuffedName = "defense";
-            std::string attributeName = "front";
-            cocos2d::Color3B buffedColor = Color3B::WHITE;
-            
-            if(specShield > specDefense)
-            {
-                specName = "defense";
-                specBuffedName = "shield";
-                attributeName = "background";
-                buffedColor = Color3B::GREEN;
-            }
-            m_defense_buff = Sprite::create(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
-            m_defense_buff->setColor(buffedColor);
-        }
-    }
-    else
-    {
-        if(m_defense_buff)
-        {
-            m_defense_buff->removeFromParent();
-            m_defense_buff = nullptr;
-        }
+        specName = "defense";
+        specBuffedName = "shield";
+        attributeName = "background";
+        buffedColor = Color3B::GREEN;
     }
     
     if(!m_defense)
@@ -248,9 +233,26 @@ void CharacterUI::createDefense()
         popUp(m_defense_value, "charUI_attributes_background_" + std:: to_string(m_charSpec[specName]));
     }
     
-    if(m_defense_buff && specShield != specDefense)
+    if(specShield != specDefense)
     {
-        m_defense->addChild(m_defense_buff, 0);
+        if(!m_defense_buff)
+        {
+            m_defense_buff = Sprite::create(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+            m_defense_buff->setColor(buffedColor);
+            m_defense->addChild(m_defense_buff, 0);
+        }
+        else
+        {
+            m_defense_buff->setTexture(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+        }
+    }
+    else
+    {
+        if(m_defense_buff)
+        {
+            m_defense_buff->removeFromParent();
+            m_defense_buff = nullptr;
+        }
     }
 }
 
@@ -262,32 +264,17 @@ void CharacterUI::createAttack()
     //buffed or unbuffed attack
     int specAttack = m_charSpec["attack"];
     int specForce = m_charSpec["force"];
-    if(specForce != specAttack)
+    
+    std::string specBuffedName = "attack";
+    std::string attributeName = "front";
+    cocos2d::Color3B buffedColor = Color3B::WHITE;
+    
+    if(specForce > specAttack)
     {
-        if(!m_attack_buff)
-        {
-            std::string specBuffedName = "attack";
-            std::string attributeName = "front";
-            cocos2d::Color3B buffedColor = Color3B::WHITE;
-            
-            if(specForce > specAttack)
-            {
-                specName = "attack";
-                specBuffedName = "force";
-                attributeName = "background";
-                buffedColor = Color3B::GREEN;
-            }
-            m_attack_buff = Sprite::create(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
-            m_attack_buff->setColor(buffedColor);
-        }
-    }
-    else
-    {
-        if(m_attack_buff)
-        {
-            m_attack_buff->removeFromParent();
-            m_attack_buff = nullptr;
-        }
+        specName = "attack";
+        specBuffedName = "force";
+        attributeName = "background";
+        buffedColor = Color3B::GREEN;
     }
     
     if(!m_attack)
@@ -313,9 +300,26 @@ void CharacterUI::createAttack()
         popUp(m_attack_value, "charUI_attributes_background_" + std:: to_string(m_charSpec[specName]));
     }
     
-    if(m_attack_buff && specForce != specAttack)
+    if(specForce != specAttack)
     {
-        m_attack->addChild(m_attack_buff, 0);
+        if(!m_attack_buff)
+        {
+            m_attack_buff = Sprite::create(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+            m_attack_buff->setColor(buffedColor);
+            m_attack->addChild(m_attack_buff, 0);
+        }
+        else
+        {
+            m_attack_buff->setTexture(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+        }
+    }
+    else
+    {
+        if(m_attack_buff)
+        {
+            m_attack_buff->removeFromParent();
+            m_attack_buff = nullptr;
+        }
     }
 }
 //Buff

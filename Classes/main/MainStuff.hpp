@@ -18,7 +18,7 @@ class  MainStuff
 public:
     
     static MainStuff* getInstance();
-    bool init();
+    
     
     static bool initCharStuffList();
     
@@ -43,16 +43,22 @@ public:
     static bool setCardBuff(int charNbr, std::string buffName, int value);
     static std::map<std::string, int> getCardBuff(int charNbr);
     
+    //Position buff.
+    static bool setLineBuff(int charNbr, int charLine);
+    
     //Card.
     static KFSpecCard* getCardSpec(std::string type, std::string breed, std::string object, int charNbr);
     
 private:
+    bool init();
     
     
 protected:
     std::map<std::string, int> m_charactersSpec[CHAR_NUMBER];
     
     std::map<std::string, int> m_cardBuff[CHAR_NUMBER];
+    
+    int m_lineBuff[CHAR_NUMBER];
     
     std::vector<KFSpecCard*> m_cardSpecLibrary;
     

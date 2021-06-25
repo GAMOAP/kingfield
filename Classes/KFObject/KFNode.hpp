@@ -55,7 +55,7 @@ public:
     virtual bool removeToStage();
     
     void add(float speedFactor = 1, float delayFactor = 1);
-    void remove(float speedFactor = 1, float delayFactor = 1, std::string movement = "both");
+    void remove(float speedFactor = 1, float delayFactor = 1, std::string movement = "both", bool create = true);
     
     void up(float speedFactor = 1, bool isCascadedMove = true);
     void place(float speedFactor = 1, bool isCascadedMove = true);

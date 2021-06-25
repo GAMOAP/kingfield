@@ -115,7 +115,7 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
         }
     }
     
-    //strike.
+    //strike or spell.
     if(actionType == 1 || actionType == 2)
     {
         for(int s = 0; s < 3; s++)
@@ -150,12 +150,6 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
                 actionSequence.push_back(action);
             }
         }
-    }
-    
-    //spell.
-    if(actionType == 2)
-    {
-        
     }
     
     //init random after random was controled

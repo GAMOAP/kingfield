@@ -102,7 +102,7 @@ void KFNode::add(float speedFactor, float delayFactor)
     auto seq = Sequence::create(delay, spawn, callFunc, NULL);
     runActionSeq("add", seq, speedFactor, delayFactor);
 }
-void KFNode::remove(float speedFactor, float delayFactor, std::string movement)
+void KFNode::remove(float speedFactor, float delayFactor, std::string movement, bool create)
 {
     m_isIn = false;
     
@@ -113,6 +113,11 @@ void KFNode::remove(float speedFactor, float delayFactor, std::string movement)
     float scaleFactor = 0.8;
     float randomTime = MainGrid::getRandom(this->getTag());
     float endDelayTime = 0;
+    float createDelayTime = 0;
+    if (create)
+    {
+        createDelayTime = 0.5;
+    }
     if(movement == "remove")
     {
         speedRemove = speedFactor;
@@ -130,17 +135,21 @@ void KFNode::remove(float speedFactor, float delayFactor, std::string movement)
     float delayTime = randomTime * delayRemove * delayFactor;
     auto delay = DelayTime::create(delayTime);
     auto endDelay = DelayTime::create(endDelayTime);
+    auto createDelay = DelayTime::create(createDelayTime);
     auto move = MoveTo::create(m_moveTime * speedRemove, Vec2(m_position.x, m_position.y - m_moveInOutRange));
     auto moveOut = EaseBackIn::create(move->clone());
     auto scale = ScaleTo::create(0.7, scaleFactor * m_isFlipped, scaleFactor);
     auto spawn = Spawn::createWithTwoActions(moveOut, scale);
-    auto callFunc = CallFunc::create([=]()
+    
+    auto isOutFunc = CallFunc::create([=]()
     {
         finishAction("remove");
         m_isOut = true;
         _eventDispatcher->dispatchCustomEvent("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT");
         _eventDispatcher->removeCustomEventListeners("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT");
-        
+    });
+    auto callFunc = CallFunc::create([=]()
+    {
         if(movement == "both")
         {
             setScale(0.8 * m_isFlipped, 0.8);
@@ -157,7 +166,7 @@ void KFNode::remove(float speedFactor, float delayFactor, std::string movement)
             add();
         }
     });
-    auto seq  = Sequence::create(delay, spawn, endDelay, callFunc,  NULL);
+    auto seq  = Sequence::create(delay, spawn, endDelay, isOutFunc, createDelay, callFunc,  NULL);
     runActionSeq("remove", seq, speedFactor, delayFactor, movement);
 }
 
@@ -222,8 +231,9 @@ void KFNode::runActionSeq(std::string action, cocos2d::Sequence* seq, float spee
         
         ssize_t nAction = this->getActionManager()->getNumberOfRunningActionsInTarget(this);
         if(nAction > 0)
+        {
             this->getActionManager()->removeAction(m_runningSeq);
-        
+        }
         m_runningSeq = seq->clone();
         this->runAction(m_runningSeq);
     

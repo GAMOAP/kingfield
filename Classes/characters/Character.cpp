@@ -87,7 +87,7 @@ bool Character::initPosition(int number)
     }
     
     //remove character
-    remove();
+    remove(1, 1, "both", true);
     
     auto IsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag) + "_IS_OUT", [this,originTag](EventCustom* event)
     {
@@ -491,7 +491,11 @@ void Character::setBuff(std::string buffName)
 }
 void Character::manageBuffs()
 {
-    int turnNbr = GameDirector::getScene()->getTurnNumber();
+    auto gameDirector = GameDirector::getInstance();
+    
+    auto mainStuff = MainStuff::getInstance();
+    
+    int turnNbr = gameDirector->getScene()->getTurnNumber();
     if(m_buffList.endTurn < turnNbr)
     {
         m_buffList.name = "";
@@ -499,6 +503,8 @@ void Character::manageBuffs()
         m_buffList.endTurn = 0;
         applyBuff("NULL");
     }
+    
+    mainStuff->setLineBuff(m_number, m_line);
 }
 bool Character::applyBuff(std::string buffName)
 {

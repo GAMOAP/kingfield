@@ -34,6 +34,13 @@ bool MainStuff::init()
 {
     initCharStuffList();
     
+    //init char buffLine
+    for(int c = 0; c < CHAR_NUMBER; c++)
+    {
+        m_lineBuff[c] = -1;
+    }
+    
+    
     std::string filePath = "res/json/card_spec.json";
     std::string prevPath = FileUtils::getInstance()->fullPathForFilename(filePath);
     const auto data = cocos2d::FileUtils::getInstance()->getStringFromFile(prevPath);
@@ -307,6 +314,41 @@ std::map<std::string, int> MainStuff::getCardBuff(int charNbr)
 {
     return m_SharedMainStuff->m_cardBuff[charNbr];
 }
+
+bool MainStuff::setLineBuff(int charNbr, int charLine)
+{
+    if(charNbr >= 5)
+    {
+        charLine = 4 + charLine * -1;
+    }
+        
+    if(getKarma(charNbr) == getTeamKarma(1))
+    {
+        
+        if(charLine == 4)
+        {
+            m_SharedMainStuff->setCharSpec(charNbr, "force", 2);
+        }
+        if(charLine == 3)
+        {
+            m_SharedMainStuff->setCharSpec(charNbr, "force", 1);
+        }
+    }
+    if(getKarma(charNbr) == getTeamKarma(0))
+    {
+        if(charLine == 1)
+        {
+            m_SharedMainStuff->setCharSpec(charNbr, "shield", 1);
+        }
+        if(charLine == 0)
+        {
+            m_SharedMainStuff->setCharSpec(charNbr, "shield", 2);
+        }
+    }
+    
+    return true;
+}
+
 
 //---------------------------CARD SPEC----------------------------------
 KFSpecCard* MainStuff::getCardSpec(std::string type, std::string breed, std::string object, int charNbr)

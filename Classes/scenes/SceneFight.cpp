@@ -95,6 +95,13 @@ bool SceneFight::allNodeIsIn()
         m_SharedSceneFight->setActionBoxTags();
     }
     
+    
+    if(m_turnNumber == -1)
+    {
+        m_SharedSceneFight->m_turnNumber = 0;
+        startTurn();
+    }
+    
     return true;
 }
 
@@ -102,7 +109,7 @@ bool SceneFight::allNodeIsIn()
 bool SceneFight::startFight(int teamNumber)
 {
     m_SharedSceneFight->m_teamNumber = teamNumber;
-    m_SharedSceneFight->m_turnNumber = 0;
+    m_SharedSceneFight->m_turnNumber = -1;
     
     GameBoxes::stopRumbleBox();
     
@@ -131,27 +138,34 @@ bool SceneFight::stopFight(bool isWin)
 }
 bool SceneFight::startTurn()
 {
-    GameCharacters::setActionAll("give_crystals");
-    GameCharacters::setActionAll("manage_buffs");
-    
-    if(!GameCharacters::getCharIsSelected())
+    if(m_SharedSceneFight->m_turnNumber == 0)
     {
-        GameCharacters::setCharSelect();
-    }
-        
-    if(!GameCards::getCardSelect())
-    {
-        GameCards::setCardSelect(0, "deck");
+        GameCharacters::setActionAll("manage_buffs");
     }
     else
-        GameCards::CardsReseted();
-    
-    if(!GameCharacters::getIsActionRun())
     {
-        m_SharedSceneFight->setActionBoxTags();
+        GameCharacters::setActionAll("give_crystals");
+        GameCharacters::setActionAll("manage_buffs");
+        
+        if(!GameCharacters::getCharIsSelected())
+        {
+            GameCharacters::setCharSelect();
+        }
+            
+        if(!GameCards::getCardSelect())
+        {
+            GameCards::setCardSelect(0, "deck");
+        }
+        else
+        {
+            GameCards::CardsReseted();
+        }
+            
+        if(!GameCharacters::getIsActionRun())
+        {
+            m_SharedSceneFight->setActionBoxTags();
+        }
     }
-    
-    
     return true;
 }
 bool SceneFight::endTurn()

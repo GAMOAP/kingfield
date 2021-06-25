@@ -49,7 +49,7 @@ private:
     static const int m_realResolutionSizeWidth = 640;
     static const int m_nbrLine = 11;
     static const int m_nbrCollumn = 7;
-    static const int m_randomDivisor = 100;
+    static const int m_randomDivisor = 50;
 };
 
 static MainGrid* m_SharedMainGrid = nullptr;
