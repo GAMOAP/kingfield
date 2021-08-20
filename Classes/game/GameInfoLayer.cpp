@@ -10,6 +10,8 @@
 #include "MainGrid.hpp"
 #include "MainObject.hpp"
 
+#include "MainSounds.hpp"
+
 #include <iostream>
 
 USING_NS_CC;
@@ -35,6 +37,7 @@ bool GameInfoLayer::init()
 void GameInfoLayer::addIntroTitle()
 {
     m_SharedGameInfoLayer->initIntroTitle(true);
+    MainSounds::playSound("tittle");
 }
 void GameInfoLayer::removeIntroTitle()
 {

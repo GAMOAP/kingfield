@@ -116,23 +116,40 @@ void CharacterDisplay::setStuffList()
 }
 void CharacterDisplay::setStuffDisplay()
 {
+    m_outlineSpriteList.clear();
+    
     for(int i = 0; i < CHAR_SLOTS.size();  i++)
     {
         std::string slotName = CHAR_SLOTS[i];
-        std::string imageFile = getSlotFileDisplay(slotName);
+        std::string slotFileDisplay = getSlotFileDisplay(slotName);
+        std::string imageFile = KFSprite::getFile(slotFileDisplay);
+        
         auto slot = m_armatureDisplay->getArmature()->getSlot("character_" + slotName);
         auto image = cocos2d::Sprite::create(imageFile);
-        
         image->cocos2d::Node::setAnchorPoint(Vec2(64,64));
         image->setName(slotName);
-        
         slot->setDisplay(image, dragonBones::DisplayType::Image);
+        
+        auto slotOutline = m_armatureDisplay->getArmature()->getSlot("character_outline_" + slotName);
+        std::string outlineImageFile = imageFile;
+        if(slotFileDisplay != "screen_void")
+        {
+            outlineImageFile = "outline_" + imageFile;
+        }
+        
+        auto imageOutline = cocos2d::Sprite::create(outlineImageFile);
+        imageOutline->cocos2d::Node::setAnchorPoint(Vec2(64,64));
+        imageOutline->setName("character_outline_" + slotName);
+        
+        slotOutline->setDisplay(imageOutline, dragonBones::DisplayType::Image);
+        
+        m_outlineSpriteList.push_back(imageOutline);
     }
 }
 std::string CharacterDisplay::getSlotFileDisplay(std::string& slotName)
 {
     std::string file = "";
-    std::string slotDisplayFile = "";
+    
     if(slotName == "head" || slotName == "face" || slotName == "hand")
     {
         file = m_stuffList["breed"][0] + m_stuffList["job"][0] +"_"+ slotName;
@@ -167,9 +184,52 @@ std::string CharacterDisplay::getSlotFileDisplay(std::string& slotName)
     {
         // NOT VALID SLOT;
     }
-    slotDisplayFile = KFSprite::getFile(file);
     
-    return slotDisplayFile;
+    return file;
+}
+//---------------OUTLINE-------------------
+bool CharacterDisplay::setOutline(OutlineColor outlineColor, float lineSize)
+{
+    //outline shader
+    
+        
+    
+    
+    Vec3 uColor = Vec3(0.0, 0.0, 0.0);
+    switch (outlineColor) {
+        case white:
+            uColor = Vec3(1.0, 1.0, 1.0);
+            break;
+        case black:
+            uColor = Vec3(0.0, 0.0, 0.0);
+            break;
+        case blue:
+            uColor = Vec3(0.0, 0.0, 1.0);
+            break;
+        case red:
+            uColor = Vec3(1.0, 0.0, 0.0);
+            break;
+            
+        default:
+            break;
+    }
+    
+    float uLineSize = lineSize * 0.01;
+    
+    m_glprogram = GLProgram::createWithFilenames("res/shaders/KFShader.vsh", "res/shaders/KFShader.fsh");
+    m_glprogramState = GLProgramState::getOrCreateWithGLProgram(m_glprogram);
+    
+    m_glprogramState->setUniformVec3("u_color", uColor);
+    m_glprogramState->setUniformFloat("u_line_size", uLineSize);
+    m_glprogramState->applyUniforms();
+    
+    for(int o = 0; o < m_outlineSpriteList.size();  o++)
+    {
+        Sprite* outlineSprite = m_outlineSpriteList[o];
+        outlineSprite->setGLProgramState(m_glprogramState);
+    }
+    
+    return true;
 }
 
 //----------------ACTION-------------------
@@ -229,6 +289,9 @@ void CharacterDisplay::setSelect()
         this->setScale(m_scaleArray[1]);
     
     this->setColor(m_colorSelect);
+    
+    this->setOutline(red, 1);
+    
     m_selected = true;
 }
 void CharacterDisplay::setUnselect()
@@ -241,6 +304,9 @@ void CharacterDisplay::setUnselect()
         this->setScale(m_scaleArray[0]);
     
     this->setColor(m_colorUnselect);
+    
+    this->setOutline(black, 0.5);
+    
     m_selected = false;
 }
 

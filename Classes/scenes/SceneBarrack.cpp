@@ -41,8 +41,6 @@ void SceneBarrack::addToStage()
 {
     MainStuff::initCharStuffList();
     
-    GameBoxes::setBoxes();
-    
     auto gameCharacters = GameCharacters::getInstance();
     gameCharacters->unselectAll(true);
     gameCharacters->setCharacters(5);
@@ -55,6 +53,8 @@ void SceneBarrack::addToStage()
     
     addFightButton();
     addLibraryButton();
+    
+    GameBoxes::setBoxes();
 }
 
 void SceneBarrack::removeToStage()
@@ -174,6 +174,8 @@ void SceneBarrack::addFightButton()
 {
     auto box33 = MainObject::getBoxByTag(33);
     
+    box33->remove();
+    
     auto box33isOutEvent = EventListenerCustom::create("NODE_box33_IS_OUT", [=](EventCustom* event)
     {
         if(!m_buttonFight)
@@ -206,6 +208,9 @@ void SceneBarrack::addLibraryButton()
 {
     auto box32 = MainObject::getBoxByTag(32);
     auto box34 = MainObject::getBoxByTag(34);
+    
+    box32->remove();
+    box34->remove();
     
     auto box32isOutEvent = EventListenerCustom::create("NODE_box32_IS_OUT", [=](EventCustom* event)
     {

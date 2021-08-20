@@ -13,6 +13,11 @@
 
 #include "CharacterInfo.hpp"
 
+enum OutlineColor
+{
+    white,black,blue,red
+};
+
 class CharacterDisplay : public cocos2d::Node
 {
 public:
@@ -47,6 +52,8 @@ private:
     void setStuffList();
     void setStuffDisplay();
     
+    bool setOutline(OutlineColor outlineColor = black, float lineSize = 1);
+    
     bool playAnimation();
     bool animationEnd(cocos2d::Event* event);
     
@@ -59,6 +66,10 @@ protected:
     
     dragonBones::CCFactory* m_factory;
     dragonBones::CCArmatureDisplay* m_armatureDisplay;
+    
+    cocos2d::GLProgram* m_glprogram = nullptr;
+    cocos2d::GLProgramState* m_glprogramState = nullptr;
+    std::vector<cocos2d::Sprite*> m_outlineSpriteList;
     
     const double m_scaleArray[4] = {1, 1.1, 1.2, 1.3};
     const cocos2d::Color3B m_colorSelect = {255, 255, 255};

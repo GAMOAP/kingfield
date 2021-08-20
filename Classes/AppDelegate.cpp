@@ -25,20 +25,12 @@
 #include "AppDelegate.h"
 #include "MainScene.hpp"
 
-// #define USE_AUDIO_ENGINE 1
-// #define USE_SIMPLE_AUDIO_ENGINE 1
+#include "TestScene.hpp"
 
-#if USE_AUDIO_ENGINE && USE_SIMPLE_AUDIO_ENGINE
-#error "Don't use AudioEngine and SimpleAudioEngine at the same time. Please just select one in your game!"
-#endif
+#include "MainSounds.hpp"
 
-#if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"
 using namespace cocos2d::experimental;
-#elif USE_SIMPLE_AUDIO_ENGINE
-#include "audio/include/SimpleAudioEngine.h"
-using namespace CocosDenshion;
-#endif
 
 #include "MainMultiPlayer.hpp"
 
@@ -59,11 +51,7 @@ AppDelegate::~AppDelegate()
 {
     MainMultiPlayer::disconnect();
     
-#if USE_AUDIO_ENGINE
     AudioEngine::end();
-#elif USE_SIMPLE_AUDIO_ENGINE
-    SimpleAudioEngine::end();
-#endif
 }
 
 // if you want a different context, modify the value of glContextAttrs
@@ -78,7 +66,10 @@ void AppDelegate::initGLContextAttrs()
     //set file resources files path
     auto filesPath = FileUtils::getInstance();
     filesPath->addSearchPath("/Users/axxwel/Documents/gamoap/kingfield/kingfield/proj.ios_mac/ios/Images.xcassets/");
-    filesPath->addSearchPath("/Users/axxwel/Documents/gamoap/kingfield/kingfield/Resources/res");
+    filesPath->addSearchPath("/Users/axxwel/Documents/gamoap/kingfield/kingfield/Resources/res/");
+    
+    // preload all game sound before start
+    MainSounds::preLoad();
 }
 
 // if you want to use the package manager to install more packages,
@@ -128,13 +119,22 @@ bool AppDelegate::applicationDidFinishLaunching() {
     else
         director->setContentScaleFactor(3);
     
-    
-    
     register_all_packages();
+    
+    // preload all game sound before start
+    MainSounds::preLoad();
 
     // create the main scene.
-    auto scene = MainScene::createScene();
-
+    cocos2d::Scene* scene = nullptr;
+    if(!TEST_SCENE)
+    {
+        scene = MainScene::createScene();
+    }
+    else
+    {
+        scene = TestScene::createScene();
+    }
+    
     // run
     director->runWithScene(scene);
     
@@ -145,22 +145,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
 
-#if USE_AUDIO_ENGINE
     AudioEngine::pauseAll();
-#elif USE_SIMPLE_AUDIO_ENGINE
-    SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
-    SimpleAudioEngine::getInstance()->pauseAllEffects();
-#endif
 }
 
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground() {
     Director::getInstance()->startAnimation();
 
-#if USE_AUDIO_ENGINE
     AudioEngine::resumeAll();
-#elif USE_SIMPLE_AUDIO_ENGINE
-    SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
-    SimpleAudioEngine::getInstance()->resumeAllEffects();
-#endif
 }

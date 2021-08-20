@@ -54,7 +54,7 @@ bool MainGrid::init()
             m_grid[l][c][2] = m_nbrLine * 3 - (l + 1) * 3;
             m_grid[l][c][3] = (l * 10 + c);
             
-            int randomInt = random(0, 40);
+            int randomInt = random(0, 20);
             int randomTime = randomInt + l;
             m_grid[l][c][4] = randomTime;
         }

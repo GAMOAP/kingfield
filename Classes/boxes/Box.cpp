@@ -11,6 +11,8 @@
 
 #include "GameDirector.hpp"
 
+#include "MainSounds.hpp"
+
 #include "Box.hpp"
 
 #include <iostream>
@@ -75,6 +77,20 @@ void Box::initDisplay()
     std::string breed = gameDirector->getKingBreed();
     std::string secondBreed = gameDirector->getKingBreed();
     
+    /*if(m_scene == "intro")
+    {
+        for(int f = 0; f < m_barrackFieldTag.size(); f++){
+            if(_tag == m_barrackFieldTag[f]){
+                type = "field";
+            }
+        }
+        for(int b = 0; b < m_barrackBarrackTag.size(); b++){
+            if(_tag == m_barrackBarrackTag[b]){
+                type = "barrack";
+            }
+        }
+    }*/
+    
     if(m_scene == "barrack")
     {
         for(int f = 0; f < m_barrackFieldTag.size(); f++){
@@ -107,7 +123,7 @@ void Box::initDisplay()
         }
     }
     
-   if(type != m_type || breed != m_breed || secondBreed != m_secondBreed)
+    if(type != m_type || breed != m_breed || secondBreed != m_secondBreed)
     {
         m_type = type;
         m_breed = breed;
@@ -137,6 +153,8 @@ void Box::removeBox()
             }
         }
     }
+    
+    //remove box from screen
     remove(speedFactor,delayFactor, movement);
     
     auto boxIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)

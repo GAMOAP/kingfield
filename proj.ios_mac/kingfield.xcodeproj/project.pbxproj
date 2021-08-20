@@ -124,6 +124,8 @@
 		E3A7BAE42339F5B400960296 /* CCTextureAtlasData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3A7BADE2339F5B400960296 /* CCTextureAtlasData.cpp */; };
 		E3A7BE4A238E79DA002D42DD /* KFSpecCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3A7BE48238E79DA002D42DD /* KFSpecCard.cpp */; };
 		E3C01C90233E5CFA008171B3 /* BoxMask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3C01C8F233E5CFA008171B3 /* BoxMask.cpp */; };
+		E3E107812692DFA300E40725 /* TestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3E1077F2692DFA300E40725 /* TestScene.cpp */; };
+		E3E1078526971FB100E40725 /* MainSounds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3E1078326971FB100E40725 /* MainSounds.cpp */; };
 		ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7B1B68A1F400C3958E /* libiconv.dylib */; };
 		ED545A7E1B68A1FA00C3958E /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED545A7D1B68A1FA00C3958E /* libiconv.dylib */; };
 /* End PBXBuildFile section */
@@ -374,6 +376,10 @@
 		E3A7BE49238E79DA002D42DD /* KFSpecCard.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KFSpecCard.hpp; sourceTree = "<group>"; };
 		E3C01C8E233E5CFA008171B3 /* BoxMask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BoxMask.hpp; sourceTree = "<group>"; };
 		E3C01C8F233E5CFA008171B3 /* BoxMask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BoxMask.cpp; sourceTree = "<group>"; };
+		E3E1077F2692DFA300E40725 /* TestScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestScene.cpp; sourceTree = "<group>"; };
+		E3E107802692DFA300E40725 /* TestScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TestScene.hpp; sourceTree = "<group>"; };
+		E3E1078326971FB100E40725 /* MainSounds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MainSounds.cpp; sourceTree = "<group>"; };
+		E3E1078426971FB100E40725 /* MainSounds.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MainSounds.hpp; sourceTree = "<group>"; };
 		ED545A7B1B68A1F400C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libiconv.dylib; sourceTree = DEVELOPER_DIR; };
 		ED545A7D1B68A1FA00C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -517,6 +523,7 @@
 				E3A7BA032338DA5400960296 /* Constants.h */,
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
+				E3E1077E2692DF6A00E40725 /* test */,
 				E3A7BA372339022400960296 /* KFObject */,
 				E392C1832338B49F007F79E4 /* main */,
 				E328E7AD233CB1C70017C1E8 /* game */,
@@ -592,6 +599,8 @@
 				E3A7BA122338F88100960296 /* MainMultiPlayer.hpp */,
 				E3A7BAC82339262600960296 /* MainAction.cpp */,
 				E3A7BAC92339262600960296 /* MainAction.hpp */,
+				E3E1078326971FB100E40725 /* MainSounds.cpp */,
+				E3E1078426971FB100E40725 /* MainSounds.hpp */,
 			);
 			path = main;
 			sourceTree = "<group>";
@@ -859,6 +868,15 @@
 			path = cocos2dx;
 			sourceTree = "<group>";
 		};
+		E3E1077E2692DF6A00E40725 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				E3E1077F2692DFA300E40725 /* TestScene.cpp */,
+				E3E107802692DFA300E40725 /* TestScene.hpp */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1012,9 +1030,11 @@
 				E3A7BA9D233903C900960296 /* DisplayData.cpp in Sources */,
 				E371167A265ED7E60008714A /* BoxDisplay.cpp in Sources */,
 				E3A7BA9B233903C900960296 /* DragonBonesData.cpp in Sources */,
+				E3E1078526971FB100E40725 /* MainSounds.cpp in Sources */,
 				E3A7BA9C233903C900960296 /* BoundingBoxData.cpp in Sources */,
 				E3A7BA0A2338F71A00960296 /* MainGrid.cpp in Sources */,
 				E3A7BAC4233921DF00960296 /* LibraryCard.cpp in Sources */,
+				E3E107812692DFA300E40725 /* TestScene.cpp in Sources */,
 				E3A7BA8C233903C900960296 /* DeformVertices.cpp in Sources */,
 				E3A7BA9A233903C900960296 /* Point.cpp in Sources */,
 				E392C1862338B4D5007F79E4 /* MainScene.cpp in Sources */,

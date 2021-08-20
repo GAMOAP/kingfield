@@ -11,6 +11,8 @@
 
 #include "MainMultiPlayer.hpp"
 
+#include "MainSounds.hpp"
+
 #include "GameDirector.hpp"
 #include "GameInfoLayer.hpp"
 #include "GameBoxes.hpp"
@@ -42,8 +44,6 @@ bool SceneIntro::init()
 
 void SceneIntro::addToStage()
 {
-    GameInfoLayer::addIntroTitle();
-    
     GameBoxes::setBoxes();
     GameCharacters::setCharacters(0);
     
@@ -57,15 +57,26 @@ void SceneIntro::removeToStage()
 {
     GameInfoLayer::removeIntroTitle();
     GameDirector::setScene("barrack");
+    
+    std::string breed = GameDirector::getKingBreed();
+    MainSounds::playSound("box_" + breed + "_remove");
 }
 
 
 bool SceneIntro::allNodeIsIn()
 {
+    //start multiplayer if activate in constant.h
     if(!MULTI_PLAYER_ON)
-        removeToStage();
+    {
+        m_removeAuth = true;
+    }
     else
+    {
         MainMultiPlayer::connect();
+    }
+    
+    //add Tittle
+    GameInfoLayer::addIntroTitle();
     
     return true;
 }
@@ -73,6 +84,17 @@ bool SceneIntro::allNodeIsIn()
 bool SceneIntro::appConnected()
 {
     GameInfoLayer::removeConnectSprite();
-    removeToStage();
+    m_removeAuth = true;
+    return true;
+}
+
+
+bool SceneIntro::unTouchBox(int tag)
+{
+    if(m_removeAuth)
+    {
+        removeToStage();
+    }
+    
     return true;
 }

@@ -45,8 +45,6 @@ bool SceneFight::init()
 
 void SceneFight::addToStage()
 {
-    GameBoxes::setBoxes();
-    
     auto gameCharacters = GameCharacters::getInstance();
     gameCharacters->setCharacters(5);
     gameCharacters->unselectAll();
@@ -65,6 +63,8 @@ void SceneFight::addToStage()
         GameBoxes::startRumbleBox(m_fightFieldTag);
         MainMultiPlayer::joinRoom();
     }
+    
+    GameBoxes::setBoxes();
 }
 
 void SceneFight::removeToStage()

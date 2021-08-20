@@ -41,9 +41,9 @@ public:
     */
     virtual void setFlip();
     
-    //--------------------------------ADD REMOVE TO STAGE-----------------
+    //--------------------------------ADD REMOVE OBJECT FROM PARENT-----------------
     /**
-    @brief    add or remove object: use move in and move out
+    @brief    add object: use move in and move out
     @return true success, app continue / false Print "NO CLASS NAME"
     */
     virtual bool addToStage();
@@ -54,12 +54,20 @@ public:
     */
     virtual bool removeToStage();
     
+    //--------------------------------ADD REMOVE OBJECT--------------------------------
+    /**
+    @brief    add object: use move in and move out
+    @param speedfactor factor of add 
+    @param delayfactor
+    */
     void add(float speedFactor = 1, float delayFactor = 1);
     void remove(float speedFactor = 1, float delayFactor = 1, std::string movement = "both", bool create = true);
     
     void up(float speedFactor = 1, bool isCascadedMove = true);
     void place(float speedFactor = 1, bool isCascadedMove = true);
     void down(float speedFactor = 1, bool isCascadedMove = true);
+    
+    bool addShader();
     
     bool getIsIn();
     bool getIsOut();
@@ -119,7 +127,7 @@ protected:
     bool m_cascadedMove = true;
     
     const int m_centerHeigth = -240;
-    const int m_moveInOutRange = 640;
+    const int m_moveInOutRange = 512;
     
     const int m_moveRange = 8;
     const float m_moveTime = 0.2 ;

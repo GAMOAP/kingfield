@@ -41,31 +41,48 @@ void KFNode::setFlip()
     m_isFlipped = -1;
 }
 
-//--------------------------------ADD REMOVE TO STAGE-------------------------------
+//-------------------------------ADD REMOVE TO STAGE-------------------------------
 bool KFNode::addToStage()
 {
+    //check object name.
     if(m_className == "")
     {
         printf("NO CLASS NAME");
         return false;
     }
     
+    //get screen size.
     m_visibleSize = Director::getInstance()->getVisibleSize();
     
+    //set position.
     setNodePosition();
     
+    if(m_className == "box")
+    {
+        addShader();
+    }
+    
+    //add to stage.
     auto mainScene = MainObject::getMainLayer();
     mainScene->addChild(this, m_index);
     
+    
+    
     return true;
 }
+
 bool KFNode::removeToStage()
 {
+    //if object is present in stage get out of screen.
     if(m_isIn)
+    {
         remove();
+    }
     
+    //wait object is out of screen to remove to stage.
     auto boxIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
     {
+        //dispatch that object is removed
         _eventDispatcher->dispatchCustomEvent("NODE_"+ m_className + std::to_string(_tag)+"_REMOVED", &_tag);
         _eventDispatcher->removeCustomEventListeners("NODE_"+ m_className + std::to_string(_tag)+"_REMOVED");
         this->removeFromParent();
@@ -83,6 +100,7 @@ void KFNode::add(float speedFactor, float delayFactor)
     float delayTime = randomTime * delayFactor;
     auto delay = DelayTime::create(delayTime);
     auto move = MoveTo::create(m_moveTime * speedFactor, Vec2(m_position.x, m_position.y));
+    
     auto moveIn = EaseBackOut::create(move->clone());
     auto scale = ScaleTo::create(0.2, 1 * m_isFlipped, 1);
     auto spawn = Spawn::createWithTwoActions(moveIn, scale);
@@ -116,7 +134,7 @@ void KFNode::remove(float speedFactor, float delayFactor, std::string movement, 
     float createDelayTime = 0;
     if (create)
     {
-        createDelayTime = 0.5;
+        createDelayTime = 0;
     }
     if(movement == "remove")
     {
@@ -274,6 +292,14 @@ void KFNode::finishAction(std::string action)
             _eventDispatcher->removeCustomEventListeners("NO_NODE_MOVE");
         }
     }
+}
+
+//---------------------------------SHADERS------------------------------
+bool KFNode::addShader()
+{
+    
+    
+    return true;
 }
 
 //---------------------------------RETURN FUNCTION------------------------------
