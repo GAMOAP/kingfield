@@ -57,6 +57,8 @@ private:
     bool playAnimation();
     bool animationEnd(cocos2d::Event* event);
     
+    bool setExpression(std::string animationName);
+    
     void displayInfo();
     void createInfo();
     

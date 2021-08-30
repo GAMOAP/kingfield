@@ -127,7 +127,6 @@ void CharacterDisplay::setStuffDisplay()
         auto slot = m_armatureDisplay->getArmature()->getSlot("character_" + slotName);
         auto image = cocos2d::Sprite::create(imageFile);
         image->cocos2d::Node::setAnchorPoint(Vec2(64,64));
-        image->setName(slotName);
         slot->setDisplay(image, dragonBones::DisplayType::Image);
         
         auto slotOutline = m_armatureDisplay->getArmature()->getSlot("character_outline_" + slotName);
@@ -139,12 +138,13 @@ void CharacterDisplay::setStuffDisplay()
         
         auto imageOutline = cocos2d::Sprite::create(outlineImageFile);
         imageOutline->cocos2d::Node::setAnchorPoint(Vec2(64,64));
-        imageOutline->setName("character_outline_" + slotName);
-        
+        imageOutline->setName(slotName);
         slotOutline->setDisplay(imageOutline, dragonBones::DisplayType::Image);
         
         m_outlineSpriteList.push_back(imageOutline);
     }
+    
+    setOutline();
 }
 std::string CharacterDisplay::getSlotFileDisplay(std::string& slotName)
 {
@@ -190,11 +190,6 @@ std::string CharacterDisplay::getSlotFileDisplay(std::string& slotName)
 //---------------OUTLINE-------------------
 bool CharacterDisplay::setOutline(OutlineColor outlineColor, float lineSize)
 {
-    //outline shader
-    
-        
-    
-    
     Vec3 uColor = Vec3(0.0, 0.0, 0.0);
     switch (outlineColor) {
         case white:
@@ -236,9 +231,18 @@ bool CharacterDisplay::setOutline(OutlineColor outlineColor, float lineSize)
 //stuff.
 bool CharacterDisplay::setStuff()
 {
+    
     setAnimation("equip", 1);
-    setStuffList();
-    setStuffDisplay();
+    
+    
+    auto delay = DelayTime::create(0.5);
+    auto func = CallFunc::create([this](){
+        setStuffList();
+        setStuffDisplay();
+    });
+    auto seq = Sequence::create(delay, func, NULL);
+    this->runAction(seq);
+    
     
     return true;
 }
@@ -281,16 +285,22 @@ void CharacterDisplay::setSelect()
 {
     setAnimation("select");
     if(!m_selected)
+    {
         setAnimation("equip", 1);
+    }
     
     if(m_number == 2 || m_number == 7)
-        this->setScale(m_scaleArray[3]);
+    {
+        setScale(m_scaleArray[3]);
+    }
     else
-        this->setScale(m_scaleArray[1]);
+    {
+        setScale(m_scaleArray[1]);
+    }
     
-    this->setColor(m_colorSelect);
+    setColor(m_colorSelect);
     
-    this->setOutline(red, 1);
+    setOutline(red, 1);
     
     m_selected = true;
 }
@@ -299,13 +309,17 @@ void CharacterDisplay::setUnselect()
     setAnimation("stand");
     
     if(m_number == 2 || m_number == 7)
-        this->setScale(m_scaleArray[2]);
+    {
+        setScale(m_scaleArray[2]);
+    }
     else
-        this->setScale(m_scaleArray[0]);
+    {
+        setScale(m_scaleArray[0]);
+    }
     
-    this->setColor(m_colorUnselect);
+    setColor(m_colorUnselect);
     
-    this->setOutline(black, 0.5);
+    setOutline(black, 0.5);
     
     m_selected = false;
 }
@@ -351,6 +365,7 @@ bool CharacterDisplay::playAnimation()
             m_alive = false;
         
         animation->fadeIn(animationName, 0.2, m_animationLoopNumber);
+        setExpression(animationName);
         m_animationLoopNumber = 0;
     }
         
@@ -375,6 +390,7 @@ bool CharacterDisplay::animationEnd(cocos2d::Event* event)
     if(!m_playLastAnimation)
     {
         animation->gotoAndStopByFrame(lastAnimationName, 60);
+        setExpression(lastAnimationName);
         m_playLastAnimation = false;
     }
     else if(lastAnimationName != m_lastAnimationName)
@@ -382,6 +398,7 @@ bool CharacterDisplay::animationEnd(cocos2d::Event* event)
         if(TEST_CHAR_ANIM_ON)printf(", startName = %s", m_lastAnimationName.c_str());
         
         animation->fadeIn(m_lastAnimationName, 0.2);
+        setExpression(m_lastAnimationName);
     }
     
     if(TEST_CHAR_ANIM_ON)printf(", event = CHAR_%i_ANIM_%s_END\n", m_number, name.c_str());
@@ -392,6 +409,55 @@ bool CharacterDisplay::animationEnd(cocos2d::Event* event)
 void CharacterDisplay::stopAnimation()
 {
     m_armatureDisplay->getAnimation()->reset();
+}
+
+//----------------EXPESSION-------------------
+bool CharacterDisplay::setExpression(std::string animationName)
+{
+    std::string aName = animationName.substr(0, animationName.find("_"));
+    std::string aState = animationName.substr(animationName.find("_") + 1, animationName.size());
+    
+    printf("char#%i :: aName = %s, aState = %s \n", m_number, aName.c_str(), aState.c_str());
+    
+    std::string expressionName = m_stuffList["job"][0];
+    
+    if(animationName == "equip_ok"){expressionName = "happy";}
+    
+    if(aName == "attack"){expressionName = "angry";}
+    if(aName == "fail"){expressionName = "dizzy";}
+    if(aName == "block"){expressionName = "happy";}
+    if(aName == "pain"){expressionName = "pain";}
+    if(aName == "sad"){expressionName = "pain";}
+    if(aName == "happy"){expressionName = "pain";}
+    if(aName == "dead"){expressionName = "pain";}
+    
+    if(aState == "sleep"){expressionName = "sleep";}
+    if(aState == "poison"){expressionName = "sick";}
+    
+    std::string expressionFile = KFSprite::getFile(m_stuffList["breed"][0] + expressionName +"_face");
+    
+    auto slot = m_armatureDisplay->getArmature()->getSlot("character_face");
+    auto image = cocos2d::Sprite::create(expressionFile);
+    image->cocos2d::Node::setAnchorPoint(Vec2(64,64));
+    slot->setDisplay(image, dragonBones::DisplayType::Image);
+    
+    auto slotOutline = m_armatureDisplay->getArmature()->getSlot("character_outline_face");
+    auto imageOutline = cocos2d::Sprite::create("outline_" + expressionFile);
+    imageOutline->cocos2d::Node::setAnchorPoint(Vec2(64,64));
+    imageOutline->setName("face");
+    
+    for(int o = 0; o < m_outlineSpriteList.size();  o++)
+    {
+        Sprite* outlineSprite = m_outlineSpriteList[o];
+        if(outlineSprite && outlineSprite->getName() == "face")
+        {
+            m_outlineSpriteList[o] = imageOutline;
+        }
+    }
+    
+    slotOutline->setDisplay(imageOutline, dragonBones::DisplayType::Image);
+    
+    return true;
 }
 
 //-----------------INFO FUNCTION--------------------
