@@ -130,7 +130,53 @@ void GameInfoLayer::initConnectSprite(bool addRemove)
     }
 }
 
-//------------------------FIGHT LOGO------------------------------
+//------------------------SOCIAL LOGO------------------------------
+void GameInfoLayer::addSocialLogo()
+{
+    m_SharedGameInfoLayer->initSocialLogo(true);
+}
+void GameInfoLayer::removeSocialLogo()
+{
+    m_SharedGameInfoLayer->initSocialLogo(false);
+}
+void GameInfoLayer::initSocialLogo(bool addRemove)
+{
+    if(!addRemove)
+    {
+        if(m_githubLogo)
+        {
+            m_githubLogo->removeFromParent();
+            m_githubLogo = nullptr;
+        }
+        if(m_twitterLogo)
+        {
+            m_twitterLogo->removeFromParent();
+            m_twitterLogo = nullptr;
+        }
+    }
+    else
+    {
+        if(!m_githubLogo)
+        {
+            m_githubLogo = Sprite::create(KFSprite::getFile("screen_github_icon"));
+            Vec3 ghPos = MainGrid::getPositionXYZ(-1, 3);
+            m_githubLogo->setAnchorPoint(Vec2(0.5, 0.5));
+            m_githubLogo->setPosition(Vec2(ghPos.x, ghPos.y));
+            m_infoLayer->addChild(m_githubLogo);
+        }
+        if(!m_twitterLogo)
+        {
+            m_twitterLogo = Sprite::create(KFSprite::getFile("screen_twitter_icon"));
+            Vec3 ttPos = MainGrid::getPositionXYZ(-1, 4);
+            m_twitterLogo->setAnchorPoint(Vec2(0.5, 0.5));
+            m_twitterLogo->setPosition(Vec2(ttPos.x, ttPos.y));
+            m_infoLayer->addChild(m_twitterLogo);
+        }
+    }
+}
+
+
+//------------------------INFO LOGO------------------------------
 void GameInfoLayer::addInfoLogo(std::string name, int line, int collumn)
 {
     m_SharedGameInfoLayer->initInfoLogo(name, line, collumn);
@@ -160,4 +206,5 @@ void GameInfoLayer::initInfoLogo(std::string name, int line, int collumn)
         m_fightLogo->runAction(seq);
     }
 }
+
 

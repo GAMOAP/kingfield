@@ -22,13 +22,19 @@ public:
     static void addConnectSprite();
     static void removeConnectSprite();
     
+    static void addSocialLogo();
+    static void removeSocialLogo();
+    
     static void addInfoLogo(std::string name, int line, int collumn);
+    
+    
     
 private:
     virtual bool init();
     
     void initConnectSprite(bool addRemove);
     void initIntroTitle(bool addRemove);
+    void initSocialLogo(bool addRemove);
     void initInfoLogo(std::string name, int line, int collumn);
     
 protected:
@@ -37,6 +43,9 @@ protected:
     cocos2d::Sprite* m_introLogo = nullptr;
     cocos2d::Sprite* m_spriteConnect = nullptr;
     cocos2d::Sprite* m_fightLogo = nullptr;
+    
+    cocos2d::Sprite* m_githubLogo = nullptr;
+    cocos2d::Sprite* m_twitterLogo = nullptr;
     
 };
 

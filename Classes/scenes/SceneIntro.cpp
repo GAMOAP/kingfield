@@ -55,7 +55,10 @@ void SceneIntro::addToStage()
 
 void SceneIntro::removeToStage()
 {
+    //remove
     GameInfoLayer::removeIntroTitle();
+    GameInfoLayer::removeSocialLogo();
+    
     GameDirector::setScene("barrack");
     
     std::string breed = GameDirector::getKingBreed();
@@ -78,6 +81,9 @@ bool SceneIntro::allNodeIsIn()
     //add Tittle
     GameInfoLayer::addIntroTitle();
     
+    //add social links
+    GameInfoLayer::addSocialLogo();
+    
     return true;
 }
 
@@ -93,7 +99,19 @@ bool SceneIntro::unTouchBox(int tag)
 {
     if(m_removeAuth)
     {
-        removeToStage();
+        if(tag == 14)
+        {
+            Application::getInstance()->openURL("https://github.com/GAMOAP/kingfield");
+        }
+        else if(tag == 15)
+        {
+            Application::getInstance()->openURL("https://twitter.com/AlexandreGimeno");
+        }
+        else
+        {
+            removeToStage();
+        }
+        
     }
     
     return true;
