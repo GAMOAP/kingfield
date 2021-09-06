@@ -51,6 +51,8 @@ bool Character::init(int number)
     m_className = "char";
     setName(m_className + "_" + std::to_string(number));
     
+    m_isActiveThisTurn = false;
+    
     if(number >= 5)
     {
         this->setFlip();
@@ -164,6 +166,7 @@ bool Character::setAction(KFAction* action)
             auto delayFail = DelayTime::create(1);
             auto failFunc = CallFunc::create([this]()
             {
+                m_characterDisplay->setAnimation("stand");
                 _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
             });
             auto seq = Sequence::create(delayFail, failFunc, NULL);
@@ -372,8 +375,6 @@ bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::strin
 //------------------REACTION----------------
 std::string Character::setReaction(m_reaction reaction)
 {
-    
-    
     std::string animationName = "stand";
     int nbrLoop = 1;
     bool playLastAnimation = true;
@@ -485,7 +486,7 @@ void Character::setBuff(std::string buffName)
     }
     m_buffList.startTurn = turnNbr;
     
-    printf("turnNbr = %i, m_buffList{name = %s, startTurn = %i, endTurn = %i}\n",turnNbr ,m_buffList.name.c_str(), m_buffList.startTurn, m_buffList.endTurn);
+    //printf("turnNbr = %i, m_buffList{name = %s, startTurn = %i, endTurn = %i}\n",turnNbr ,m_buffList.name.c_str(), m_buffList.startTurn, m_buffList.endTurn);
     
     applyBuff(buffName);
 }
@@ -505,6 +506,8 @@ void Character::manageBuffs()
     }
     
     mainStuff->setLineBuff(m_number, m_line);
+    
+    
 }
 bool Character::applyBuff(std::string buffName)
 {
@@ -514,7 +517,7 @@ bool Character::applyBuff(std::string buffName)
     {
         mainStuff->initCombatSpecs(m_number);
         mainStuff->initCardBuff(m_number);
-        m_characterDisplay->setState("ok");
+        manageTired();
     }
     if(buffName == "crystal_break")
     {
@@ -552,6 +555,33 @@ bool Character::applyBuff(std::string buffName)
     }
     return true;
 }
+
+bool Character::manageTired()
+{
+    auto mainStuff = MainStuff::getInstance();
+    auto charSpecs = mainStuff->getCharSpec(m_number);
+    
+    if(charSpecs["crystal"] <= charSpecs["crystal_red"] && m_characterDisplay->getStateName() == "ok")
+    {
+        
+        m_characterDisplay->setState("tired");
+        m_characterDisplay->setAnimation("stand");
+    }
+    if(charSpecs["crystal"] > charSpecs["crystal_red"] && m_characterDisplay->getStateName() == "tired")
+    {
+        m_characterDisplay->setState("ok");
+        m_characterDisplay->setAnimation("stand");
+    }
+    
+    if(m_characterDisplay->getStateName() == "tired")
+    {
+        mainStuff->setCharSpec(m_number, "shield", -2);
+    }
+    
+    
+    return true;
+}
+
 bool Character::isSleeping()
 {
     if(m_characterDisplay->getStateName() == "sleep")
@@ -577,6 +607,15 @@ int Character::getBuffTurnLeft()
     int turnLeft = (m_buffList.endTurn - gameTurn)/2 + 1;
     
     return turnLeft;
+}
+
+void Character::setIfActiveThisTurn(bool isActive)
+{
+    m_isActiveThisTurn = isActive;
+}
+bool Character::getIfActiveThisTurn()
+{
+    return m_isActiveThisTurn;
 }
 
 //-----------------KING-------------------------

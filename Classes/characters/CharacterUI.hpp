@@ -26,6 +26,7 @@ private:
     void createKarma();
     void createDefense();
     void createAttack();
+    void createDiceSpec(std::string type);
     void createBuff();
     void createUnderlight();
     

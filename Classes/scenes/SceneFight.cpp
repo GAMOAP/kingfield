@@ -55,7 +55,9 @@ void SceneFight::addToStage()
     gameCards->unselectAll();
     
     if(!MULTI_PLAYER_ON)
+    {
         startFight(0);
+    }
     else
     {
         gameCards->removeDeck();
@@ -63,8 +65,6 @@ void SceneFight::addToStage()
         GameBoxes::startRumbleBox(m_fightFieldTag);
         MainMultiPlayer::joinRoom();
     }
-    
-    GameBoxes::setBoxes();
 }
 
 void SceneFight::removeToStage()
@@ -76,6 +76,12 @@ void SceneFight::removeToStage()
 
 bool SceneFight::allNodeIsIn()
 {
+    if(m_turnNumber == -1)
+    {
+        m_SharedSceneFight->m_turnNumber = 0;
+        GameCharacters::setActionAll("manage_buffs");
+    }
+    
     if(!GameCharacters::getIsActionRun())
     {
         if(!GameCharacters::getCharIsSelected())
@@ -93,13 +99,6 @@ bool SceneFight::allNodeIsIn()
         }
         
         m_SharedSceneFight->setActionBoxTags();
-    }
-    
-    
-    if(m_turnNumber == -1)
-    {
-        m_SharedSceneFight->m_turnNumber = 0;
-        startTurn();
     }
     
     return true;
@@ -138,34 +137,28 @@ bool SceneFight::stopFight(bool isWin)
 }
 bool SceneFight::startTurn()
 {
-    if(m_SharedSceneFight->m_turnNumber == 0)
+    GameCharacters::setActionAll("give_crystals");
+    GameCharacters::setActionAll("manage_buffs");
+    
+    if(!GameCharacters::getCharIsSelected())
     {
-        GameCharacters::setActionAll("manage_buffs");
+        GameCharacters::setCharSelect();
+    }
+        
+    if(!GameCards::getCardSelect())
+    {
+        GameCards::setCardSelect(0, "deck");
     }
     else
     {
-        GameCharacters::setActionAll("give_crystals");
-        GameCharacters::setActionAll("manage_buffs");
-        
-        if(!GameCharacters::getCharIsSelected())
-        {
-            GameCharacters::setCharSelect();
-        }
-            
-        if(!GameCards::getCardSelect())
-        {
-            GameCards::setCardSelect(0, "deck");
-        }
-        else
-        {
-            GameCards::CardsReseted();
-        }
-            
-        if(!GameCharacters::getIsActionRun())
-        {
-            m_SharedSceneFight->setActionBoxTags();
-        }
+        GameCards::CardsReseted();
     }
+        
+    if(!GameCharacters::getIsActionRun())
+    {
+        m_SharedSceneFight->setActionBoxTags();
+    }
+   
     return true;
 }
 bool SceneFight::endTurn()
@@ -189,7 +182,9 @@ bool SceneFight::touchBox(int tag)
         m_touchedBox = tag;
     }
     else
+    {
         m_touchedBox = NAN;
+    }
     
     return true;
 }
@@ -232,6 +227,13 @@ bool SceneFight::unTouchBox(int tag)
             GameCharacters::setAction(actionSequence);
         }
         
+        //unselect
+        if(box && !character && !card && !box->getIsActionUI())
+        {
+            GameCharacters::unselectAll();
+            GameBoxes::setUnselectActionBoxes();
+        }
+        
     }
     cancelTouchObject();
     m_touchedBox = NAN;
@@ -257,9 +259,13 @@ bool SceneFight::getIsPlayerTurn()
     int charSelectNbr;
     auto character = GameCharacters::getCharSelect();
     if(character && !character->isSleeping())
+    {
         charSelectNbr = character->getNumber();
+    }
     else
+    {
         return false;
+    }
     
     if(!MULTI_PLAYER_ON)
     {

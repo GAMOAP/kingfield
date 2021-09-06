@@ -417,22 +417,23 @@ bool CharacterDisplay::setExpression(std::string animationName)
     std::string aName = animationName.substr(0, animationName.find("_"));
     std::string aState = animationName.substr(animationName.find("_") + 1, animationName.size());
     
-    printf("char#%i :: aName = %s, aState = %s \n", m_number, aName.c_str(), aState.c_str());
-    
     std::string expressionName = m_stuffList["job"][0];
     
+    //expression are classed by inverse priority
     if(animationName == "equip_ok"){expressionName = "happy";}
     
     if(aName == "attack"){expressionName = "angry";}
-    if(aName == "fail"){expressionName = "dizzy";}
     if(aName == "block"){expressionName = "happy";}
+    
+    if(m_animationVector[1] == "sleep"){expressionName = "sleep";}
+    if(m_animationVector[1] == "poison"){expressionName = "sick";}
+    if(m_animationVector[1] == "tired"){expressionName = "tired";}
+    
+    if(aName == "fail"){expressionName = "dizzy";}
     if(aName == "pain"){expressionName = "pain";}
     if(aName == "sad"){expressionName = "pain";}
     if(aName == "happy"){expressionName = "pain";}
     if(aName == "dead"){expressionName = "pain";}
-    
-    if(aState == "sleep"){expressionName = "sleep";}
-    if(aState == "poison"){expressionName = "sick";}
     
     std::string expressionFile = KFSprite::getFile(m_stuffList["breed"][0] + expressionName +"_face");
     

@@ -36,6 +36,8 @@ public:
     std::string getBuffName();
     int getBuffTurnLeft();
     
+    bool manageTired();
+    
     void setFlag();
     
     void setInfo(std::string infoName, int infoValue = -1);
@@ -44,6 +46,9 @@ public:
     
     bool isSleeping();
     bool isBlocking();
+    
+    void setIfActiveThisTurn(bool isActive);
+    bool getIfActiveThisTurn();
     
 private:
     
@@ -76,5 +81,7 @@ protected:
         int startTurn = 0;
         int endTurn = 0;
     }m_buffList;
+    
+    bool m_isActiveThisTurn;
 };
 #endif /* Character_hpp */

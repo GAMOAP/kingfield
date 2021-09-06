@@ -223,7 +223,7 @@ void MainStuff::setCharSpec(int charNbr, std::string specName, int value)
     
     int specValue = charSpec[specName] + value;
     
-    if(charSpec[specName] + value < 0){specValue = 1;}
+    if(charSpec[specName] + value <= 0){specValue = 0;}
     
     const int cRedBlue = charSpec["crystal_red"] + charSpec["crystal_blue"];
     if(specName == "crystal" && specValue > cRedBlue){specValue = cRedBlue;}

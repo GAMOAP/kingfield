@@ -46,7 +46,7 @@ bool CharacterUI::initStage(int charNumber)
     createCrystal();
     createLife();
     createKarma();
-    createDefense();
+     createDefense();
     createAttack();
     createBuff();
     createUnderlight();
@@ -213,16 +213,21 @@ void CharacterUI::createDefense()
     if(!m_defense)
     {
         m_defense = Node::create();
-        m_defense_picture = Sprite::create(KFSprite::getFile("charUI_defense_picture"));
-        m_defense_value = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec[specName])));
-        m_defense_value->setColor(m_colorDefense);
-        m_defense->addChild(m_defense_picture, 0);
-        m_defense->addChild(m_defense_value, 1);
-        
         m_defense->setName("charUI_defense_" + std:: to_string(m_charSpec[specName]));
         m_defense->setAnchorPoint(Vec2( 0.5, 0.5));
         m_defense->setPosition(m_defensePosition);
         this->addChild(m_defense);
+        
+        m_defense_picture = Sprite::create(KFSprite::getFile("charUI_defense_picture"));
+        m_defense->addChild(m_defense_picture, 0);
+        
+        m_defense_value = Sprite::create();
+        if(m_charSpec[specName] > 0)
+        {
+            m_defense_value->setTexture(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec[specName])));
+        }
+        m_defense_value->setColor(m_colorDefense);
+        m_defense->addChild(m_defense_value, 1);
     }
     else
     {
@@ -244,6 +249,7 @@ void CharacterUI::createDefense()
         else
         {
             m_defense_buff->setTexture(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+            m_defense_buff->setColor(buffedColor);
         }
     }
     else
@@ -280,16 +286,21 @@ void CharacterUI::createAttack()
     if(!m_attack)
     {
         m_attack = Node::create();
-        m_attack_picture = Sprite::create(KFSprite::getFile("charUI_attack_picture"));
-        m_attack_value = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec[specName])));
-        m_attack_value->setColor(m_colorAttack);
-        m_attack->addChild(m_attack_picture, 0);
-        m_attack->addChild(m_attack_value, 1);
-        
         m_attack->setName("charUI_attack_" + std:: to_string(m_charSpec[specName]));
         m_attack->setAnchorPoint(Vec2( 0.5, 0.5));
         m_attack->setPosition(m_attackPosition);
         this->addChild(m_attack);
+        
+        m_attack_picture = Sprite::create(KFSprite::getFile("charUI_attack_picture"));
+        m_attack->addChild(m_attack_picture, 0);
+        
+        m_attack_value = Sprite::create();
+        if(m_charSpec[specName] > 0)
+        {
+            m_attack_value->setTexture(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec[specName])));
+        }
+        m_attack_value->setColor(m_colorAttack);
+        m_attack->addChild(m_attack_value, 1);
     }
     else
     {
@@ -311,6 +322,7 @@ void CharacterUI::createAttack()
         else
         {
             m_attack_buff->setTexture(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+            m_attack_buff->setColor(buffedColor);
         }
     }
     else
@@ -322,6 +334,7 @@ void CharacterUI::createAttack()
         }
     }
 }
+
 //Buff
 void CharacterUI::createBuff()
 {

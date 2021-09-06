@@ -307,7 +307,11 @@ void Box::resetActionUI()
 bool Box::getIsActionUI()
 {
     if(m_boxActionUI)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }

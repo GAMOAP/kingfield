@@ -102,6 +102,7 @@ void GameCharacters::removeCharacter(int charNbr)
 //----------------------------CHARACTER SELECT------------------------------------
 void GameCharacters::setCharSelect(int number)
 {
+    
     if(number < 0)
     {
         number = 2;
@@ -113,10 +114,13 @@ void GameCharacters::setCharSelect(int number)
     
     auto charSelected = m_SharedGameCharacters->m_charSelected;
     if(charSelected)
+    {
         m_SharedGameCharacters->m_charNumberMemory = charSelected->getNumber();
+    }
     
     if(!charSelected || charSelected->getNumber() != number)
     {
+        
         auto sceneChildren = MainObject::getMainLayer()->getChildren();
         Vector<Node*>::iterator scIt;
         for(scIt = sceneChildren.begin(); scIt != sceneChildren.end(); scIt++)
@@ -130,6 +134,7 @@ void GameCharacters::setCharSelect(int number)
                     bool isPlayerTurn = GameDirector::getScene()->getIsPlayerTurn();
                     if(isPlayerTurn)
                     {
+
                         GameBoxes::setBoxSelect(character->getTag());
                     }
                     
@@ -223,6 +228,7 @@ void GameCharacters::setAction(std::vector<KFAction*> actionSequence)
     GameBoxes::unselectAll();
     
     auto character = MainObject::getCharByNumber(actionSequence[0]->getCharNbr());
+    character->setIfActiveThisTurn(true);
     
     auto charIsPlace = EventListenerCustom::create("NODE_char" + std::to_string(character->getTag())+"_IS_PLACE", [=](EventCustom* event)
     {
@@ -242,10 +248,13 @@ void GameCharacters::setAction(std::vector<KFAction*> actionSequence)
     
     if(character && character->getIsPlace())
     {
+        printf("character->tag = %i && character->getIsPlace() = %i\n",character->getNumber(),character->getIsPlace());
         eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(character->getTag())+"_IS_PLACE");
         eventDispatcher->removeCustomEventListeners("NODE_char" + std::to_string(character->getTag())+"_IS_PLACE");
     }
+    
 }
+
 void GameCharacters::setActionSequence(Character* character)
 {
     if(m_sequenceState >= m_actionSequence.size())
@@ -273,9 +282,9 @@ void GameCharacters::setActionSequence(Character* character)
         eventDispatcher->addEventListenerWithSceneGraphPriority(charIsActionEnd, character);
     }
 }
+
 void GameCharacters::endActionSequence(Character* character)
 {
-    
     character->getEventDispatcher()->removeCustomEventListeners("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION_SEQUENCE");
     
     for(int c = 0; c < CHAR_NUMBER; c++)
@@ -292,10 +301,13 @@ void GameCharacters::endActionSequence(Character* character)
     }
     
     MainStuff::setCharSpec(character->getNumber(), "crystal", -m_actionSequence[0]->getCost());
+    
     m_actionSequence.clear();
     character->setIsMove(false);
     
     m_SharedGameCharacters->m_isActionRun = false;
+    
+    character->manageTired();
     
     GameDirector::endTurn();
 }
@@ -310,17 +322,27 @@ void GameCharacters::setActionAll(std::string actionName)
         if(character)
         {
             if(actionName == "give_crystals" &&
-               GameDirector::getScene()->getIsTeamTurn(character->getNumber()))
+               !GameDirector::getScene()->getIsTeamTurn(character->getNumber()) )
             {
-                MainStuff::setCharSpec(character->getNumber(), "crystal", +1);
+                if(!character->getIfActiveThisTurn())
+                {
+                    MainStuff::setCharSpec(character->getNumber(), "crystal", +1);
+                    character->manageTired();
+                }
+                else
+                {
+                    character->setIfActiveThisTurn(false);
+                }
             }
             if(actionName == "manage_buffs")
             {
                 character->manageBuffs();
             }
+            
         }
     }
 }
+
 bool GameCharacters::getIsActionRun()
 {
     return m_SharedGameCharacters->m_isActionRun;
