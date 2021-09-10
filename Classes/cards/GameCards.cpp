@@ -80,7 +80,16 @@ void GameCards::remove(std::string board)
         auto card = dynamic_cast<Card*>(*nlIt);
         if(card && card->getBoard() == board)
         {
-            card->removeToStage();
+            if(board == "library")
+            {
+                //removeToStage(speedFactor, delayFactor, movement);
+                card->removeToStage(1,0,"remove");
+            }
+            else
+            {
+                card->removeToStage();
+            }
+                
             GameBoxes::setBoxUnselect(card->getTag());
         }
     }

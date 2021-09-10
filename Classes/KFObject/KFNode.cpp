@@ -71,12 +71,12 @@ bool KFNode::addToStage()
     return true;
 }
 
-bool KFNode::removeToStage()
+bool KFNode::removeToStage(float speedFactor, float delayFactor, std::string movement)
 {
     //if object is present in stage get out of screen.
     if(m_isIn)
     {
-        remove();
+        remove(speedFactor, delayFactor, movement);
     }
     
     //wait object is out of screen to remove to stage.
@@ -120,7 +120,7 @@ void KFNode::add(float speedFactor, float delayFactor)
     auto seq = Sequence::create(delay, spawn, callFunc, NULL);
     runActionSeq("add", seq, speedFactor, delayFactor);
 }
-void KFNode::remove(float speedFactor, float delayFactor, std::string movement, bool create)
+void KFNode::remove(float speedFactor, float delayFactor, std::string movement)
 {
     m_isIn = false;
     
@@ -131,11 +131,7 @@ void KFNode::remove(float speedFactor, float delayFactor, std::string movement, 
     float scaleFactor = 0.8;
     float randomTime = MainGrid::getRandom(this->getTag());
     float endDelayTime = 0;
-    float createDelayTime = 0;
-    if (create)
-    {
-        createDelayTime = 0;
-    }
+    
     if(movement == "remove")
     {
         speedRemove = speedFactor;
@@ -153,7 +149,6 @@ void KFNode::remove(float speedFactor, float delayFactor, std::string movement, 
     float delayTime = randomTime * delayRemove * delayFactor;
     auto delay = DelayTime::create(delayTime);
     auto endDelay = DelayTime::create(endDelayTime);
-    auto createDelay = DelayTime::create(createDelayTime);
     auto move = MoveTo::create(m_moveTime * speedRemove, Vec2(m_position.x, m_position.y - m_moveInOutRange));
     auto moveOut = EaseBackIn::create(move->clone());
     auto scale = ScaleTo::create(0.7, scaleFactor * m_isFlipped, scaleFactor);
@@ -184,7 +179,7 @@ void KFNode::remove(float speedFactor, float delayFactor, std::string movement, 
             add();
         }
     });
-    auto seq  = Sequence::create(delay, spawn, endDelay, isOutFunc, createDelay, callFunc,  NULL);
+    auto seq  = Sequence::create(delay, spawn, endDelay, isOutFunc, callFunc,  NULL);
     runActionSeq("remove", seq, speedFactor, delayFactor, movement);
 }
 

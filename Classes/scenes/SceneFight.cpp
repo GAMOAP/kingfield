@@ -53,18 +53,23 @@ void SceneFight::addToStage()
     gameCards->removeSheet();
     gameCards->removeLibrary();
     gameCards->unselectAll();
+    //gameCards->removeDeck();
     
-    if(!MULTI_PLAYER_ON)
-    {
-        startFight(0);
-    }
-    else
-    {
-        gameCards->removeDeck();
-        
-        GameBoxes::startRumbleBox(m_fightFieldTag);
-        MainMultiPlayer::joinRoom();
-    }
+    startFight();
+    
+    GameBoxes::startRumbleBox(m_fightFieldTag);
+    
+    float delayTime = 1.5;
+    Director::getInstance()->getScheduler()->schedule([this](float){
+        if(!MULTI_PLAYER_ON)
+        {
+            startFight();
+        }
+        else
+        {
+            MainMultiPlayer::joinRoom();
+        }
+    }, this, delayTime, 0, 0, false, "RUMBLE_WAIT");
 }
 
 void SceneFight::removeToStage()

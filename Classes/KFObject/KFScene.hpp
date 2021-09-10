@@ -8,7 +8,9 @@
 #ifndef KFScene_hpp
 #define KFScene_hpp
 
-class KFScene
+#include "cocos2d.h"
+
+class KFScene : public cocos2d::Node
 {
 public:
     virtual bool init() = 0;

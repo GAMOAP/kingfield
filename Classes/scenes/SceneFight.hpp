@@ -21,7 +21,8 @@ public:
     
     virtual bool allNodeIsIn();
     
-    static bool startFight(int teamNumber);
+    static void waitingStart(float dt);
+    static bool startFight(int teamNumber = 0);
     static bool stopFight(bool isWin);
     
     static bool startTurn();

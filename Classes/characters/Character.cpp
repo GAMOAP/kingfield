@@ -89,7 +89,14 @@ bool Character::initPosition(int number)
     }
     
     //remove character
-    remove(1, 1, "both", true);
+    auto IsBoxOutEvent = EventListenerCustom::create("NODE_box" + std::to_string(_tag) + "_IS_IN", [=](EventCustom* event)
+    {
+        if(!m_characterDisplay)
+        {
+            remove(1, 1, "both");
+        } 
+    });
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(IsBoxOutEvent, this);
     
     auto IsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag) + "_IS_OUT", [this,originTag](EventCustom* event)
     {
@@ -97,6 +104,7 @@ bool Character::initPosition(int number)
         {
             m_characterDisplay = CharacterDisplay::create(m_number);
             this->addChild(m_characterDisplay, 1);
+            setUnselect();
         }
         else
         {

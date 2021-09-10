@@ -77,20 +77,6 @@ void Box::initDisplay()
     std::string breed = gameDirector->getKingBreed();
     std::string secondBreed = gameDirector->getKingBreed();
     
-    /*if(m_scene == "intro")
-    {
-        for(int f = 0; f < m_barrackFieldTag.size(); f++){
-            if(_tag == m_barrackFieldTag[f]){
-                type = "field";
-            }
-        }
-        for(int b = 0; b < m_barrackBarrackTag.size(); b++){
-            if(_tag == m_barrackBarrackTag[b]){
-                type = "barrack";
-            }
-        }
-    }*/
-    
     if(m_scene == "barrack")
     {
         for(int f = 0; f < m_barrackFieldTag.size(); f++){
@@ -104,7 +90,7 @@ void Box::initDisplay()
             }
         }
     }
-    else if(m_scene == "fight")
+    else if(m_scene == "fight" )
     {
         if(_tag >= 31 && _tag != 36 && _tag != 40)
         {
@@ -123,7 +109,7 @@ void Box::initDisplay()
         }
     }
     
-    if(type != m_type || breed != m_breed || secondBreed != m_secondBreed)
+    if(type != m_type || breed != m_breed || secondBreed != m_secondBreed || m_isRumble == true)
     {
         m_type = type;
         m_breed = breed;
@@ -143,7 +129,7 @@ void Box::removeBox()
         {
             if(m_scene == "barrack")
             {
-                speedFactor = 2;//change valor in LibraryCard::initDisplay()
+                speedFactor = 2;//change valor in LibraryCard::initDisplay() & 
                 movement = "add";
             }
             if(m_scene == "fight")
@@ -198,21 +184,25 @@ void Box::setUnselect()
 //RUMBLE------------------------------------
 void Box::startRumble()
 {
+    //initDisplay();
+    
     m_isRumble = true;
     rumble();
 }
 void Box::stopRumble()
 {
+    initDisplay();
     m_isRumble = false;
 }
 void Box::rumble()
 {
     if(m_isRumble)
+    {
         remove(4);
+    }
         
     auto boxIsOut = EventListenerCustom::create("NODE_box" + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
     {
-        
         const std::string scene = "rumble";
         const std::string type = m_type;
         

@@ -91,7 +91,9 @@ bool GameBoxes::startRumbleBox(std::vector<int> boxesTagList)
     {
         auto box = MainObject::getBoxByTag(boxesTagList[b]);
         if(box)
+        {
             box->startRumble();
+        }
     }
     return true;
 }

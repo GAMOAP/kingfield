@@ -45,16 +45,16 @@ void SceneBarrack::addToStage()
     gameCharacters->unselectAll(true);
     gameCharacters->setCharacters(5);
     
+    GameBoxes::setBoxes();
+    
     auto gameCards = GameCards::getInstance();
     gameCards->addDeck();
     gameCards->addSheet();
     gameCards->addLibrary();
     gameCards->unselectAll();
-    
+     
     addFightButton();
     addLibraryButton();
-    
-    GameBoxes::setBoxes();
 }
 
 void SceneBarrack::removeToStage()

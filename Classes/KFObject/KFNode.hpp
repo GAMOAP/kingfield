@@ -50,9 +50,13 @@ public:
     
     /**
     @brief    add or remove object: use move in and move out
+    @param speedFactor remove box speed
+    @param delayFactor delay before remove box
+    @param movement does speedFactor and delayFactor is passed to addBox
+    @param create of add
     @return true success, app continue / false Print "NO CLASS NAME"
     */
-    virtual bool removeToStage();
+    virtual bool removeToStage(float speedFactor = 1, float delayFactor = 1, std::string movement = "both");
     
     //--------------------------------ADD REMOVE OBJECT--------------------------------
     /**
@@ -61,7 +65,7 @@ public:
     @param delayfactor
     */
     void add(float speedFactor = 1, float delayFactor = 1);
-    void remove(float speedFactor = 1, float delayFactor = 1, std::string movement = "both", bool create = true);
+    void remove(float speedFactor = 1, float delayFactor = 1, std::string movement = "both");
     
     void up(float speedFactor = 1, bool isCascadedMove = true);
     void place(float speedFactor = 1, bool isCascadedMove = true);
