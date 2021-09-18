@@ -33,6 +33,9 @@ public:
     void resetActionUI();
     bool getIsActionUI();
     
+    std::string getBreed();
+    std::string getType();
+    
 private:
     virtual bool init(int line, int collumn);
     void initDisplay();

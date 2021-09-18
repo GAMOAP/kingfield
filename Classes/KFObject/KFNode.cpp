@@ -9,6 +9,8 @@
 
 #include "KFNode.hpp"
 
+#include "MainSounds.hpp"
+
 #include <iostream>
 
 USING_NS_CC;
@@ -119,6 +121,10 @@ void KFNode::add(float speedFactor, float delayFactor)
     });
     auto seq = Sequence::create(delay, spawn, callFunc, NULL);
     runActionSeq("add", seq, speedFactor, delayFactor);
+    
+    if (m_className == "box") {
+        MainSounds::playBox("add", _tag);
+    }
 }
 void KFNode::remove(float speedFactor, float delayFactor, std::string movement)
 {
@@ -181,6 +187,10 @@ void KFNode::remove(float speedFactor, float delayFactor, std::string movement)
     });
     auto seq  = Sequence::create(delay, spawn, endDelay, isOutFunc, callFunc,  NULL);
     runActionSeq("remove", seq, speedFactor, delayFactor, movement);
+    
+    if (m_className == "box") {
+        MainSounds::playBox("remove", _tag);
+    }
 }
 
 //-------------------------------PLACE UP DOWN-----------------------------------

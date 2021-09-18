@@ -14,6 +14,7 @@
 #include "MainUser.hpp"
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
+#include "MainSounds.hpp"
 #include "MainMultiPlayer.hpp"
 
 #include "GameDirector.hpp"

@@ -60,6 +60,9 @@ bool MainScene::init()
     //Create game Stuff
     MainStuff::getInstance();
     
+    //Create game Sounds
+    MainSounds::getInstance();
+    
     //Init Game Director
     GameDirector::getInstance();
     

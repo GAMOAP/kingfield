@@ -10,9 +10,15 @@
 
 #include "cocos2d.h"
 
-class MainSounds
+class MainSounds //: public cocos2d::Node
 {
 public:
+    
+    /**
+     * @brief get the instance of MainSouds or create and init it, if don't exist.
+    */
+    static MainSounds* getInstance();
+    bool init();
     
     /**
      * @brief play game music
@@ -23,17 +29,36 @@ public:
     /**
      * @brief play game soud effect.
      * @param theme sound effect name.
+     * @param volume sound volume.
     */
-    static void playSound(std::string sound);
+    static void playSound(std::string sound, float volume = 1.0f);
+    
+    /**
+     * @brief play box  soud effect.
+     * @param soundBoxType type of box animation.
+     * @param boxTag box's KFNode tag
+    */
+    static void playBox(std::string mouvement, int boxTag);
     
     /**
      * @brief preload all game sound.
     */
     static void preLoad();
     
+    /**
+     * @brief get and set play sound box authorization.
+    */
+    void setBoxSoundAuth(bool Auth);
+    bool getBoxSoundAuth();
+    
+    
 private:
     
-    
+    //play sound box authorization.
+    bool m_boxSoundAuth;
 };
+
+//unique instance of MainSouds.
+static MainSounds* m_SharedMainSounds = nullptr;
 
 #endif /* MainSounds_hpp */

@@ -11,8 +11,6 @@
 
 #include "GameDirector.hpp"
 
-#include "MainSounds.hpp"
-
 #include "Box.hpp"
 
 #include <iostream>
@@ -304,4 +302,14 @@ bool Box::getIsActionUI()
     {
         return false;
     }
+}
+
+std::string Box::getBreed()
+{
+    return m_breed;
+}
+
+std::string Box::getType()
+{
+    return m_type;
 }

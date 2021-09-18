@@ -60,9 +60,6 @@ void SceneIntro::removeToStage()
     GameInfoLayer::removeSocialLogo();
     
     GameDirector::setScene("barrack");
-    
-    std::string breed = GameDirector::getKingBreed();
-    MainSounds::playSound("box_" + breed + "_remove");
 }
 
 

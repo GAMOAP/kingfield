@@ -9,20 +9,66 @@
 
 #include "audio/include/AudioEngine.h"
 
+#include "MainObject.hpp"
+
 USING_NS_CC;
+
+MainSounds* MainSounds::getInstance()
+{
+    if (!m_SharedMainSounds)
+    {
+        m_SharedMainSounds = new (std::nothrow) MainSounds;
+        m_SharedMainSounds->init();
+    }
+    
+    return m_SharedMainSounds;
+}
+
+bool MainSounds::init()
+{
+    m_SharedMainSounds->setBoxSoundAuth(true);
+    return true;
+}
 
 void MainSounds::playMusic(std::string theme)
 {
     //PLAY GAME MUSIC
 }
 
-void MainSounds::playSound(std::string sound)
+void MainSounds::playSound(std::string sound,float volume)
 {
     // format sound file name
     std::string soundStr = "res/sounds/" + sound + ".mp3";
     
+    printf("soundStr = %s\n", soundStr.c_str());
+    
     // play sound (file name, repeat, volume)
-    cocos2d::experimental::AudioEngine::play2d(soundStr, false, 1.0f);
+    cocos2d::experimental::AudioEngine::play2d(soundStr, false, volume);
+}
+
+void MainSounds::playBox(std::string mouvement, int boxTag)
+{
+    //get box object
+    auto box = MainObject::getBoxByTag(boxTag);
+    
+    //play box sound if box si in playing surface, is not backgroud type and if the previous sound started from the time indicated
+    if(m_SharedMainSounds->getBoxSoundAuth() == true &&
+       box->getType() != "background" &&
+       (boxTag >= 11 && boxTag <= 65))
+    {
+        //play the box sound.
+        std::string boxBreed = box->getBreed();
+        playSound("box_" + boxBreed + "_" + mouvement, 0.2);
+        
+        
+        //set a delay to start the future sound.
+        float delayTime = 0.1;
+        Director::getInstance()->getScheduler()->schedule([=](float){
+            m_SharedMainSounds->setBoxSoundAuth(true);
+        }, box, delayTime, 0, 0, false, "BOX_MOVE_DELAY");
+        
+        m_SharedMainSounds->setBoxSoundAuth(false);
+    }
 }
 
 void MainSounds::preLoad()
@@ -68,5 +114,15 @@ void MainSounds::preLoad()
         std::string sound = "res/sounds/" + *soundIt + ".mp3";
         cocos2d::experimental::AudioEngine::preload(sound);
     }
+}
+
+// Play sound box authorization (set & get)
+void MainSounds::setBoxSoundAuth(bool Auth)
+{
+    m_SharedMainSounds->m_boxSoundAuth = Auth;
+}
+bool MainSounds::getBoxSoundAuth()
+{
+    return m_boxSoundAuth;
 }
 
