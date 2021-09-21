@@ -11,6 +11,7 @@
 #include "MainGrid.hpp"
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
+#include "MainSounds.hpp"
 
 #include "CharacterDisplay.hpp"
 
@@ -231,9 +232,7 @@ bool CharacterDisplay::setOutline(OutlineColor outlineColor, float lineSize)
 //stuff.
 bool CharacterDisplay::setStuff()
 {
-    
     setAnimation("equip", 1);
-    
     
     auto delay = DelayTime::create(0.5);
     auto func = CallFunc::create([this](){
@@ -287,6 +286,7 @@ void CharacterDisplay::setSelect()
     if(!m_selected)
     {
         setAnimation("equip", 1);
+        MainSounds::playChar("select", m_number);
     }
     
     if(m_number == 2 || m_number == 7)

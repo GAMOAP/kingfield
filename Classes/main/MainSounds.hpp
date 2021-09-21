@@ -35,10 +35,17 @@ public:
     
     /**
      * @brief play box  soud effect.
-     * @param soundBoxType type of box animation.
+     * @param mouvement type of box animation.
      * @param boxTag box's KFNode tag
     */
     static void playBox(std::string mouvement, int boxTag);
+    
+    /**
+     * @brief play char  soud effect.
+     * @param saction type of char action.
+     * @param charNbr box's KFNode tag
+    */
+    static void playChar(std::string action, int charNbr);
     
     /**
      * @brief preload all game sound.
