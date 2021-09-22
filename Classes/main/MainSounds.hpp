@@ -41,11 +41,18 @@ public:
     static void playBox(std::string mouvement, int boxTag);
     
     /**
-     * @brief play char  soud effect.
-     * @param saction type of char action.
-     * @param charNbr box's KFNode tag
+     * @brief play char soud effect.
+     * @param saction type of character action.
+     * @param charNbr character number.
     */
     static void playChar(std::string action, int charNbr);
+    
+    /**
+     * @brief play card soud effect.
+     * @param saction type of card action.
+     * @param cardNbr card number.
+    */
+    static void playCard(std::string action, int cardNbr);
     
     /**
      * @brief preload all game sound.

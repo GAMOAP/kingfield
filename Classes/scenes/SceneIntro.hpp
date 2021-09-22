@@ -22,6 +22,7 @@ public:
     virtual bool allNodeIsIn();
     virtual bool appConnected();
     
+    virtual bool touchBox(int tag);
     virtual bool unTouchBox(int tag);
     
 private:

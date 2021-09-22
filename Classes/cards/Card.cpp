@@ -8,6 +8,7 @@
 #include "MainGrid.hpp"
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
+#include "MainSounds.hpp"
 
 #include "GameDirector.hpp"
 
@@ -65,6 +66,7 @@ void Card::setSelect()
         auto charIsOutUp = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_UP", [this](EventCustom* event)
         {
             m_cardDisplay->setScale(m_scaleArray[1]);
+            MainSounds::playCard("select", m_number);
             m_select = true;
         });
         m_cardDisplay->setSelect();

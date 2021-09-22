@@ -71,18 +71,28 @@ void MainSounds::playBox(std::string mouvement, int boxTag)
         }
     }
 }
+
 void MainSounds::playChar(std::string action, int charNbr)
 {
     //get char breed
     std::string breed = MainStuff::getStuffByName(charNbr, 8)[0];
     
-    
-    printf("breed = %s\n", breed.c_str());
-    
     if(action == "select")
     {
         playSound("select_char", 0.9);
         playSound("select_" + breed, 0.3);
+    }
+}
+
+void MainSounds::playCard(std::string action, int cardNbr)
+{
+    if(action == "flip")
+    {
+        playSound("card_flip", 0.5);
+    }
+    if(action == "select")
+    {
+        playSound("card_select", 1);
     }
 }
 

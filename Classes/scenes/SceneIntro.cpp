@@ -91,6 +91,17 @@ bool SceneIntro::appConnected()
     return true;
 }
 
+bool SceneIntro::touchBox(int tag)
+{
+    if(m_removeAuth)
+    {
+        if(tag == 14|| tag == 15)
+        {
+            MainSounds::playSound("button_social");
+        }
+    }
+    return true;
+}
 
 bool SceneIntro::unTouchBox(int tag)
 {

@@ -9,6 +9,7 @@
 #include "MainGrid.hpp"
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
+#include "MainSounds.hpp"
 
 #include "GameCards.hpp"
 
@@ -137,6 +138,7 @@ bool LibraryCard::initDisplay()
             });
             auto m_rotSeq = Sequence::create(spawn, callFunc, respawn, callEndFunc, NULL);
             this->runAction(m_rotSeq);
+            MainSounds::playCard("flip", m_number);
         }
     }
     
