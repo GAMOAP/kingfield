@@ -36,13 +36,9 @@ void MainSounds::playMusic(std::string theme)
     //PLAY GAME MUSIC
 }
 
-void MainSounds::playSound(std::string sound,float volume)
+void MainSounds::playGame(std::string sound)
 {
-    // format sound file name
-    std::string soundStr = "res/sounds/" + sound + ".mp3";
-    
-    // play sound (file name, repeat, volume)
-    cocos2d::experimental::AudioEngine::play2d(soundStr, false, volume);
+    playSound("game_" + sound);
 }
 
 void MainSounds::playBox(std::string mouvement, int boxTag)
@@ -76,11 +72,39 @@ void MainSounds::playChar(std::string action, int charNbr)
 {
     //get char breed
     std::string breed = MainStuff::getStuffByName(charNbr, 8)[0];
+    std::string job = MainStuff::getStuffByName(charNbr, 7)[0];
     
     if(action == "select")
     {
-        playSound("select_char", 0.9);
-        playSound("select_" + breed, 0.3);
+        playSound("char_select_main", 0.9);
+        playSound("char_select_" + breed, 0.3);
+    }
+    
+    if(action.substr(0, 5) == "stuff")
+    {
+        printf("playChar(%s, %i)\n", action.c_str(), charNbr);
+        
+        std::string type = action.substr(6, action.size());
+        if(type == "move" || type == "helmet" || type == "armor")
+        {
+            playSound("char_stuff_clothes", 0.8);
+        }
+        if(type == "spell" || type == "weapon")
+        {
+            playSound("char_stuff_weapon", 0.8);
+        }
+        if(type == "item" || type == "object")
+        {
+            playSound("char_stuff_object", 0.8);
+        }
+        if(type == "breed")
+        {
+            playSound("char_select_" + breed, 0.3);
+        }
+        if(type == "job")
+        {
+            playSound("char_job_" + job, 0.8);
+        }
     }
 }
 
@@ -92,7 +116,7 @@ void MainSounds::playCard(std::string action, int cardNbr)
     }
     if(action == "select")
     {
-        playSound("card_select", 1);
+        playSound("card_select");
     }
 }
 
@@ -103,7 +127,7 @@ void MainSounds::preLoad()
         //SOUNDLIST...
         
         //GAME----------------------------
-        "tittle", "fight", "win", "lose",
+        "game_tittle", "game_fight", "game_win", "game_lose", "game_button_social", "game_button_library",
         
         //BOX-----------------------------
             //add
@@ -112,12 +136,16 @@ void MainSounds::preLoad()
         "box_sun_remove", "box_night_remove", "box_time_remove",
         
         //CARD----------------------------
-        "card_flip",
+        "card_flip", "card_select",
         //CHARACTER-----------------------
-         //select
-        "select_main"
-        "select_sun", "select_night", "select_time",
-         //weapon
+            //select
+        "char_select_main", "char_select_sun", "char_select_night", "char_select_time",
+            //stuff
+        "char_stuff_clothes", "char_stuff_weapon", "char_stuff_object",
+                //stuff job
+        "char_job_sun", "char_job_night", "char_job_time"
+        
+            //weapon
          /*
             //sun (spear)
         "weapon_sun_1", "weapon_sun_2", "weapon_sun_3"
@@ -136,6 +164,17 @@ void MainSounds::preLoad()
         std::string sound = "res/sounds/" + *soundIt + ".mp3";
         cocos2d::experimental::AudioEngine::preload(sound);
     }
+}
+
+//----------------------------PRIVATE-------------------------------------
+
+void MainSounds::playSound(std::string sound,float volume)
+{
+    // format sound file name
+    std::string soundStr = "res/sounds/" + sound + ".mp3";
+    
+    // play sound (file name, repeat, volume)
+    cocos2d::experimental::AudioEngine::play2d(soundStr, false, volume);
 }
 
 // Play sound box authorization (set & get)

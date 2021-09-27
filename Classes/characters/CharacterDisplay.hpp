@@ -24,7 +24,7 @@ public:
     static CharacterDisplay* create(int number);
     virtual bool init(int number);
     
-    bool setStuff();
+    bool setStuff(std::string type);
     
     bool setFlag();
     

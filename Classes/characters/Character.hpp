@@ -24,7 +24,7 @@ public:
     
     virtual bool removeToStage();
     
-    void setStuff();
+    void setStuff(std::string type);
     
     bool setAction(KFAction* action);
     

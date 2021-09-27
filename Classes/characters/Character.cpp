@@ -143,9 +143,9 @@ bool Character::removeToStage()
     return true;
 }
 
-void Character::setStuff()
+void Character::setStuff(std::string type)
 {
-    m_characterDisplay->setStuff();
+    m_characterDisplay->setStuff(type);
 }
 
 //---------------------------ACTION--------------------------

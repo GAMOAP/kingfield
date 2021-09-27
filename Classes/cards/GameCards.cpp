@@ -157,7 +157,7 @@ void GameCards::setCardSelectLibrary(Card* cardCliqued)
         const std::string breed = cardCliqued->getBreed();
         const std::string object = cardCliqued->getObject();
         MainStuff::setStuff(charNumber, type, breed, object);
-        charSelect->setStuff();
+        charSelect->setStuff(type);
         charUI->setCharacterUI(charNumber);
         cardSelect->initDisplay();
         cardCliqued->setSelect();

@@ -37,7 +37,7 @@ bool GameInfoLayer::init()
 void GameInfoLayer::addIntroTitle()
 {
     m_SharedGameInfoLayer->initIntroTitle(true);
-    MainSounds::playSound("tittle");
+    MainSounds::playGame("tittle");
 }
 void GameInfoLayer::removeIntroTitle()
 {

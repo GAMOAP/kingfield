@@ -230,9 +230,11 @@ bool CharacterDisplay::setOutline(OutlineColor outlineColor, float lineSize)
 
 //----------------ACTION-------------------
 //stuff.
-bool CharacterDisplay::setStuff()
+bool CharacterDisplay::setStuff(std::string type)
 {
     setAnimation("equip", 1);
+    
+    MainSounds::playChar("stuff_" + type, m_number);
     
     auto delay = DelayTime::create(0.5);
     auto func = CallFunc::create([this](){

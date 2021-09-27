@@ -27,11 +27,11 @@ public:
     static void playMusic(std::string theme);
     
     /**
-     * @brief play game soud effect.
-     * @param theme sound effect name.
-     * @param volume sound volume.
+     * @brief play game  soud effect.
+     * @param sound game sound name.
+     * @param boxTag box's KFNode tag
     */
-    static void playSound(std::string sound, float volume = 1.0f);
+    static void playGame(std::string sound);
     
     /**
      * @brief play box  soud effect.
@@ -59,14 +59,20 @@ public:
     */
     static void preLoad();
     
+private:
+    
+    /**
+     * @brief play game soud effect.
+     * @param theme sound effect name.
+     * @param volume sound volume.
+    */
+    static void playSound(std::string sound, float volume = 1.0f);
+    
     /**
      * @brief get and set play sound box authorization.
     */
     void setBoxSoundAuth(bool Auth);
     bool getBoxSoundAuth();
-    
-    
-private:
     
     //play sound box authorization.
     bool m_boxSoundAuth;

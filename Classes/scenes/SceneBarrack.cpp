@@ -9,6 +9,7 @@
 
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
+#include "MainSounds.hpp"
 
 #include "GameDirector.hpp"
 #include "GameInfoLayer.hpp"
@@ -97,11 +98,15 @@ bool SceneBarrack::touchBox(int tag)
     {
         pushLibraryButton(tag);
         m_touchedBox = tag;
+        
+        MainSounds::playGame("button_library");
     }
     else if(tag == m_fightButtonTag)
     {
         m_touchedBox = tag;
         m_buttonFight->setTexture(KFSprite::getFile("screen_start_fight_button_down"));
+        
+        MainSounds::playGame("button_fight");
     }
     else
         m_touchedBox = NAN;
@@ -131,7 +136,8 @@ bool SceneBarrack::unTouchBox(int tag)
         //fight button
         if(tag == m_fightButtonTag)
         {
-                removeToStage();
+            MainSounds::playGame("fight");
+            removeToStage();
         }
         //library buttons.
         if(tag == m_libraryLeftButtonTag || tag == m_libraryRightButtonTag)

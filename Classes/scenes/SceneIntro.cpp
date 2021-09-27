@@ -97,7 +97,7 @@ bool SceneIntro::touchBox(int tag)
     {
         if(tag == 14|| tag == 15)
         {
-            MainSounds::playSound("button_social");
+            MainSounds::playGame("button_social");
         }
     }
     return true;
