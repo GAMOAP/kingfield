@@ -104,6 +104,8 @@ private:
     void runActionSeq(std::string action, cocos2d::Sequence* seq, float speedFactor = 1, float delayFactor = 1, std::string movement = "both");
     void finishAction(std::string action);
     
+    void playSound(std::string action);
+    
 protected:
     
     int getIndexClassName();

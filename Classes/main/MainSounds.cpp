@@ -27,6 +27,8 @@ MainSounds* MainSounds::getInstance()
 
 bool MainSounds::init()
 {
+    
+    
     m_SharedMainSounds->setBoxSoundAuth(true);
     return true;
 }
@@ -47,8 +49,13 @@ void MainSounds::playBox(std::string mouvement, int boxTag)
     auto box = MainObject::getBoxByTag(boxTag);
     if(box)
     {
+        if(mouvement == "upDown")
+        {
+            playSound("box_upDown", 1);
+        }
+        
         //play box sound if box si in playing surface, is not backgroud type and if the previous sound started from the time indicated
-        if(m_SharedMainSounds->getBoxSoundAuth() == true &&
+        else if(m_SharedMainSounds->getBoxSoundAuth() == true &&
            box->getType() != "background" &&
            (boxTag >= 11 && boxTag <= 65))
         {
@@ -74,16 +81,16 @@ void MainSounds::playChar(std::string action, int charNbr)
     std::string breed = MainStuff::getStuffByName(charNbr, 8)[0];
     std::string job = MainStuff::getStuffByName(charNbr, 7)[0];
     
+    //select sound
     if(action == "select")
     {
         playSound("char_select_main", 0.9);
         playSound("char_select_" + breed, 0.3);
     }
     
+    //stuff sound
     if(action.substr(0, 5) == "stuff")
     {
-        printf("playChar(%s, %i)\n", action.c_str(), charNbr);
-        
         std::string type = action.substr(6, action.size());
         if(type == "move" || type == "helmet" || type == "armor")
         {
@@ -106,6 +113,37 @@ void MainSounds::playChar(std::string action, int charNbr)
             playSound("char_job_" + job, 0.8);
         }
     }
+    
+    //action sound
+    if(action.substr(0, 6) == "action")
+    {
+        
+    }
+}
+void MainSounds::playCharWalk(float animationTime, int startBoxTag, int finishBoxTag)
+{
+    printf("[MS] MainSounds::playCharWalk\n");
+    
+    auto character = MainObject::getCharByTag(startBoxTag);
+    if(character)
+    {
+        
+        float stepTime = 0.15;
+        int stepNbr = animationTime / stepTime - 1;
+        
+        int boxTag = startBoxTag;
+        
+        std::string boxBreed  = MainObject::getBoxByTag(boxTag)->getBreed();
+        
+        Director::getInstance()->getScheduler()->schedule([=](float){
+            
+            playSound("char_step_" + boxBreed, 0.3 + random(0, 5)/10);
+            
+        }, character, stepTime, stepNbr , 0, false, "CHAR_WALK");
+    }
+    
+    //Director::getInstance()->getScheduler()->schedule(const ccSchedulerFunc &callback, void *target, float interval, unsigned int repeat, float delay, bool paused, const std::string &key)
+    
 }
 
 void MainSounds::playCard(std::string action, int cardNbr)
@@ -143,18 +181,10 @@ void MainSounds::preLoad()
             //stuff
         "char_stuff_clothes", "char_stuff_weapon", "char_stuff_object",
                 //stuff job
-        "char_job_sun", "char_job_night", "char_job_time"
+        "char_job_sun", "char_job_night", "char_job_time",
         
-            //weapon
-         /*
-            //sun (spear)
-        "weapon_sun_1", "weapon_sun_2", "weapon_sun_3"
-            //night (sword)
-        "weapon_night_1", "weapon_night_2", "weapon_night_3"
-            //time (bow)
-        "weapon_time_1", "weapon_time_2", "weapon_time_3"
-         
-         */
+       //CHARACTER STEP
+        "char_step_sun", "char_step_night", "char_step_time"
     };
     
     // load all game sounds

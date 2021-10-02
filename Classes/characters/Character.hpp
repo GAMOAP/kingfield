@@ -57,7 +57,7 @@ private:
     
     void setActionSequence();
     
-    bool setMove(int endTag);
+    bool setMove(int startTag, int endTag);
     bool setStrike(std::vector<std::vector<int>> strikedList, std::string actionSlotType, int force);
     bool setSpell(std::vector<std::vector<int>> bewitchedList, std::string actionSlotType, int force);
     
@@ -71,7 +71,8 @@ protected:
     
     CharacterDisplay* m_characterDisplay = nullptr;
     
-    const float m_actionTime = 0.5;
+    const float m_moveTime = 0.6;
+    const float m_moveDecTime = 0.2;
     
     const std::vector<int> m_originTagList= {21, 22, 23, 24, 25, 65, 64, 63, 62, 61};
     

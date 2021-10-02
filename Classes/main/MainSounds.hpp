@@ -42,10 +42,19 @@ public:
     
     /**
      * @brief play char soud effect.
-     * @param saction type of character action.
+     * @param action type of character action.
      * @param charNbr character number.
     */
     static void playChar(std::string action, int charNbr);
+    
+    /**
+     * @brief play char walk soud effect.
+     * @param actionTime  char walk atction duration.
+     * @param animationTime  char walk animation duration.
+     * @param boxStartTag box tag where char start.
+     * @param boxFinishTag box tag where char arrive.
+    */
+    static void playCharWalk(float animationTime, int boxStartTag, int boxFinishTag);
     
     /**
      * @brief play card soud effect.
@@ -76,6 +85,8 @@ private:
     
     //play sound box authorization.
     bool m_boxSoundAuth;
+    
+    
 };
 
 //unique instance of MainSouds.

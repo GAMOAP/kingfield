@@ -8,6 +8,7 @@
 #include "MainObject.hpp"
 #include "MainAction.hpp"
 #include "MainStuff.hpp"
+#include "MainSounds.hpp"
 
 #include "GameDirector.hpp"
 
@@ -159,8 +160,9 @@ bool Character::setAction(KFAction* action)
     
     if(actionType == 0)
     {
+        int startTag = action->getSartTag();
         int endTag = action->getEndTag();
-        setMove(endTag);
+        setMove(startTag, endTag);
     }
     //character strike...
     if(actionType == 1 || actionType == 2)
@@ -203,7 +205,7 @@ bool Character::setAction(KFAction* action)
 
 
 //------------------ACTION MOVE----------------
-bool Character::setMove(int endTag)
+bool Character::setMove(int startTag, int endTag)
 {
     auto mainGrid = MainGrid::getInstance();
     
@@ -214,24 +216,34 @@ bool Character::setMove(int endTag)
     const Vec3 positionXYZ = mainGrid->getPositionXYZ(line, collumn);
     
     float decTime = 0;
-    if(line != m_line && collumn != m_collumn){decTime = 0.3;}
+    if(line != m_line && collumn != m_collumn){decTime = m_moveDecTime;}
     if(line < m_line){setLocalZOrder(positionXYZ.z + getIndexClassName() - 1);}
     
-    auto move = MoveTo::create(m_actionTime + decTime, Vec2(positionXYZ.x, positionXYZ.y));
+    auto move = MoveTo::create(m_moveTime + decTime, Vec2(positionXYZ.x, positionXYZ.y));
+    auto delayEndMove = DelayTime::create(m_moveDecTime);
     
     m_line = line;
     m_collumn = collumn;
     
+    auto stopFunc = CallFunc::create([this]()
+    {
+        m_characterDisplay->setAnimation("stand");
+    });
+    
     auto endFunc = CallFunc::create([this]()
     {
         setNodePosition();
-        m_characterDisplay->setAnimation("stand");
         _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
     });
-    auto seq = Sequence::create(move, endFunc, NULL);
+    
+    
+    
+    auto seq = Sequence::create(move, stopFunc, delayEndMove, endFunc, NULL);
     this->runAction(seq);
     
     m_characterDisplay->setAnimation("walk");
+    
+    MainSounds::playCharWalk(m_moveTime + decTime, startTag, endTag);
     
     return true;
 }

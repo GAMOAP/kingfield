@@ -122,9 +122,7 @@ void KFNode::add(float speedFactor, float delayFactor)
     auto seq = Sequence::create(delay, spawn, callFunc, NULL);
     runActionSeq("add", seq, speedFactor, delayFactor);
     
-    if (m_className == "box") {
-        MainSounds::playBox("add", _tag);
-    }
+    playSound("add");
 }
 void KFNode::remove(float speedFactor, float delayFactor, std::string movement)
 {
@@ -188,9 +186,7 @@ void KFNode::remove(float speedFactor, float delayFactor, std::string movement)
     auto seq  = Sequence::create(delay, spawn, endDelay, isOutFunc, callFunc,  NULL);
     runActionSeq("remove", seq, speedFactor, delayFactor, movement);
     
-    if (m_className == "box") {
-        MainSounds::playBox("remove", _tag);
-    }
+    playSound("remove");
 }
 
 //-------------------------------PLACE UP DOWN-----------------------------------
@@ -211,6 +207,8 @@ void KFNode::place(float speedFactor, bool isCascadedMove)
         auto seq  = Sequence::create(move, callFunc, NULL);
         runActionSeq("place", seq, speedFactor);
         m_cascadedMove = true;
+        
+        playSound("upDown");
     }
 }
 void KFNode::up(float speedFactor, bool isCascadedMove)
@@ -227,6 +225,8 @@ void KFNode::up(float speedFactor, bool isCascadedMove)
     auto seq  = Sequence::create(move, callFunc, NULL);
     runActionSeq("up", seq, speedFactor);
     m_cascadedMove = true;
+    
+    playSound("upDown");
 }
 void KFNode::down(float speedFactor, bool isCascadedMove)
 {
@@ -242,6 +242,8 @@ void KFNode::down(float speedFactor, bool isCascadedMove)
     auto seq = Sequence::create(move, callFunc, NULL);
     runActionSeq("down", seq, speedFactor);
     m_cascadedMove = true;
+    
+    playSound("upDown");
 }
 
 //-------------------------------------MOVE ACTION------------------------------
@@ -298,7 +300,13 @@ void KFNode::finishAction(std::string action)
         }
     }
 }
-
+//---------------------------------SOUNDS------------------------------
+void KFNode::playSound(std::string action)
+{
+    if (m_className == "box") {
+        MainSounds::playBox(action, _tag);
+    }
+}
 //---------------------------------SHADERS------------------------------
 bool KFNode::addShader()
 {
