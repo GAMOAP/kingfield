@@ -104,7 +104,7 @@ bool SceneBarrack::touchBox(int tag)
     else if(tag == m_fightButtonTag)
     {
         m_touchedBox = tag;
-        m_buttonFight->setTexture(KFSprite::getFile("screen_start_fight_button_down"));
+        m_buttonFight->setSpriteFrame("screen/start_fight_button_down.png");
         
         MainSounds::playGame("button_fight");
     }
@@ -149,7 +149,7 @@ bool SceneBarrack::unTouchBox(int tag)
             GameCards::setLibraryPage(pagePlus);
         }
     }
-    m_buttonFight->setTexture(KFSprite::getFile("screen_start_fight_button_up"));
+    m_buttonFight->setSpriteFrame("screen/start_fight_button_up.png");
     
     cancelPushLibraryButton();
     
@@ -161,7 +161,7 @@ bool SceneBarrack::unTouchBox(int tag)
 
 bool SceneBarrack::cancelTouchBox(int tag)
 {
-    m_buttonFight->setTexture(KFSprite::getFile("screen_start_fight_button_up"));
+    m_buttonFight->setSpriteFrame("screen/start_fight_button_up.png");
     cancelTouchObject();
     return true;
 }
@@ -186,7 +186,7 @@ void SceneBarrack::addFightButton()
     {
         if(!m_buttonFight)
         {
-            m_buttonFight = Sprite::create(KFSprite::getFile("screen_start_fight_button_up"));
+            m_buttonFight = Sprite::createWithSpriteFrameName("screen/start_fight_button_up.png");
             m_buttonFight->setPositionY(24);
             m_buttonFight->setTag(33);
             box33->addChild(m_buttonFight);
@@ -222,7 +222,7 @@ void SceneBarrack::addLibraryButton()
     {
         if(!m_libraryButtonLeft)
         {
-            m_libraryButtonLeft = Sprite::create(KFSprite::getFile("screen_library_button_left"));
+            m_libraryButtonLeft = Sprite::createWithSpriteFrameName("screen/library_button_left.png");
             m_libraryButtonLeft->setPositionY(16);
             m_libraryButtonLeft->setTag(32);
             box32->addChild(m_libraryButtonLeft);
@@ -233,7 +233,7 @@ void SceneBarrack::addLibraryButton()
     {
         if(!m_libraryButtonRight)
         {
-            m_libraryButtonRight = Sprite::create(KFSprite::getFile("screen_library_button_right"));
+            m_libraryButtonRight = Sprite::createWithSpriteFrameName("screen/library_button_right.png");
             m_libraryButtonRight->setPositionY(16);
             m_libraryButtonRight->setTag(34);
             box34->addChild(m_libraryButtonRight);

@@ -107,6 +107,12 @@ void Box::initDisplay()
         }
     }
     
+    if(type == "background")
+    {
+        breed = "void";
+        secondBreed = "void";
+    }
+    
     if(type != m_type || breed != m_breed || secondBreed != m_secondBreed || m_isRumble == true)
     {
         m_type = type;
@@ -268,10 +274,10 @@ void Box::setActionUI(int actionType, bool touchAuth)
         {
             setSelect(0.5);
         }
-        std::string fileName = KFSprite::getFile("charUI_box_move_" + actionColor + authColor);
+        std::string fileName = "UI/char/box_move_" + actionColor + authColor + ".png";
         if(!m_boxActionUI)
         {
-            m_boxActionUI = Sprite::create(fileName);
+            m_boxActionUI = Sprite::createWithSpriteFrameName(fileName);
             m_boxActionUI->setName("board_action");
             this->addChild(m_boxActionUI);
         }

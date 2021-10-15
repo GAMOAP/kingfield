@@ -46,7 +46,7 @@ bool BoxMask::init(int line)
     auto mainScene = MainObject::getMainLayer();
     mainScene->addChild(this, m_index);
     
-    auto mask = Sprite::create(KFSprite::getFile("screen_boxes_mask"));
+    auto mask = Sprite::createWithSpriteFrameName("screen/boxes_mask.png");
     mask->setAnchorPoint(Vec2( 0.5, 1));
     mask->setPosition(Vec2(0, -80));
     this->addChild(mask);

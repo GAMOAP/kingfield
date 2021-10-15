@@ -6,8 +6,6 @@
 //
 #include "Constants.h"
 
-#include "KFSprite.hpp"
-
 #include "MainGrid.hpp"
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
@@ -123,21 +121,24 @@ void CharacterDisplay::setStuffDisplay()
     {
         std::string slotName = CHAR_SLOTS[i];
         std::string slotFileDisplay = getSlotFileDisplay(slotName);
-        std::string imageFile = KFSprite::getFile(slotFileDisplay);
+        std::string textureName, outlineName;
+        if(slotFileDisplay != "")
+        {
+            textureName = "char/texture/" + slotFileDisplay + ".png";
+            outlineName = "char/outline/" + slotFileDisplay + ".png";
+        }
+        else
+        {
+            textureName = outlineName = "screen/void.png";
+        }
         
         auto slot = m_armatureDisplay->getArmature()->getSlot("character_" + slotName);
-        auto image = cocos2d::Sprite::create(imageFile);
+        auto image = cocos2d::Sprite::createWithSpriteFrameName(textureName);
         image->cocos2d::Node::setAnchorPoint(Vec2(64,64));
         slot->setDisplay(image, dragonBones::DisplayType::Image);
         
         auto slotOutline = m_armatureDisplay->getArmature()->getSlot("character_outline_" + slotName);
-        std::string outlineImageFile = imageFile;
-        if(slotFileDisplay != "screen_void")
-        {
-            outlineImageFile = "outline_" + imageFile;
-        }
-        
-        auto imageOutline = cocos2d::Sprite::create(outlineImageFile);
+        auto imageOutline = cocos2d::Sprite::createWithSpriteFrameName(outlineName);
         imageOutline->cocos2d::Node::setAnchorPoint(Vec2(64,64));
         imageOutline->setName(slotName);
         slotOutline->setDisplay(imageOutline, dragonBones::DisplayType::Image);
@@ -153,15 +154,15 @@ std::string CharacterDisplay::getSlotFileDisplay(std::string& slotName)
     
     if(slotName == "head" || slotName == "face" || slotName == "hand")
     {
-        file = m_stuffList["breed"][0] + m_stuffList["job"][0] +"_"+ slotName;
+        file = m_stuffList["breed"][0] +"/"+ m_stuffList["job"][0] +"_"+ slotName;
     }
     else if (slotName == "helmet")
     {
-        file = m_stuffList["helmet"][0] + m_stuffList["helmet"][1] +"_"+ slotName;
+        file = m_stuffList["helmet"][0] +"/"+ m_stuffList["helmet"][1] +"_"+ slotName;
     }
     else if (slotName == "armor" || slotName == "arm")
     {
-        file = m_stuffList["armor"][0] + m_stuffList["armor"][1] +"_"+ slotName;
+        file = m_stuffList["armor"][0] +"/"+ m_stuffList["armor"][1] +"_"+ slotName;
     }
     else if (slotName == "item_arm" || slotName == "item_armor" || slotName == "item_hand")
     {
@@ -169,17 +170,17 @@ std::string CharacterDisplay::getSlotFileDisplay(std::string& slotName)
         if((itemType == "sun" && slotName == "item_armor") ||
            (itemType == "night" && slotName == "item_arm") ||
            (itemType == "time" && slotName == "item_hand"))
-            file = m_stuffList["item"][0] + m_stuffList["item"][1] +"_item";
+            file = m_stuffList["item"][0] +"/"+ m_stuffList["item"][1] +"_item";
         else
-            file = "screen_void";
+            file = "";
     }
     else if (slotName == "frontLeg" || slotName == "backLeg")
     {
-        file = m_stuffList["move"][0] + m_stuffList["move"][1] +"_"+ slotName;
+        file = m_stuffList["move"][0] +"/"+ m_stuffList["move"][1] +"_"+ slotName;
     }
     else if (slotName == "weapon")
     {
-        file = m_stuffList["weapon"][0] + m_stuffList["weapon"][1] +"_"+ slotName;
+        file = m_stuffList["weapon"][0] +"/"+ m_stuffList["weapon"][1] +"_"+ slotName;
     }
     else
     {
@@ -191,38 +192,29 @@ std::string CharacterDisplay::getSlotFileDisplay(std::string& slotName)
 //---------------OUTLINE-------------------
 bool CharacterDisplay::setOutline(OutlineColor outlineColor, float lineSize)
 {
-    Vec3 uColor = Vec3(0.0, 0.0, 0.0);
+    Color3B outlineColor3B = Color3B::WHITE;
     switch (outlineColor) {
         case white:
-            uColor = Vec3(1.0, 1.0, 1.0);
+            outlineColor3B = Color3B::WHITE;
             break;
         case black:
-            uColor = Vec3(0.0, 0.0, 0.0);
+            outlineColor3B = Color3B::BLACK;
             break;
         case blue:
-            uColor = Vec3(0.0, 0.0, 1.0);
+            outlineColor3B = Color3B::BLUE;
             break;
         case red:
-            uColor = Vec3(1.0, 0.0, 0.0);
+            outlineColor3B = Color3B::RED;
             break;
             
         default:
             break;
     }
     
-    float uLineSize = lineSize * 0.01;
-    
-    m_glprogram = GLProgram::createWithFilenames("res/shaders/KFShader.vsh", "res/shaders/KFShader.fsh");
-    m_glprogramState = GLProgramState::getOrCreateWithGLProgram(m_glprogram);
-    
-    m_glprogramState->setUniformVec3("u_color", uColor);
-    m_glprogramState->setUniformFloat("u_line_size", uLineSize);
-    m_glprogramState->applyUniforms();
-    
     for(int o = 0; o < m_outlineSpriteList.size();  o++)
     {
         Sprite* outlineSprite = m_outlineSpriteList[o];
-        outlineSprite->setGLProgramState(m_glprogramState);
+        outlineSprite->setColor(outlineColor3B);
     }
     
     return true;
@@ -258,7 +250,7 @@ bool CharacterDisplay::setFlag()
         m_flag = nullptr;
     }
     
-    m_flag = Sprite::create(KFSprite::getFile("charUI_flag_" + flagName + "_" + std::to_string(0)));
+    m_flag = Sprite::createWithSpriteFrameName("UI/char/flag_" + flagName + "_" + std::to_string(0) + ".png");
     m_flag->setAnchorPoint(Vec2(1,0));
     
     if(m_number == 7)
@@ -271,9 +263,11 @@ bool CharacterDisplay::setFlag()
     
     cocos2d::Vector<cocos2d::SpriteFrame*> flagFrame;
     flagFrame.reserve(7);
+    auto spriteCache = SpriteFrameCache::getInstance();
     for(int f = 0; f < 7; f++)
     {
-        flagFrame.pushBack(SpriteFrame::create(KFSprite::getFile("charUI_flag_" + flagName + "_" + std::to_string(f)), Rect(0,0,88,52)));
+        std::string animName = "UI/char/flag_" + flagName + "_" + std::to_string(f) + ".png";
+        flagFrame.pushBack(spriteCache->getSpriteFrameByName(animName.c_str()));
     }
     Animation* flagAnimation = Animation::createWithSpriteFrames(flagFrame, 0.1f);
     Animate* flagAnimate = Animate::create(flagAnimation);
@@ -303,6 +297,7 @@ void CharacterDisplay::setSelect()
     setColor(m_colorSelect);
     
     setOutline(red, 1);
+    
     
     m_selected = true;
 }
@@ -437,15 +432,16 @@ bool CharacterDisplay::setExpression(std::string animationName)
     if(aName == "happy"){expressionName = "pain";}
     if(aName == "dead"){expressionName = "pain";}
     
-    std::string expressionFile = KFSprite::getFile(m_stuffList["breed"][0] + expressionName +"_face");
+    std::string expressionFile = "char/texture/" + m_stuffList["breed"][0] +"/"+ expressionName + "_face.png";
     
     auto slot = m_armatureDisplay->getArmature()->getSlot("character_face");
-    auto image = cocos2d::Sprite::create(expressionFile);
+    auto image = cocos2d::Sprite::createWithSpriteFrameName(expressionFile);
     image->cocos2d::Node::setAnchorPoint(Vec2(64,64));
     slot->setDisplay(image, dragonBones::DisplayType::Image);
     
+    std::string expressionFileOutline = "char/outline/" + m_stuffList["breed"][0] +"/"+ expressionName + "_face.png";
     auto slotOutline = m_armatureDisplay->getArmature()->getSlot("character_outline_face");
-    auto imageOutline = cocos2d::Sprite::create("outline_" + expressionFile);
+    auto imageOutline = cocos2d::Sprite::createWithSpriteFrameName(expressionFileOutline);
     imageOutline->cocos2d::Node::setAnchorPoint(Vec2(64,64));
     imageOutline->setName("face");
     

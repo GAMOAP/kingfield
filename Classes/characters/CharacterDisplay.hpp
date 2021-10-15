@@ -18,7 +18,7 @@ enum OutlineColor
     white,black,blue,red
 };
 
-class CharacterDisplay : public cocos2d::Node
+class CharacterDisplay : public cocos2d::Sprite
 {
 public:
     static CharacterDisplay* create(int number);

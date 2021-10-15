@@ -64,7 +64,7 @@ void GameInfoLayer::initIntroTitle(bool addRemove)
     }
     else
     {
-        m_introLogo = Sprite::create(KFSprite::getFile("screen_logo"));
+        m_introLogo = Sprite::createWithSpriteFrameName("screen/logo.png");
         Vec2 visibleSize = MainGrid::getVisibleSize();
         m_introLogo->setPosition(Vec2(visibleSize.x/2, visibleSize.y/2));
         m_infoLayer->addChild(m_introLogo);
@@ -86,12 +86,12 @@ void GameInfoLayer::initConnectSprite(bool addRemove)
     {
         if(!m_spriteConnect)
         {
-            m_spriteConnect = Sprite::create(KFSprite::getFile("screen_connected"));
+            m_spriteConnect = Sprite::createWithSpriteFrameName("screen/connected.png");
         }
         else
         {
             m_spriteConnect->stopAllActions();
-            m_spriteConnect->setTexture(KFSprite::getFile("screen_connected"));
+            m_spriteConnect->setTexture("screen/connected.png");
         }
         auto fadeOut = FadeOut::create(1);
         auto scale = ScaleTo::create(0.2, 1.3);
@@ -108,7 +108,7 @@ void GameInfoLayer::initConnectSprite(bool addRemove)
     {
         if(!m_spriteConnect)
         {
-            m_spriteConnect = Sprite::create(KFSprite::getFile("screen_connexion_0"));
+            m_spriteConnect = Sprite::createWithSpriteFrameName("screen/connexion_0.png");
             Vec3 scPos = MainGrid::getPositionXYZ(-1, 0);
             m_spriteConnect->setAnchorPoint(Vec2(0.5, 0.5));
             m_spriteConnect->setPosition(Vec2(scPos.x -20, scPos.y - 36));
@@ -118,9 +118,11 @@ void GameInfoLayer::initConnectSprite(bool addRemove)
         Vector<SpriteFrame*> animConnect;
         int imageNbr = 5;
         animConnect.reserve(imageNbr);
+        auto spriteCache = SpriteFrameCache::getInstance();
         for(int i = 0; i < imageNbr; i++)
         {
-            animConnect.pushBack(SpriteFrame::create(KFSprite::getFile("screen_connexion_" + std::to_string(i)), Rect(0,0,64,64)));
+            std::string animName = "screen/connexion_" + std::to_string(i) + ".png";
+            animConnect.pushBack(spriteCache->getSpriteFrameByName(animName.c_str()));
         }
         
         auto animation = Animation::createWithSpriteFrames(animConnect, 0.5f);
@@ -158,7 +160,7 @@ void GameInfoLayer::initSocialLogo(bool addRemove)
     {
         if(!m_githubLogo)
         {
-            m_githubLogo = Sprite::create(KFSprite::getFile("screen_github_icon"));
+            m_githubLogo = Sprite::createWithSpriteFrameName("screen/github_icon_up.png");
             Vec3 ghPos = MainGrid::getPositionXYZ(-1, 3);
             m_githubLogo->setAnchorPoint(Vec2(0.5, 0.5));
             m_githubLogo->setPosition(Vec2(ghPos.x, ghPos.y));
@@ -166,7 +168,7 @@ void GameInfoLayer::initSocialLogo(bool addRemove)
         }
         if(!m_twitterLogo)
         {
-            m_twitterLogo = Sprite::create(KFSprite::getFile("screen_twitter_icon"));
+            m_twitterLogo = Sprite::createWithSpriteFrameName("screen/twitter_icon_up.png");
             Vec3 ttPos = MainGrid::getPositionXYZ(-1, 4);
             m_twitterLogo->setAnchorPoint(Vec2(0.5, 0.5));
             m_twitterLogo->setPosition(Vec2(ttPos.x, ttPos.y));
@@ -183,7 +185,7 @@ void GameInfoLayer::addInfoLogo(std::string name, int line, int collumn)
 }
 void GameInfoLayer::initInfoLogo(std::string name, int line, int collumn)
 {
-    m_fightLogo = Sprite::create(KFSprite::getFile("screen_" + name + "_logo"));
+    m_fightLogo = Sprite::createWithSpriteFrameName("screen/" + name + "_logo.png");
     Vec3 logoPos = MainGrid::getPositionXYZ(line, collumn);
     Vec2 visibleSize = MainGrid::getVisibleSize();
     m_fightLogo->setPosition(Vec2(logoPos.x, logoPos.y));

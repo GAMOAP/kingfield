@@ -7,8 +7,6 @@
 
 #include "SceneOption.hpp"
 
-#include "KFSprite.hpp"
-
 #include "MainObject.hpp"
 #include "MainGrid.hpp"
 
@@ -149,7 +147,7 @@ void SceneOption::initFocus()
 {
     Vec3 maskCenterBox = MainGrid::getPositionXYZ(2, 2);
     
-    m_mask = Sprite::create(KFSprite::getFile("screen_help_mask"));
+    m_mask = Sprite::createWithSpriteFrameName("screen/help_mask.png");
     m_mask->setAnchorPoint(Vec2( 0.5, 0.5));
     m_mask->setPosition(Vec2(maskCenterBox.x, maskCenterBox.y));
     m_mask->setOpacity(0);

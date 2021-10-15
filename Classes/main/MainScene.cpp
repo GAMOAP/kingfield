@@ -35,6 +35,25 @@ bool MainScene::init()
         return false;
     }
     
+    //==============================================================
+    /*SpriteFrameCache *cache = SpriteFrameCache::getInstance();
+
+    // load at least one texture
+    cache->addSpriteFramesWithFile("/Users/axxwel/Documents/gamoap/kingfield/kingfield/Resources/res/assets/HD/assets-0.plist");
+
+    // the number of multipack files varies with the resolution
+    // but we don't have information which search paths are set
+    // so we can only try to load the ones we find
+    FileUtils *fileUtils = FileUtils::getInstance();
+    bool restoreNotify = fileUtils->isPopupNotify();
+    fileUtils->setPopupNotify(false); // disable warnings
+    if(fileUtils->fullPathForFilename("assets-1.plist").size() > 0)
+    {
+        cache->addSpriteFramesWithFile("assets-1.plist");
+    }*/
+    //==============================================================
+    
+    
     //MainUser::reset();
     
     auto director = Director::getInstance();

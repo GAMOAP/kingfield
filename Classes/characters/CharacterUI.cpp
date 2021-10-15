@@ -9,8 +9,6 @@
 
 #include "CharacterUI.hpp"
 
-#include "KFSprite.hpp"
-
 #include <iostream>
 
 USING_NS_CC;
@@ -107,7 +105,7 @@ void CharacterUI::createCrystal()
     {
         for(int c = 0; c < m_crystalNbr; c++)
         {
-            auto crystalPointer = Sprite::create(KFSprite::getFile("charUI_crystalred"));
+            auto crystalPointer = Sprite::createWithSpriteFrameName("UI/char/crystalred.png");
             crystalPointer->setName("crystal");
             int decY = 0;
             if(c%2 == 0){decY = 10;}
@@ -129,15 +127,15 @@ void CharacterUI::createCrystal()
             
         if(c < m_charSpec["crystal_red"])
         {
-            popUp(crystalPointer, "charUI_crystal" + isVoid + "red",true);
+            popUp(crystalPointer, "UI/char/crystal" + isVoid + "red.png",true);
         }
         else if(c < m_charSpec["crystal_red"] + m_charSpec["crystal_blue"])
         {
-            popUp(crystalPointer, "charUI_crystal" + isVoid + "blue",true);
+            popUp(crystalPointer, "UI/char/crystal" + isVoid + "blue.png",true);
         }
         else
         {
-            popUp(crystalPointer, "charUI_crystalred",false);
+            popUp(crystalPointer, "UI/char/crystalred.png",false);
         }
     }
 }
@@ -149,7 +147,7 @@ void CharacterUI::createLife()
     {
         for(int l = 0; l < m_lifeNbr; l++)
         {
-            auto lifePointer = Sprite::create(KFSprite::getFile("charUI_lifebar"));
+            auto lifePointer = Sprite::createWithSpriteFrameName("UI/char/lifebar.png");
             lifePointer->setAnchorPoint(Vec2( 0.5, 0.5));
             lifePointer->setPosition(Vec2(m_lifeListX + l*12, m_lifeListY));
             lifePointer->setVisible(false);
@@ -166,9 +164,9 @@ void CharacterUI::createLife()
             isVoid = "void";
         
         if(l < m_charSpec["life"])
-            popUp(lifePointer, "charUI_lifebar" + isVoid, true);
+            popUp(lifePointer, "UI/char/lifebar.png" + isVoid, true);
         else
-            popUp(lifePointer, "charUI_lifebar", false);
+            popUp(lifePointer, "UI/char/lifebar.png", false);
     }
 }
 
@@ -177,15 +175,15 @@ void CharacterUI::createKarma()
 {
     if(!m_karma)
     {
-        m_karma = Sprite::create(KFSprite::getFile("charUI_karma_" + m_karmaBreed));
-        m_karma->setName("charUI_karma_" + m_karmaBreed);
+        m_karma = Sprite::createWithSpriteFrameName("UI/char/karma_" + m_karmaBreed + ".png");
+        m_karma->setName("UI/char/karma_" + m_karmaBreed + ".png");
         m_karma->setAnchorPoint(Vec2( 0.5, 0.5));
         m_karma->setPosition(m_karmaPosition);
         this->addChild(m_karma, 0);
     }
     else
     {
-        popUp(m_karma, "charUI_karma_" + m_karmaBreed);
+        popUp(m_karma, "UI/char/karma_" + m_karmaBreed + ".png");
     }
 }
 
@@ -213,42 +211,42 @@ void CharacterUI::createDefense()
     if(!m_defense)
     {
         m_defense = Node::create();
-        m_defense->setName("charUI_defense_" + std:: to_string(m_charSpec[specName]));
+        m_defense->setName("UI/char/defense_" + std:: to_string(m_charSpec[specName]) + ".png");
         m_defense->setAnchorPoint(Vec2( 0.5, 0.5));
         m_defense->setPosition(m_defensePosition);
         this->addChild(m_defense);
         
-        m_defense_picture = Sprite::create(KFSprite::getFile("charUI_defense_picture"));
+        m_defense_picture = Sprite::createWithSpriteFrameName("UI/char/defense_picture.png");
         m_defense->addChild(m_defense_picture, 0);
         
         m_defense_value = Sprite::create();
         if(m_charSpec[specName] > 0)
         {
-            m_defense_value->setTexture(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec[specName])));
+            m_defense_value->setSpriteFrame("UI/char/attributes_background_" + std:: to_string(m_charSpec[specName]) + ".png");
         }
         m_defense_value->setColor(m_colorDefense);
         m_defense->addChild(m_defense_value, 1);
     }
     else
     {
-        if(m_defense_value->getName() != "charUI_attributes_background_" + std:: to_string(m_charSpec[specName]))
+        if(m_defense_value->getName() != "UI/char/attributes_background_" + std:: to_string(m_charSpec[specName]) + ".png")
         {
-            popUp(m_defense_picture, "charUI_defense_picture");
+            popUp(m_defense_picture, "UI/char/defense_picture.png");
         }
-        popUp(m_defense_value, "charUI_attributes_background_" + std:: to_string(m_charSpec[specName]));
+        popUp(m_defense_value, "UI/char/attributes_background_" + std:: to_string(m_charSpec[specName]) + ".png");
     }
     
     if(specShield != specDefense)
     {
         if(!m_defense_buff)
         {
-            m_defense_buff = Sprite::create(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+            m_defense_buff = Sprite::createWithSpriteFrameName("UI/char/attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName]) + ".png");
             m_defense_buff->setColor(buffedColor);
             m_defense->addChild(m_defense_buff, 0);
         }
         else
         {
-            m_defense_buff->setTexture(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+            m_defense_buff->setSpriteFrame("UI/char/attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName]) + ".png");
             m_defense_buff->setColor(buffedColor);
         }
     }
@@ -286,42 +284,42 @@ void CharacterUI::createAttack()
     if(!m_attack)
     {
         m_attack = Node::create();
-        m_attack->setName("charUI_attack_" + std:: to_string(m_charSpec[specName]));
+        m_attack->setName("UI/char/attack_" + std:: to_string(m_charSpec[specName]) + ".png");
         m_attack->setAnchorPoint(Vec2( 0.5, 0.5));
         m_attack->setPosition(m_attackPosition);
         this->addChild(m_attack);
         
-        m_attack_picture = Sprite::create(KFSprite::getFile("charUI_attack_picture"));
+        m_attack_picture = Sprite::createWithSpriteFrameName("UI/char/attack_picture.png");
         m_attack->addChild(m_attack_picture, 0);
         
         m_attack_value = Sprite::create();
         if(m_charSpec[specName] > 0)
         {
-            m_attack_value->setTexture(KFSprite::getFile("charUI_attributes_background_" + std:: to_string(m_charSpec[specName])));
+            m_attack_value->setSpriteFrame("UI/char/attributes_background_" + std:: to_string(m_charSpec[specName]) + ".png");
         }
         m_attack_value->setColor(m_colorAttack);
         m_attack->addChild(m_attack_value, 1);
     }
     else
     {
-        if(m_attack_value->getName() != "charUI_attributes_background_" + std:: to_string(m_charSpec[specName]))
+        if(m_attack_value->getName() != "UI/char/attributes_background_" + std:: to_string(m_charSpec[specName]) + ".png")
         {
-            popUp(m_attack_picture, "charUI_attack_picture");
+            popUp(m_attack_picture, "UI/char/attack_picture.png");
         }
-        popUp(m_attack_value, "charUI_attributes_background_" + std:: to_string(m_charSpec[specName]));
+        popUp(m_attack_value, "UI/char/attributes_background_" + std:: to_string(m_charSpec[specName]) + ".png");
     }
     
     if(specForce != specAttack)
     {
         if(!m_attack_buff)
         {
-            m_attack_buff = Sprite::create(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+            m_attack_buff = Sprite::createWithSpriteFrameName("UI/char/attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName]) + ".png");
             m_attack_buff->setColor(buffedColor);
             m_attack->addChild(m_attack_buff, 0);
         }
         else
         {
-            m_attack_buff->setTexture(KFSprite::getFile("charUI_attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName])));
+            m_attack_buff->setSpriteFrame("UI/char/attributes_" + attributeName + "_" + std:: to_string(m_charSpec[specBuffedName]) + ".png");
             m_attack_buff->setColor(buffedColor);
         }
     }
@@ -347,13 +345,13 @@ void CharacterUI::createBuff()
         if(!m_buff)
         {
             m_buff = Node::create();
-            m_buff_picture = Sprite::create(KFSprite::getFile("charUI_" + buffName + "_picture"));
+            m_buff_picture = Sprite::createWithSpriteFrameName("UI/char/" + buffName + "_picture.png");
             m_buff_picture->setAnchorPoint(Vec2(0.5, 0.5));
             m_buff_picture->setPosition(m_buffPosition);
             m_buff_picture->setScale(0.75);
             m_buff->addChild(m_buff_picture, 0);
             
-            m_buff_turnLeft = Sprite::create(KFSprite::getFile("charUI_buff_turn_left_" + std::to_string(turnLeft)));
+            m_buff_turnLeft = Sprite::createWithSpriteFrameName("UI/char/buff_turn_left_" + std::to_string(turnLeft) + ".png");
             m_buff_turnLeft->setAnchorPoint(Vec2(0.5, 0.5));
             m_buff_turnLeft->setPosition(m_buffTurnLeftPosition);
             m_buff->addChild(m_buff_turnLeft, 1);
@@ -362,8 +360,8 @@ void CharacterUI::createBuff()
         }
         else
         {
-            m_buff_picture->setTexture(KFSprite::getFile(buffName + "_picture"));
-            m_buff_turnLeft->setTexture(KFSprite::getFile("charUI_buff_turn_left_" + std::to_string(turnLeft)) );
+            m_buff_picture->setSpriteFrame("UI/char/" + buffName + "_picture.png");
+            m_buff_turnLeft->setSpriteFrame("UI/char/buff_turn_left_" + std::to_string(turnLeft) + ".png");
             m_buff->setVisible(true);
         }
     }
@@ -381,11 +379,11 @@ void CharacterUI::createUnderlight()
 {
     if(!m_underlight)
     {
-        m_underlight = Sprite::create(KFSprite::getFile("charUI_underlight_" + m_karmaBreed));
+        m_underlight = Sprite::createWithSpriteFrameName("UI/char/underlight_" + m_karmaBreed + ".png");
     }
     else
     {
-        m_underlight->setTexture(KFSprite::getFile("charUI_underlight_" + m_karmaBreed));
+        m_underlight->setSpriteFrame("UI/char/underlight_" + m_karmaBreed + ".png");
     }
 }
 
@@ -428,7 +426,7 @@ void CharacterUI::popUp(Sprite* sprite, std::string name, bool isVisible)
     if(!m_popUpActived)
     {
         sprite->setName(name);
-        sprite->setTexture(KFSprite::getFile(name));
+        sprite->setSpriteFrame(name);
         sprite->setVisible(isVisible);
     }
     else if(sprite->getName() != name || sprite->isVisible() != isVisible || name.find("picture") != std::string::npos)
@@ -441,7 +439,7 @@ void CharacterUI::popUp(Sprite* sprite, std::string name, bool isVisible)
         auto callFunc = CallFunc::create([=]()
         {
             sprite->setName(name);
-            sprite->setTexture(KFSprite::getFile(name));
+            sprite->setSpriteFrame(name);
             sprite->setVisible(isVisible);
         });
         auto popUpSeq = Sequence::create(scaleUpEase, callFunc, scaleDownEase, NULL);

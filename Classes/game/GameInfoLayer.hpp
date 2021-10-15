@@ -9,7 +9,6 @@
 #define GameInfoLayer_hpp
 
 #include "cocos2d.h"
-#include "KFSprite.hpp"
 
 class GameInfoLayer
 {

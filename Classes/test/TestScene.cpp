@@ -24,7 +24,7 @@ bool TestScene::init()
     //introLogo->setGLProgram(ShaderCache::getInstance()->getProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_NO_MVP));
     
     
-    Sprite* introLogo = Sprite::create("screen_logo.png");
+    Sprite* introLogo = Sprite::createWithSpriteFrameName("screen_logo.png");
     
     Layer* introLayer = Layer::create();
     

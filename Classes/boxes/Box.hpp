@@ -11,7 +11,6 @@
 #include "cocos2d.h"
 
 #include "KFNode.hpp"
-#include "KFSprite.hpp"
 
 #include "BoxDisplay.hpp"
 

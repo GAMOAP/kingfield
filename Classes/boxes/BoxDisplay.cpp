@@ -7,8 +7,6 @@
 
 #include "BoxDisplay.hpp"
 
-#include "KFSprite.hpp"
-
 USING_NS_CC;
 
 BoxDisplay* BoxDisplay::create(int line, int collumn, std::string type, std::string breed, std::string secondBreed, std::string scene)
@@ -74,12 +72,12 @@ bool BoxDisplay::init(int line, int collumn, std::string type, std::string breed
             }
         }
         
-        const std::string backFileName = "box_" + type + "_" + backBreed + "_" + std::to_string(backLine) + "_" + std::to_string(collumn);
+        const std::string backFileName = "box/" + type + "/" + backBreed + "/" + std::to_string(backLine) + "_" + std::to_string(collumn);
         setDisplayBox(m_backBox, backFileName, 0);
         
         if(isFrontBox)
         {
-            const std::string frontFileName = "box_" + type + "_" + frontBreed + "_" + std::to_string(frontLine) + "_" + std::to_string(collumn);
+            const std::string frontFileName = "box/" + type + "/" + frontBreed + "/" + std::to_string(frontLine) + "_" + std::to_string(collumn);
             setDisplayBox(m_frontBox, frontFileName, 0);
         }
         
@@ -93,7 +91,7 @@ bool BoxDisplay::init(int line, int collumn, std::string type, std::string breed
             m_frontBox = nullptr;
         }
         
-        const std::string fileName = "box_" + type + "_" + breed + "_" + std::to_string(line) + "_" + std::to_string(collumn);
+        const std::string fileName = "box/" + type + "/" + breed + "/" + std::to_string(line) + "_" + std::to_string(collumn);
         
         m_backBox = setDisplayBox(m_backBox, fileName, 0);
     }
@@ -110,13 +108,13 @@ cocos2d::Sprite* BoxDisplay::setDisplayBox(Sprite* box, std::string fileName, in
 {
     if(!box)
     {
-        box = cocos2d::Sprite::create(KFSprite::getFile(fileName));
+        box = cocos2d::Sprite::createWithSpriteFrameName(fileName + ".png");
         box->setAnchorPoint(Vec2( 0.5, 0));
         this->addChild(box, index);
     }
     else
     {
-        box->setTexture(KFSprite::getFile(fileName));
+        box->setSpriteFrame(fileName + ".png");
     }
     
     return box;

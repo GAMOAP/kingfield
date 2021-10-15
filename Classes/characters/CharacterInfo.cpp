@@ -8,8 +8,6 @@
 
 #include "MainStuff.hpp"
 
-#include "KFSprite.hpp"
-
 #include <iostream>
 
 USING_NS_CC;
@@ -149,7 +147,7 @@ cocos2d::Node* CharacterInfo::createUpInfo(std::vector<int> info)
         default:
             break;
     }
-    auto picture = Sprite::create(KFSprite::getFile("charUI_info_" + infoFileName));
+    auto picture = Sprite::createWithSpriteFrameName("UI/char/info_" + infoFileName + ".png");
     picture->setAnchorPoint(Vec2(0.5,0));
     infoDisplay->addChild(picture, 0);
     
@@ -164,13 +162,13 @@ cocos2d::Node* CharacterInfo::createUpInfo(std::vector<int> info)
             
         }
         
-        auto digit = Sprite::create(KFSprite::getFile("charUI_info_number_" + std::to_string(abs(infoValue))));
+        auto digit = Sprite::createWithSpriteFrameName("UI/char/info_number_" + std::to_string(abs(infoValue)) + ".png");
         digit->setAnchorPoint(Vec2(0,0));
         digit->setPosition(Vec2(0,0));
         digit->setColor(infoColor);
         infoDisplay->addChild(digit);
         
-        auto sign = Sprite::create(KFSprite::getFile("charUI_info_number_" + signString));
+        auto sign = Sprite::createWithSpriteFrameName("UI/char/info_number_" + signString + ".png");
         sign->setPositionX(-36);
         sign->setColor(infoColor);
         sign->setAnchorPoint(Vec2(0,0));
@@ -188,7 +186,7 @@ cocos2d::Node* CharacterInfo::createPopInfo(std::vector<int> info)
     int infoPopValue = info[1];
     
     //add picture
-    m_pop_picture = Sprite::create(KFSprite::getFile("charUI_" + infoPopName + "_picture"));
+    m_pop_picture = Sprite::createWithSpriteFrameName("UI/char/" + infoPopName + "_picture.png");
     infoDisplay->addChild(m_pop_picture);
     
     if(infoPopValue >= 0)
@@ -202,19 +200,19 @@ cocos2d::Node* CharacterInfo::createPopInfo(std::vector<int> info)
         int charSpecTotal = MainStuff::getCharSpec(m_characterNbr)[infoPopName];
         
         //add background
-        m_popValueTotalBackgroud = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std::to_string(charSpecTotal)));
+        m_popValueTotalBackgroud = Sprite::createWithSpriteFrameName("UI/char/attributes_background_" + std::to_string(charSpecTotal) + "png");
         infoDisplay->addChild(m_popValueTotalBackgroud);
         
         //add value
         if(infoPopValue > 0)
         {
-            m_popValue = Sprite::create(KFSprite::getFile("charUI_attributes_background_" + std::to_string(infoPopValue)));
+            m_popValue = Sprite::createWithSpriteFrameName("UI/char/attributes_background_" + std::to_string(infoPopValue) + "png");
             m_popValue->setColor(color);
             infoDisplay->addChild(m_popValue);
         }
         
         //add front
-        m_popValueTotalfront = Sprite::create(KFSprite::getFile("charUI_attributes_front_" + std:: to_string(charSpecTotal)));
+        m_popValueTotalfront = Sprite::createWithSpriteFrameName("UI/char/attributes_front_" + std:: to_string(charSpecTotal) + "png");
         m_popValueTotalfront->setColor(color);
         infoDisplay->addChild(m_popValueTotalfront);
     }

@@ -11,8 +11,6 @@
 
 #include "CardDisplay.hpp"
 
-#include "KFSprite.hpp"
-
 #include <iostream>
 
 USING_NS_CC;
@@ -75,15 +73,15 @@ void CardDisplay::setDisplay()
 
 void CardDisplay::setImage()
 {
-    std::string imageFileName = KFSprite::getFile(m_breed + m_object + "_" + m_type + "Card");
+    std::string imageFileName = "card/" + m_breed + "/" + m_object + "_" + m_type + "Card.png";
     if(!m_image)
     {
-        m_image = Sprite::create(imageFileName);
+        m_image = Sprite::createWithSpriteFrameName(imageFileName);
         this->addChild(m_image, 0);
     }
     else
     {
-        m_image->setTexture(imageFileName);
+        m_image->setSpriteFrame(imageFileName);
     }
     
     if((m_type == "move" || m_type == "spell" || m_type == "weapon" || m_type == "object") && !isCardAvailable())
@@ -102,10 +100,10 @@ void CardDisplay::setMana()
             cardCrystalColor = "blue";
     }
     
-    std::string manaFileName = KFSprite::getFile("cardUI_card_crystal_" + cardCrystalColor);
+    std::string manaFileName = "UI/card/card_crystal_" + cardCrystalColor + ".png";
     if(!m_mana)
     {
-        m_mana = Sprite::create(manaFileName);
+        m_mana = Sprite::createWithSpriteFrameName(manaFileName);
         m_mana->setAnchorPoint(Vec2(0.5, 0.5));
         m_mana->setPosition(m_manaPosition);
         m_mana->setCascadeOpacityEnabled(true);
@@ -118,10 +116,10 @@ void CardDisplay::setMana()
     
     int charNbr = GameCharacters::getCharSelect()->getNumber();
     int manaNbr = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getMana(getOrigin);
-    std::string manaNbrFileName = KFSprite::getFile("cardUI_number_" + std::to_string(manaNbr));
+    std::string manaNbrFileName = "UI/card/number_" + std::to_string(manaNbr) + ".png";
     if(!m_manaNbr)
     {
-        m_manaNbr = Sprite::create(manaNbrFileName);
+        m_manaNbr = Sprite::createWithSpriteFrameName(manaNbrFileName);
         m_manaNbr->setName(manaNbrFileName);
         m_manaNbr->setAnchorPoint(Vec2(0.5, 0.5));
         m_manaNbr->setPosition(m_manaNbrPosition);
@@ -139,9 +137,9 @@ void CardDisplay::setMana()
             auto scaleDownEase = EaseIn::create(scaleDown, 0.5);
             auto callFunc = CallFunc::create([=]()
             {
-                m_mana->setTexture(manaFileName);
+                m_mana->setSpriteFrame(manaFileName);
                 
-                m_manaNbr->setTexture(manaNbrFileName);
+                m_manaNbr->setSpriteFrame(manaNbrFileName);
                 m_manaNbr->setName(manaNbrFileName);
             });
             auto popUpSeq = Sequence::create(scaleUpEase, callFunc, scaleDownEase, NULL);
@@ -149,10 +147,10 @@ void CardDisplay::setMana()
         }
         else
         {
-            m_mana->setTexture(manaFileName);
+            m_mana->setSpriteFrame(manaFileName);
             
             m_manaNbr->setName(manaNbrFileName);
-            m_manaNbr->setTexture(manaNbrFileName);
+            m_manaNbr->setSpriteFrame(manaNbrFileName);
         }
     }
 }
@@ -173,10 +171,10 @@ void CardDisplay::setSlots()
         auto slot = m_slotList[s];
         int charNbr = GameCharacters::getCharSelect()->getNumber();
         std::string slotName = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getSlot("slot" + std::to_string(s));
-        std::string slotFileName = KFSprite::getFile("cardUI_" + slotName);
+        std::string slotFileName = "UI/card/" + slotName + ".png";
         if(!slot)
         {
-            slot = Sprite::create(slotFileName);
+            slot = Sprite::createWithSpriteFrameName(slotFileName);
             slot->setAnchorPoint(Vec2(0, 0));
             slot->setPositionX(slotDec * s);
             m_slotContener->addChild(slot, 0);
@@ -184,7 +182,7 @@ void CardDisplay::setSlots()
         }
         else
         {
-            slot->setTexture(slotFileName);
+            slot->setSpriteFrame(slotFileName);
         }
         if(slotName != "NULL")
         {
@@ -203,10 +201,10 @@ void CardDisplay::setChessBoard()
     int charNbr = GameCharacters::getCharSelect()->getNumber();
     std::vector<std::vector<int>> board = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getBoard();
     
-    std::string checkBoardFileName = KFSprite::getFile("cardUI_chess_board");
+    std::string checkBoardFileName = "UI/card/chess_board.png";
     if(!m_chessBoard)
     {
-        m_chessBoard = Sprite::create(checkBoardFileName);
+        m_chessBoard = Sprite::createWithSpriteFrameName(checkBoardFileName);
         m_chessBoard->setPosition(m_boardOrigin);
         m_chessBoard->setCascadeOpacityEnabled(true);
         this->addChild(m_chessBoard, 1);
@@ -232,8 +230,8 @@ void CardDisplay::setChessBoard()
         
         for(int y = 3; y < boardSpec.size(); y++)
         {
-            std::string boardMoveFileName = KFSprite::getFile("cardUI_board_" + std::to_string(boardSpec[y]));
-            auto boardMove = Sprite::create(boardMoveFileName);
+            std::string boardMoveFileName = "UI/card/board_" + std::to_string(boardSpec[y]) + ".png";
+            auto boardMove = Sprite::createWithSpriteFrameName(boardMoveFileName);
             boardMove->setAnchorPoint(Vec2(0.5, 0.5));
             boardMove->setPosition(Vec2(originX, originY));
             boardMove->setColor(boardColor);
@@ -241,22 +239,22 @@ void CardDisplay::setChessBoard()
         }
         for(int w = 3; w < boardSpec.size(); w++)
         {
-            std::string overBoardMoveFileName = KFSprite::getFile("cardUI_over_board_" + std::to_string(boardSpec[w]));
-            auto overboardMove = Sprite::create(overBoardMoveFileName);
+            std::string overBoardMoveFileName = "UI/card/over_board_" + std::to_string(boardSpec[w]) + ".png";
+            auto overboardMove = Sprite::createWithSpriteFrameName(overBoardMoveFileName);
             overboardMove->setAnchorPoint(Vec2(0.5, 0.5));
             overboardMove->setPosition(Vec2(originX, originY));
             m_chessBoard->addChild(overboardMove, 1);
         }
     }
     if(board.size() > 0){
-        std::string yellowDotFileName = KFSprite::getFile("cardUI_board_0");
-        auto yellowDot = Sprite::create(yellowDotFileName);
+        std::string yellowDotFileName = "UI/card/board_0.png";
+        auto yellowDot = Sprite::createWithSpriteFrameName(yellowDotFileName);
         yellowDot->setAnchorPoint(Vec2(0.5, 0.5));
         yellowDot->setPosition(m_boardMoveOrigin);
         m_chessBoard->addChild(yellowDot, 2);
         
-        std::string overYellowDotFileName = KFSprite::getFile("cardUI_over_board_0");
-        auto overYellowDot = Sprite::create(overYellowDotFileName);
+        std::string overYellowDotFileName = "UI/card/over_board_0.png";
+        auto overYellowDot = Sprite::createWithSpriteFrameName(overYellowDotFileName);
         overYellowDot->setAnchorPoint(Vec2(0.5, 0.5));
         overYellowDot->setPosition(m_boardMoveOrigin);
         overYellowDot->setColor(boardMoveColor[board[0][2]]);

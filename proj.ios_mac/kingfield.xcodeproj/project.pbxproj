@@ -48,7 +48,6 @@
 		E328E7A6233B33AA0017C1E8 /* SceneIntro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E328E7A4233B33AA0017C1E8 /* SceneIntro.cpp */; };
 		E328E7AC233BBE4B0017C1E8 /* axxwelLaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = E328E7AB233BBE4B0017C1E8 /* axxwelLaunchScreen.png */; };
 		E328E7B0233CB20A0017C1E8 /* GameInfoLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E328E7AE233CB20A0017C1E8 /* GameInfoLayer.cpp */; };
-		E328E7B3233CE1F40017C1E8 /* KFSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E328E7B1233CE1F40017C1E8 /* KFSprite.cpp */; };
 		E337CC2C2386BA4D009011CF /* KFAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E337CC2A2386BA4D009011CF /* KFAction.cpp */; };
 		E36144842604B3470074F0C2 /* CharacterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E36144822604B3470074F0C2 /* CharacterInfo.cpp */; };
 		E371167A265ED7E60008714A /* BoxDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E3711678265ED7E60008714A /* BoxDisplay.cpp */; };
@@ -214,8 +213,6 @@
 		E328E7AB233BBE4B0017C1E8 /* axxwelLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = axxwelLaunchScreen.png; sourceTree = "<group>"; };
 		E328E7AE233CB20A0017C1E8 /* GameInfoLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameInfoLayer.cpp; sourceTree = "<group>"; };
 		E328E7AF233CB20A0017C1E8 /* GameInfoLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameInfoLayer.hpp; sourceTree = "<group>"; };
-		E328E7B1233CE1F40017C1E8 /* KFSprite.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KFSprite.cpp; sourceTree = "<group>"; };
-		E328E7B2233CE1F40017C1E8 /* KFSprite.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KFSprite.hpp; sourceTree = "<group>"; };
 		E337CC2A2386BA4D009011CF /* KFAction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KFAction.cpp; sourceTree = "<group>"; };
 		E337CC2B2386BA4D009011CF /* KFAction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KFAction.hpp; sourceTree = "<group>"; };
 		E36144822604B3470074F0C2 /* CharacterInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterInfo.cpp; sourceTree = "<group>"; };
@@ -642,8 +639,6 @@
 				E3A7BA392339025B00960296 /* KFNode.hpp */,
 				E326550C233A5364006FC91B /* KFScene.cpp */,
 				E326550D233A5364006FC91B /* KFScene.hpp */,
-				E328E7B1233CE1F40017C1E8 /* KFSprite.cpp */,
-				E328E7B2233CE1F40017C1E8 /* KFSprite.hpp */,
 				E3A7BE48238E79DA002D42DD /* KFSpecCard.cpp */,
 				E3A7BE49238E79DA002D42DD /* KFSpecCard.hpp */,
 				E337CC2A2386BA4D009011CF /* KFAction.cpp */,
@@ -1021,7 +1016,6 @@
 				E3A7BA99233903C900960296 /* Transform.cpp in Sources */,
 				E3A7BA332338FE2900960296 /* cJSON.c in Sources */,
 				E328E7B0233CB20A0017C1E8 /* GameInfoLayer.cpp in Sources */,
-				E328E7B3233CE1F40017C1E8 /* KFSprite.cpp in Sources */,
 				E3A7BAA6233903CA00960296 /* EventObject.cpp in Sources */,
 				E3A7BA8F233903C900960296 /* Slot.cpp in Sources */,
 				E3A7BAE12339F5B400960296 /* CCArmatureDisplay.cpp in Sources */,

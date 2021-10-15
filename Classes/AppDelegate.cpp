@@ -39,6 +39,7 @@ USING_NS_CC;
 static int drSx = 704;//672;
 static cocos2d::Size designResolutionSize = cocos2d::Size(drSx, 1024);
 
+static cocos2d::Size smallResolutionSize = cocos2d::Size(drSx, 1024);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(drSx*2, 2048);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(drSx*3, 3072);
 
@@ -60,16 +61,7 @@ void AppDelegate::initGLContextAttrs()
 {
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
-
     GLView::setGLContextAttrs(glContextAttrs);
-    
-    //set file resources files path
-    auto filesPath = FileUtils::getInstance();
-    filesPath->addSearchPath("/Users/axxwel/Documents/gamoap/kingfield/kingfield/proj.ios_mac/ios/Images.xcassets/");
-    filesPath->addSearchPath("/Users/axxwel/Documents/gamoap/kingfield/kingfield/Resources/res/");
-    
-    // preload all game sound before start
-    MainSounds::preLoad();
 }
 
 // if you want to use the package manager to install more packages,
@@ -79,22 +71,23 @@ static int register_all_packages()
     return 0; //flag for packages manager
 }
 
-bool AppDelegate::applicationDidFinishLaunching() {
+bool AppDelegate::applicationDidFinishLaunching()
+{
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("kingfield", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
-#else
-        glview = GLViewImpl::create("kingfield");
-#endif
+        #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+        glview = GLViewImpl::createWithRect("demonsway", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        #else
+        glview = GLViewImpl::create("demonsway");
+        #endif
         director->setOpenGLView(glview);
     }
 
     // turn on display FPS
-    director->setDisplayStats(false);
-    
+    director->setDisplayStats(true);
+
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
 
@@ -103,7 +96,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     float gameRatio = frameSize.height/frameSize.width;
     const float screenRatio = 1.5;
     
-    // chose resolution in accordance to screen size
+    // chose resolution policy in accordance to screen ratio
     if (gameRatio >= screenRatio)
     {
         glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::FIXED_WIDTH);
@@ -113,43 +106,48 @@ bool AppDelegate::applicationDidFinishLaunching() {
         glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::FIXED_HEIGHT);
     }
     
-    //set sprites resolution scale factor.
-    if(frameSize.width < 1000)
-        director->setContentScaleFactor(2);
-    else
-        director->setContentScaleFactor(3);
+    //set the factor resolution.
+    //all sprites sizes must multiply by the ScaleFactor.
+    director->setContentScaleFactor(2);
+    
+    // add sprite sheet image list
+    SpriteFrameCache *cache = SpriteFrameCache::getInstance();
+    FileUtils *fileUtils = FileUtils::getInstance();
+    int spriteSheetNbr = 20;
+    for(int s = 0; s < spriteSheetNbr; s++)
+    {
+        std::string assetsName = "res/assets/textures-" + std::to_string(s) + ".plist";
+        if(fileUtils->fullPathForFilename(assetsName).size() > 0)
+        {
+            cache->addSpriteFramesWithFile(assetsName);
+        }
+    }
     
     register_all_packages();
     
     // preload all game sound before start
     MainSounds::preLoad();
 
-    // create the main scene.
-    cocos2d::Scene* scene = nullptr;
-    if(!TEST_SCENE)
-    {
-        scene = MainScene::createScene();
-    }
-    else
-    {
-        scene = TestScene::createScene();
-    }
-    
+    // create a scene. it's an autorelease object
+    auto scene = MainScene::createScene();
+
     // run
     director->runWithScene(scene);
-    
+
     return true;
 }
 
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.
-void AppDelegate::applicationDidEnterBackground() {
+void AppDelegate::applicationDidEnterBackground()
+{
     Director::getInstance()->stopAnimation();
 
     AudioEngine::pauseAll();
 }
 
 // this function will be called when the app is active again
-void AppDelegate::applicationWillEnterForeground() {
+void AppDelegate::applicationWillEnterForeground()
+{
     Director::getInstance()->startAnimation();
 
     AudioEngine::resumeAll();
