@@ -99,6 +99,7 @@ void MainSounds::playChar(std::string action, int charNbr, int linkedCharNbr)
     //select sound
     if(action == "select")
     {
+        printf("[MS][SLT] char_select_%s\n", breed.c_str());
         playSound("char_select_main", 0.9);
         playSound("char_select_" + breed, 0.3);
     }
@@ -157,7 +158,6 @@ void MainSounds::playChar(std::string action, int charNbr, int linkedCharNbr)
         }
         if(type == "pain")
         {
-            printf("[HIT] char_hit_%s & linkedCharNbr = %i\n", weaponLinked.c_str(), linkedCharNbr);
             playSound("char_hit_" + weaponLinked, 0.8);
         }
         if(type == "block")
@@ -234,9 +234,9 @@ void MainSounds::preLoad()
                 //step effect
         "walk_effect_0", "walk_effect_1", "walk_effect_2",
             //action
-        "char_tired", "char_fail", "char_fall"
+        "char_tired", "char_fail", "char_fall",
             //attack
-        "char_attack_sun", "char_attack_night", "char_attack_time"
+        "char_attack_sun", "char_attack_night", "char_attack_time",
             //hit
         "char_hit_sun", "char_hit_night", "char_hit_time", "char_hit_block"
         
@@ -256,17 +256,25 @@ void MainSounds::preLoad()
 void MainSounds::playSound(std::string sound,float volume, float delay)
 {
     //
-    //printf("[MS] MainSounds::playSound(%s, %f)\n", sound.c_str(), volume);
+    printf("[MS] ==> MainSounds::playSound(%s, %f)\n", sound.c_str(), volume);
     
     
     // format sound file name
     std::string soundStr = "res/sounds/" + sound + ".mp3";
     
-    // delay to start sound
-    Director::getInstance()->getScheduler()->schedule([=](float){
-        // play sound (file name, repeat, volume)
+    // play sound (file name, repeat, volume)
+    if(delay <= 0.0)
+    {
         cocos2d::experimental::AudioEngine::play2d(soundStr, false, volume);
-    }, m_SharedMainSounds, delay, 0, 0, false, "SOUND_DELAY");
+    }
+    else
+    {
+        // delay to start sound
+        Director::getInstance()->getScheduler()->schedule([=](float){
+            cocos2d::experimental::AudioEngine::play2d(soundStr, false, volume);
+        }, m_SharedMainSounds, delay, 0, 0, false, "SOUND_DELAY");
+    }
+    
 }
 
 void MainSounds::boxShedulerStart(cocos2d::Node* box)
