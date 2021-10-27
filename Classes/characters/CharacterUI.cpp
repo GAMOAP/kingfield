@@ -44,7 +44,7 @@ bool CharacterUI::initStage(int charNumber)
     createCrystal();
     createLife();
     createKarma();
-     createDefense();
+    createDefense();
     createAttack();
     createBuff();
     createUnderlight();
@@ -164,7 +164,7 @@ void CharacterUI::createLife()
             isVoid = "void";
         
         if(l < m_charSpec["life"])
-            popUp(lifePointer, "UI/char/lifebar.png" + isVoid, true);
+            popUp(lifePointer, "UI/char/lifebar" + isVoid + ".png" , true);
         else
             popUp(lifePointer, "UI/char/lifebar.png", false);
     }
@@ -233,7 +233,10 @@ void CharacterUI::createDefense()
         {
             popUp(m_defense_picture, "UI/char/defense_picture.png");
         }
-        popUp(m_defense_value, "UI/char/attributes_background_" + std:: to_string(m_charSpec[specName]) + ".png");
+        if(m_charSpec[specName] > 0)
+        {
+            popUp(m_defense_value, "UI/char/attributes_background_" + std:: to_string(m_charSpec[specName]) + ".png");
+        }
     }
     
     if(specShield != specDefense)

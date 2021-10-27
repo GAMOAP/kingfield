@@ -34,6 +34,7 @@ public:
     
     std::string getBreed();
     std::string getType();
+    std::string getLastType();
     
 private:
     virtual bool init(int line, int collumn);
@@ -45,6 +46,7 @@ private:
     
 protected:
     std::string m_scene;
+    std::string m_lastType;
     std::string m_type;
     std::string m_breed;
     std::string m_secondBreed;

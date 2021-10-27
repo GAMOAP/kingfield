@@ -115,6 +115,7 @@ void Box::initDisplay()
     
     if(type != m_type || breed != m_breed || secondBreed != m_secondBreed || m_isRumble == true)
     {
+        m_lastType = m_type;
         m_type = type;
         m_breed = breed;
         m_secondBreed = secondBreed;
@@ -318,4 +319,9 @@ std::string Box::getBreed()
 std::string Box::getType()
 {
     return m_type;
+}
+
+std::string Box::getLastType()
+{
+    return m_lastType;
 }

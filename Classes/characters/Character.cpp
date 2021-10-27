@@ -317,7 +317,7 @@ bool Character::setStrike(std::vector<std::vector<int>> strikedList, std::string
                 printf("ERROR :: actionSlotType missing");
             }
             
-            std::string endEventName = strikedChar->setReaction(reactionName);
+            std::string endEventName = strikedChar->setReaction(reactionName, m_number);
             auto reactionEndEvent = EventListenerCustom::create(endEventName, [=](EventCustom* event)
             {
                 if(reactionName == death)
@@ -375,7 +375,7 @@ bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::strin
             
             bewitchedChar->setInfo(actionSlotType);
             
-            std::string endEventName = bewitchedChar->setReaction(reactionName);
+            std::string endEventName = bewitchedChar->setReaction(reactionName, m_number);
             auto reactionEndEvent = EventListenerCustom::create(endEventName, [=](EventCustom* event)
             {
                 bewitchedChar->setLocalZOrder(bewitchedChar->m_index);
@@ -393,7 +393,7 @@ bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::strin
 }
 
 //------------------REACTION----------------
-std::string Character::setReaction(m_reaction reaction)
+std::string Character::setReaction(m_reaction reaction, int actionCharNbr)
 {
     std::string animationName = "stand";
     int nbrLoop = 1;
@@ -458,7 +458,7 @@ std::string Character::setReaction(m_reaction reaction)
         default:
             break;
     }
-    m_characterDisplay->setAnimation(animationName, nbrLoop, playLastAnimation);
+    m_characterDisplay->setAnimation(animationName, nbrLoop, playLastAnimation, actionCharNbr);
     
     return "CHAR_" + std::to_string(m_number) + "_ANIM_" + animationName + "_END";
 }

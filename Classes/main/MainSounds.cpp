@@ -49,37 +49,52 @@ void MainSounds::playBox(std::string mouvement, int boxTag)
     auto box = MainObject::getBoxByTag(boxTag);
     if(box)
     {
-        if(mouvement == "upDown")
-        {
-            playSound("box_upDown", 1);
-        }
+        std::string boxBreed = box->getBreed();
         
-        //play box sound if box si in playing surface, is not backgroud type and if the previous sound started from the time indicated
-        else if(m_SharedMainSounds->getBoxSoundAuth() == true &&
-           box->getType() != "background" &&
-           (boxTag >= 11 && boxTag <= 65))
+        if(boxTag >= 11 && boxTag <= 65)
         {
-            //play the box sound.
-            std::string boxBreed = box->getBreed();
-            playSound("box_" + boxBreed + "_" + mouvement, 0.2);
-            
-            
-            //set a delay to start the future sound.
-            float delayTime = 0.1;
-            Director::getInstance()->getScheduler()->schedule([=](float){
-                m_SharedMainSounds->setBoxSoundAuth(true);
-            }, box, delayTime, 0, 0, false, "BOX_MOVE_DELAY");
-            
-            m_SharedMainSounds->setBoxSoundAuth(false);
+            if(mouvement == "upDown" &&
+               boxTag >= 21 &&
+               box->getType() == "field")
+            {
+                playSound("box_upDown", 1);
+            }
+            else if(mouvement == "add" &&
+                    m_SharedMainSounds->getBoxSoundAuth() == true&&
+                    box->getType() != "" &&
+                    box->getType() != "background")
+            {
+                playSound("box_" + boxBreed + "_add", 0.2);
+                m_SharedMainSounds->boxShedulerStart(box);
+            }
+            else if(mouvement == "remove" &&
+                    m_SharedMainSounds->getBoxSoundAuth() == true &&
+                    box->getLastType() != "" &&
+                    box->getLastType() != "background"
+                    )
+            {
+                playSound("box_" + boxBreed + "_remove", 0.2);
+                m_SharedMainSounds->boxShedulerStart(box);
+            }
         }
     }
 }
 
-void MainSounds::playChar(std::string action, int charNbr)
+void MainSounds::playChar(std::string action, int charNbr, int linkedCharNbr)
 {
+    printf("[MS] MainSounds::playChar(%s, %i)\n", action.c_str(), charNbr);
+    
+    
     //get char breed
     std::string breed = MainStuff::getStuffByName(charNbr, 8)[0];
     std::string job = MainStuff::getStuffByName(charNbr, 7)[0];
+    std::string weapon = MainStuff::getStuffByName(charNbr, 2)[1];
+    
+    std::string weaponLinked = weapon;
+    if(linkedCharNbr >= 0)
+    {
+        weaponLinked = MainStuff::getStuffByName(linkedCharNbr, 2)[1];
+    }
     
     //select sound
     if(action == "select")
@@ -114,16 +129,45 @@ void MainSounds::playChar(std::string action, int charNbr)
         }
     }
     
-    //action sound
-    if(action.substr(0, 6) == "action")
+    //expression sound
+    if(action.substr(0, 10) == "expression")
+    {
+        printf("[MS] expression = %s\n", action.c_str());
+        
+        std::string type = action.substr(11, action.size());
+        if(type == "tired" ||
+           type == "sleep" ||
+           type == "sick" ||
+           type == "dizzy"
+           )
+        {
+            playSound("char_" + type, 0.1);
+        }
+    }
+    
+    //animation sound
+    if(action.substr(0, 9) == "animation")
     {
         
+        
+        std::string type = action.substr(10, action.size());
+        if(type == "attack")
+        {
+            playSound("char_attack_" + weapon, 0.8, 0.8);
+        }
+        if(type == "pain")
+        {
+            printf("[HIT] char_hit_%s & linkedCharNbr = %i\n", weaponLinked.c_str(), linkedCharNbr);
+            playSound("char_hit_" + weaponLinked, 0.8);
+        }
+        if(type == "block")
+        {
+            playSound("char_hit_block", 0.8);
+        }
     }
 }
 void MainSounds::playCharWalk(float animationTime, int startBoxTag, int finishBoxTag)
 {
-    printf("[MS] MainSounds::playCharWalk\n");
-    
     auto character = MainObject::getCharByTag(startBoxTag);
     if(character)
     {
@@ -134,6 +178,8 @@ void MainSounds::playCharWalk(float animationTime, int startBoxTag, int finishBo
         int boxTag = startBoxTag;
         
         std::string boxBreed  = MainObject::getBoxByTag(boxTag)->getBreed();
+        
+        playSound("walk_effect", 0.2);
         
         Director::getInstance()->getScheduler()->schedule([=](float){
             
@@ -183,8 +229,17 @@ void MainSounds::preLoad()
                 //stuff job
         "char_job_sun", "char_job_night", "char_job_time",
         
-       //CHARACTER STEP
-        "char_step_sun", "char_step_night", "char_step_time"
+            //step
+        "char_step_sun", "char_step_night", "char_step_time",
+                //step effect
+        "walk_effect_0", "walk_effect_1", "walk_effect_2",
+            //action
+        "char_tired", "char_fail", "char_fall"
+            //attack
+        "char_attack_sun", "char_attack_night", "char_attack_time"
+            //hit
+        "char_hit_sun", "char_hit_night", "char_hit_time", "char_hit_block"
+        
     };
     
     // load all game sounds
@@ -198,13 +253,31 @@ void MainSounds::preLoad()
 
 //----------------------------PRIVATE-------------------------------------
 
-void MainSounds::playSound(std::string sound,float volume)
+void MainSounds::playSound(std::string sound,float volume, float delay)
 {
+    //
+    //printf("[MS] MainSounds::playSound(%s, %f)\n", sound.c_str(), volume);
+    
+    
     // format sound file name
     std::string soundStr = "res/sounds/" + sound + ".mp3";
     
-    // play sound (file name, repeat, volume)
-    cocos2d::experimental::AudioEngine::play2d(soundStr, false, volume);
+    // delay to start sound
+    Director::getInstance()->getScheduler()->schedule([=](float){
+        // play sound (file name, repeat, volume)
+        cocos2d::experimental::AudioEngine::play2d(soundStr, false, volume);
+    }, m_SharedMainSounds, delay, 0, 0, false, "SOUND_DELAY");
+}
+
+void MainSounds::boxShedulerStart(cocos2d::Node* box)
+{
+    m_SharedMainSounds->setBoxSoundAuth(false);
+    
+    //set a delay to start the future sound.
+    float delayTime = 0.1;
+    Director::getInstance()->getScheduler()->schedule([=](float){
+        m_SharedMainSounds->setBoxSoundAuth(true);
+    }, box, delayTime, 0, 0, false, "BOX_MOVE_DELAY");
 }
 
 // Play sound box authorization (set & get)

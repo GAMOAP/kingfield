@@ -200,19 +200,19 @@ cocos2d::Node* CharacterInfo::createPopInfo(std::vector<int> info)
         int charSpecTotal = MainStuff::getCharSpec(m_characterNbr)[infoPopName];
         
         //add background
-        m_popValueTotalBackgroud = Sprite::createWithSpriteFrameName("UI/char/attributes_background_" + std::to_string(charSpecTotal) + "png");
+        m_popValueTotalBackgroud = Sprite::createWithSpriteFrameName("UI/char/attributes_background_" + std::to_string(charSpecTotal) + ".png");
         infoDisplay->addChild(m_popValueTotalBackgroud);
         
         //add value
         if(infoPopValue > 0)
         {
-            m_popValue = Sprite::createWithSpriteFrameName("UI/char/attributes_background_" + std::to_string(infoPopValue) + "png");
+            m_popValue = Sprite::createWithSpriteFrameName("UI/char/attributes_background_" + std::to_string(infoPopValue) + ".png");
             m_popValue->setColor(color);
             infoDisplay->addChild(m_popValue);
         }
         
         //add front
-        m_popValueTotalfront = Sprite::createWithSpriteFrameName("UI/char/attributes_front_" + std:: to_string(charSpecTotal) + "png");
+        m_popValueTotalfront = Sprite::createWithSpriteFrameName("UI/char/attributes_front_" + std:: to_string(charSpecTotal) + ".png");
         m_popValueTotalfront->setColor(color);
         infoDisplay->addChild(m_popValueTotalfront);
     }

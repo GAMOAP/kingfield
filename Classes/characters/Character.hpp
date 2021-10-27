@@ -64,7 +64,7 @@ private:
     bool applyBuff(std::string buffName);
     
     enum m_reaction{fail, block, pain, death, heal, crystal_break, defense_more, attack_more, defense_less, attack_less, poison, sleep, blocking};
-    std::string setReaction(m_reaction reaction);
+    std::string setReaction(m_reaction reaction, int actionCharNbr);
      
 protected:
     bool m_isPlayerTeam;

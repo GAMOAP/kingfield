@@ -322,11 +322,13 @@ void CharacterDisplay::setUnselect()
 }
 
 //----------------ANIMATION-------------------
-bool CharacterDisplay::setAnimation(std::string animation, int nbrLoop, bool playLastAnimation)
+bool CharacterDisplay::setAnimation(std::string animation, int nbrLoop, bool playLastAnimation, int linkedCharNbr)
 {
     m_animationLoopNumber = nbrLoop;
     m_animationVector[0] = animation;
     m_playLastAnimation = playLastAnimation;
+    m_linkedCharNbr = linkedCharNbr;
+    
     playAnimation();
     
     return true;
@@ -455,6 +457,11 @@ bool CharacterDisplay::setExpression(std::string animationName)
     }
     
     slotOutline->setDisplay(imageOutline, dragonBones::DisplayType::Image);
+    
+    MainSounds::playChar("expression_" + expressionName, m_number, m_linkedCharNbr);
+    MainSounds::playChar("animation_" + aName, m_number, m_linkedCharNbr);
+    
+    m_linkedCharNbr = -1;
     
     return true;
 }

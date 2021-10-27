@@ -10,7 +10,7 @@
 
 #include "cocos2d.h"
 
-class MainSounds //: public cocos2d::Node
+class MainSounds : public cocos2d::Node
 {
 public:
     
@@ -44,8 +44,9 @@ public:
      * @brief play char soud effect.
      * @param action type of character action.
      * @param charNbr character number.
+     * @param linkedCharNbr number of the character  linked at the action.
     */
-    static void playChar(std::string action, int charNbr);
+    static void playChar(std::string action, int charNbr, int linkedCharNbr = -1);
     
     /**
      * @brief play char walk soud effect.
@@ -74,8 +75,15 @@ private:
      * @brief play game soud effect.
      * @param theme sound effect name.
      * @param volume sound volume.
+     * @param delay start sound delay
     */
-    static void playSound(std::string sound, float volume = 1.0f);
+    static void playSound(std::string sound, float volume = 1.0f, float delay = 0.0);
+    
+    /**
+     * @brief star authorization box sound temporisation.
+     * @param box pointer to shedules box.
+    */
+    void boxShedulerStart(cocos2d::Node* box);
     
     /**
      * @brief get and set play sound box authorization.

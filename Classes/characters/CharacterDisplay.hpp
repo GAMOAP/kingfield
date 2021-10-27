@@ -31,7 +31,7 @@ public:
     void setSelect();
     void setUnselect();
     
-    bool setAnimation(std::string animation, int nbrLoop = 0, bool playLastAnimation = true);
+    bool setAnimation(std::string animation, int nbrLoop = 0, bool playLastAnimation = true, int linkedCharNbr = -1);
     bool setState(std::string state);
     
     std::string getAnimationName();
@@ -95,7 +95,7 @@ protected:
     std::string m_lastAnimationName = "";
     int m_animationLoopNumber = 0;
     bool m_playLastAnimation = true;
-    
+    int m_linkedCharNbr = -1;
     
     CharacterInfo* m_charInfo = nullptr;
 };
