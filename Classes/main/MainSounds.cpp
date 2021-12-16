@@ -42,7 +42,7 @@ void MainSounds::playMusic(std::string theme)
     }
     
     //play music theme and get the chanel ID
-    m_SharedMainSounds->m_musicID = cocos2d::experimental::AudioEngine::play2d("res/music/" + theme + ".mp3", false, 0.1);
+    m_SharedMainSounds->m_musicID = cocos2d::experimental::AudioEngine::play2d("res/music/" + theme + ".mp3", true, 0.05);
 }
 
 void MainSounds::playGame(std::string sound)

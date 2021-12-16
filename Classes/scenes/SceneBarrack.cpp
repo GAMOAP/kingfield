@@ -40,6 +40,8 @@ bool SceneBarrack::init()
 
 void SceneBarrack::addToStage()
 {
+    MainSounds::playMusic("barrack");
+    
     MainStuff::initCharStuffList();
     
     auto gameCharacters = GameCharacters::getInstance();

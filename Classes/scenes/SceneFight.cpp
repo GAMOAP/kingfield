@@ -14,6 +14,7 @@
 #include "MainStuff.hpp"
 #include "MainMultiPlayer.hpp"
 #include "MainAction.hpp"
+#include "MainSounds.hpp"
 
 #include "GameDirector.hpp"
 #include "GameInfoLayer.hpp"
@@ -45,6 +46,8 @@ bool SceneFight::init()
 
 void SceneFight::addToStage()
 {
+    MainSounds::playMusic("fight");
+    
     auto gameCharacters = GameCharacters::getInstance();
     gameCharacters->setCharacters(5);
     gameCharacters->unselectAll();
