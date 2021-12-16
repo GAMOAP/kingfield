@@ -52,6 +52,16 @@ int KFAction::getCost()
     return m_crystalCost;
 }
 
+//------------------CRYSTAL COST---------------------
+void KFAction::setCardNbr(int cardSelectNbr)
+{
+    m_cardNbr = cardSelectNbr;
+}
+int KFAction::getCardNbr()
+{
+    return m_cardNbr;
+}
+
 //------------------SLOT LIST---------------------
 void KFAction::setSlotSpec(std::string slotSpec)
 {

@@ -52,18 +52,22 @@ public:
     
 private:
     
+    enum m_reaction{fail, block, pain, death, heal, crystal_break, defense_more, attack_more, defense_less, attack_less, poison, sleep, blocking};
+    
     virtual bool init(int number);
     bool initPosition(int number);
     
     void setActionSequence();
     
     bool setMove(int startTag, int endTag);
-    bool setStrike(std::vector<std::vector<int>> strikedList, std::string actionSlotType, int force);
-    bool setSpell(std::vector<std::vector<int>> bewitchedList, std::string actionSlotType, int force);
+    bool setStrike(std::vector<std::vector<int>> strikedList, int actionCard, std::string actionSlotType, int force);
+    bool setSpell(std::vector<std::vector<int>> bewitchedList, int actionCard, std::string actionSlotType, int force);
+    
+    bool setEndAction(Character* reactChar, m_reaction reaction, int reactedSize, int reactedNbr);
     
     bool applyBuff(std::string buffName);
     
-    enum m_reaction{fail, block, pain, death, heal, crystal_break, defense_more, attack_more, defense_less, attack_less, poison, sleep, blocking};
+    
     std::string setReaction(m_reaction reaction, int actionCharNbr);
      
 protected:

@@ -154,6 +154,9 @@ bool Character::setAction(KFAction* action)
 {
     //init action.
     int actionType = action->getType();
+    int actionCard = action->getCardNbr();
+    
+    printf("[CHAR]actionCard = %i\n",actionCard);
     
     //move character...
     setIsMove(true);
@@ -187,11 +190,12 @@ bool Character::setAction(KFAction* action)
         {
             switch (actionType) {
                 case 1:
-                    setStrike(charList, actionSlotType, force);
+                    setStrike(charList, actionCard, actionSlotType, force);
                     break;
                 case 2:
-                    setSpell(charList, actionSlotType, force);
+                    setSpell(charList, actionCard, actionSlotType, force);
                     break;
+                    
                     
                 default:
                     break;
@@ -248,26 +252,32 @@ bool Character::setMove(int startTag, int endTag)
     return true;
 }
 //------------------ACTION STRIKE----------------
-bool Character::setStrike(std::vector<std::vector<int>> strikedList, std::string actionSlotType, int force)
+bool Character::setStrike(std::vector<std::vector<int>> strikedList, int actionCard, std::string actionSlotType, int force)
 {
     auto mainStuff = MainStuff::getInstance();
     
     this->setLocalZOrder(32);
     
-    if(actionSlotType == "strike")
+    
+    if(actionCard == 1)
+    {
+        m_characterDisplay->setAnimation("spell_" + mainStuff->getStuffByName(m_number, 1)[1], 1);
+    }
+    else if(actionCard == 2)
     {
         m_characterDisplay->setAnimation("attack_" + mainStuff->getStuffByName(m_number, 2)[1], 1);
         setInfo("attack", force);
     }
-    else
+    else if(actionCard == 3)
     {
-        m_characterDisplay->setAnimation("spell", 1);
+        m_characterDisplay->setAnimation("object_" + mainStuff->getStuffByName(m_number, 3)[1], 1);
     }
     
     auto delayStrike = DelayTime::create(1);
     auto strikeFunc = CallFunc::create([this, strikedList, actionSlotType, force]()
     {
         this->setLocalZOrder(m_index);
+        
         for(int c = 0; c < strikedList.size(); c++)
         {
             const auto strikedChar = MainObject::getCharByNumber(strikedList[c][0]);
@@ -320,24 +330,7 @@ bool Character::setStrike(std::vector<std::vector<int>> strikedList, std::string
             std::string endEventName = strikedChar->setReaction(reactionName, m_number);
             auto reactionEndEvent = EventListenerCustom::create(endEventName, [=](EventCustom* event)
             {
-                if(reactionName == death)
-                {
-                    strikedChar->removeToStage();
-                    int strikedTag = strikedChar->getTag();
-                    auto strikeddBox = MainObject::getBoxByTag(strikedTag);
-                    auto isIn = EventListenerCustom::create("NODE_box" + std::to_string(strikedTag) + "_IS_IN", [=](EventCustom* event)
-                    {
-                        _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
-                        _eventDispatcher->removeCustomEventListeners("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
-                    });
-                    auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-                    eventDispatcher->addEventListenerWithSceneGraphPriority(isIn,strikeddBox);
-                }
-                else
-                {
-                    _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
-                }
-                strikedChar->setLocalZOrder(strikedChar->m_index);
+                setEndAction(strikedChar, reactionName, (int)strikedList.size(), c);
             });
             auto eventDispatcher = Director::getInstance()->getEventDispatcher();
             eventDispatcher->addEventListenerWithSceneGraphPriority(reactionEndEvent, strikedChar);
@@ -351,10 +344,20 @@ bool Character::setStrike(std::vector<std::vector<int>> strikedList, std::string
 }
 
 //------------------ACTION SPELL----------------
-bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::string actionSlotType, int force)
+bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, int actionCard, std::string actionSlotType, int force)
 {
     this->setLocalZOrder(32);
-    m_characterDisplay->setAnimation("spell", 1);
+    
+    auto mainStuff = MainStuff::getInstance();
+    
+    if(actionCard == 1)
+    {
+        m_characterDisplay->setAnimation("spell_" + mainStuff->getStuffByName(m_number, 1)[1], 1);
+    }
+    else if(actionCard == 3)
+    {
+        m_characterDisplay->setAnimation("object_" + mainStuff->getStuffByName(m_number, 3)[1], 1);
+    }
     
     auto delayStrike = DelayTime::create(1);
     auto strikeFunc = CallFunc::create([this, bewitchedList, actionSlotType, force]()
@@ -388,6 +391,44 @@ bool Character::setSpell(std::vector<std::vector<int>> bewitchedList, std::strin
     
     auto seq = Sequence::create(delayStrike, strikeFunc, NULL);
     this->runAction(seq);
+    
+    return true;
+}
+//-----------------END ACTION---------------
+bool Character::setEndAction(Character* reactChar, m_reaction reaction, int reactedSize, int reactedNbr)
+{
+    bool isLastAction = false;
+    if(reactedNbr + 1 >= reactedSize)
+    {
+        isLastAction = true;
+    }
+    
+    std::printf("[ACT]setEndAction, reactedNbr_%i >= reactedSize_%i\n", reactedNbr, reactedSize);
+    
+    if(reaction == death)
+    {
+        reactChar->removeToStage();
+        int strikedTag = reactChar->getTag();
+        auto strikeddBox = MainObject::getBoxByTag(strikedTag);
+        auto isIn = EventListenerCustom::create("NODE_box" + std::to_string(strikedTag) + "_IS_IN", [=](EventCustom* event)
+        {
+            if(isLastAction)
+            {
+                _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
+                _eventDispatcher->removeCustomEventListeners("NODE_char" + std::to_string(m_number) + "_END_ACTION_SEQUENCE");
+            }
+        });
+        auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+        eventDispatcher->addEventListenerWithSceneGraphPriority(isIn,strikeddBox);
+    }
+    else
+    {
+        if(isLastAction)
+        {
+            _eventDispatcher->dispatchCustomEvent("NODE_char" + std::to_string(m_number) + "_END_ACTION");
+        }
+    }
+    reactChar->setLocalZOrder(reactChar->m_index);
     
     return true;
 }
@@ -505,6 +546,8 @@ void Character::setBuff(std::string buffName)
         m_buffList.endTurn = turnNbr + 2;
     }
     m_buffList.startTurn = turnNbr;
+    
+    MainSounds::playChar("buff_" + buffName, m_number);
     
     //printf("turnNbr = %i, m_buffList{name = %s, startTurn = %i, endTurn = %i}\n",turnNbr ,m_buffList.name.c_str(), m_buffList.startTurn, m_buffList.endTurn);
     

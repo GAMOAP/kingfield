@@ -94,7 +94,8 @@ private:
     //play sound box authorization.
     bool m_boxSoundAuth;
     
-    
+    // ID of the background sound music.
+    int m_musicID;
 };
 
 //unique instance of MainSouds.

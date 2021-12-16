@@ -27,7 +27,7 @@ MainSounds* MainSounds::getInstance()
 
 bool MainSounds::init()
 {
-    
+    m_SharedMainSounds->m_musicID = -1;
     
     m_SharedMainSounds->setBoxSoundAuth(true);
     return true;
@@ -35,7 +35,14 @@ bool MainSounds::init()
 
 void MainSounds::playMusic(std::string theme)
 {
-    //PLAY GAME MUSIC
+    //stop music theme
+    if(m_SharedMainSounds->m_musicID >= 0)
+    {
+        cocos2d::experimental::AudioEngine::stop(m_SharedMainSounds->m_musicID);
+    }
+    
+    //play music theme and get the chanel ID
+    m_SharedMainSounds->m_musicID = cocos2d::experimental::AudioEngine::play2d("res/music/" + theme + ".mp3", false, 0.1);
 }
 
 void MainSounds::playGame(std::string sound)
@@ -85,11 +92,15 @@ void MainSounds::playChar(std::string action, int charNbr, int linkedCharNbr)
     printf("[MS] MainSounds::playChar(%s, %i)\n", action.c_str(), charNbr);
     
     
-    //get char breed
+    //get char atributes
     std::string breed = MainStuff::getStuffByName(charNbr, 8)[0];
     std::string job = MainStuff::getStuffByName(charNbr, 7)[0];
+    std::string spell = MainStuff::getStuffByName(charNbr, 1)[1];
     std::string weapon = MainStuff::getStuffByName(charNbr, 2)[1];
+    std::string object = MainStuff::getStuffByName(charNbr, 3)[1];
     
+    
+    //get the weapon that striked
     std::string weaponLinked = weapon;
     if(linkedCharNbr >= 0)
     {
@@ -136,11 +147,11 @@ void MainSounds::playChar(std::string action, int charNbr, int linkedCharNbr)
         printf("[MS] expression = %s\n", action.c_str());
         
         std::string type = action.substr(11, action.size());
-        if(type == "tired" ||
-           type == "sleep" ||
-           type == "sick" ||
-           type == "dizzy"
-           )
+        if(type == "tired")
+        {
+            playSound("char_" + type, 0.1, 0.5);
+        }
+        if(type == "dizzy")
         {
             playSound("char_" + type, 0.1);
         }
@@ -149,12 +160,18 @@ void MainSounds::playChar(std::string action, int charNbr, int linkedCharNbr)
     //animation sound
     if(action.substr(0, 9) == "animation")
     {
-        
-        
         std::string type = action.substr(10, action.size());
         if(type == "attack")
         {
-            playSound("char_attack_" + weapon, 0.8, 0.8);
+            playSound("action_attack_" + weapon, 0.8, 0.8);
+        }
+        if(type == "spell")
+        {
+            playSound("action_spell_" + spell, 0.8, 0.8);
+        }
+        if(type == "object")
+        {
+            playSound("action_object_" + object, 0.8, 0.8);
         }
         if(type == "pain")
         {
@@ -164,6 +181,41 @@ void MainSounds::playChar(std::string action, int charNbr, int linkedCharNbr)
         {
             playSound("char_hit_block", 0.8);
         }
+    }
+    
+    //buff sound
+    if(action.substr(0, 4) == "buff")
+    {
+        std::string type = action.substr(5, action.size());
+        if(type == "sleep")
+        {
+            playSound(action, 1, 1);
+        }
+        if(type == "poison")
+        {
+            playSound(action, 1, 0.5);
+        }
+        if(type == "block")
+        {
+            playSound(action, 1, 0.5);
+        }
+        if(type == "attack_more")
+        {
+            playSound(action, 1, 0.5);
+        }
+        if(type == "attack_less")
+        {
+            playSound(action, 1, 0.5);
+        }
+        if(type == "defense_more")
+        {
+            playSound(action, 1, 0.5);
+        }
+        if(type == "defense_less")
+        {
+            playSound(action, 1, 0.5);
+        }
+
     }
 }
 void MainSounds::playCharWalk(float animationTime, int startBoxTag, int finishBoxTag)
@@ -179,11 +231,11 @@ void MainSounds::playCharWalk(float animationTime, int startBoxTag, int finishBo
         
         std::string boxBreed  = MainObject::getBoxByTag(boxTag)->getBreed();
         
-        playSound("walk_effect", 0.2);
+        playSound("action_move_walk_effect", 0.2);
         
         Director::getInstance()->getScheduler()->schedule([=](float){
             
-            playSound("char_step_" + boxBreed, 0.3 + random(0, 5)/10);
+            playSound("action_move_step_" + boxBreed, 0.3 + random(0, 5)/10);
             
         }, character, stepTime, stepNbr , 0, false, "CHAR_WALK");
     }
@@ -208,7 +260,8 @@ void MainSounds::preLoad()
 {
     // create sounds list name
     std::vector<std::string> soundsList = {
-        //SOUNDLIST...
+        //MUSIC THEME---------------------
+        "music_barrack", "music_fight",
         
         //GAME----------------------------
         "game_tittle", "game_fight", "game_win", "game_lose", "game_button_social", "game_button_library",
@@ -221,6 +274,7 @@ void MainSounds::preLoad()
         
         //CARD----------------------------
         "card_flip", "card_select",
+        
         //CHARACTER-----------------------
             //select
         "char_select_main", "char_select_sun", "char_select_night", "char_select_time",
@@ -229,16 +283,22 @@ void MainSounds::preLoad()
                 //stuff job
         "char_job_sun", "char_job_night", "char_job_time",
         
-            //step
-        "char_step_sun", "char_step_night", "char_step_time",
-                //step effect
-        "walk_effect_0", "walk_effect_1", "walk_effect_2",
-            //action
-        "char_tired", "char_fail", "char_fall",
+            //move
+        "action_move_step_sun", "action_move_step_night", "action_move_step_time", "action_move_walk_effect",
+            //spell
+        "action_spell_sun", "action_spell_night", "action_spell_time",
             //attack
-        "char_attack_sun", "char_attack_night", "char_attack_time",
+        "action_attack_sun", "action_attack_night", "action_attack_time",
+            //object
+        "action_object_sun", "action_object_night", "action_object_time",
+        
+            //action
+        "char_tired", "char_block", "char_fail", "char_sad", "char_happy",
             //hit
-        "char_hit_sun", "char_hit_night", "char_hit_time", "char_hit_block"
+        "char_hit_sun", "char_hit_night", "char_hit_time",
+        
+            //buff
+        "buff_sleep", "buff_poison", "buff_block", "buff_attack_more", "buff_attack_less", "buff_defense_up", "buff_defense_down"
         
     };
     

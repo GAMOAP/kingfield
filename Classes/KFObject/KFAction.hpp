@@ -21,6 +21,10 @@ public:
     void setCost(int crystalCost);
     int getCost();
     
+    //CARD SELECT NBR
+    void setCardNbr(int cardSelectNbr);
+    int getCardNbr();
+    
     //SLOT SPEC
     void setSlotSpec(std::string slotSpec);
     std::string getSlotSpec();
@@ -54,6 +58,8 @@ protected:
     int m_charNbr;
     
     int m_crystalCost;
+    
+    int m_cardNbr;
     
     std::string m_slotSpec;
     

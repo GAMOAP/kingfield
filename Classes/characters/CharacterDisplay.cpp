@@ -324,6 +324,8 @@ void CharacterDisplay::setUnselect()
 //----------------ANIMATION-------------------
 bool CharacterDisplay::setAnimation(std::string animation, int nbrLoop, bool playLastAnimation, int linkedCharNbr)
 {
+    printf("[ANIMATION] animation = %s, nbrLoop = %i, playLastAnimation = %i, linkedCharNbr = %i\n",animation.c_str() , nbrLoop, playLastAnimation, linkedCharNbr);
+    
     m_animationLoopNumber = nbrLoop;
     m_animationVector[0] = animation;
     m_playLastAnimation = playLastAnimation;
@@ -431,7 +433,7 @@ bool CharacterDisplay::setExpression(std::string animationName)
     if(aName == "fail"){expressionName = "dizzy";}
     if(aName == "pain"){expressionName = "pain";}
     if(aName == "sad"){expressionName = "pain";}
-    if(aName == "happy"){expressionName = "pain";}
+    if(aName == "happy"){expressionName = "happy";}
     if(aName == "dead"){expressionName = "pain";}
     
     std::string expressionFile = "char/texture/" + m_stuffList["breed"][0] +"/"+ expressionName + "_face.png";

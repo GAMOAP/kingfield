@@ -132,6 +132,7 @@ std::vector<KFAction*> MainAction::getActionSequence(int charSelectNbr, int card
                 int charForce = rand() % (attack);
                 action->setCharAttackForce(charForce);
                 action->setSlotSpec(slotName);
+                action->setCardNbr(cardSelectNbr);
                 
                 std::vector<std::vector<int>> strikedList;
                 
