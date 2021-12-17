@@ -181,6 +181,11 @@ void MainSounds::playChar(std::string action, int charNbr, int linkedCharNbr)
         {
             playSound("char_hit_block", 0.8);
         }
+        if(type == "death")
+        {
+            playSound("char_death_" + breed, 0.5, 0.1);
+            playSound("char_death_effect", 1, 0.1);
+        }
     }
     
     //buff sound

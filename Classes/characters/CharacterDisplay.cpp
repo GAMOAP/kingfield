@@ -363,7 +363,9 @@ bool CharacterDisplay::playAnimation()
         if(TEST_CHAR_ANIM_ON)printf("ANIMATION_START :: char#%i, name = %s\n", m_number, animationName.c_str());
         
         if(m_animationVector[0] == "death")
+        {
             m_alive = false;
+        }
         
         animation->fadeIn(animationName, 0.2, m_animationLoopNumber);
         setExpression(animationName);
@@ -387,19 +389,22 @@ bool CharacterDisplay::animationEnd(cocos2d::Event* event)
     _eventDispatcher->dispatchCustomEvent("CHAR_" + std::to_string(m_number) + "_ANIM_" + name + "_END");
     _eventDispatcher->removeCustomEventListeners("CHAR_" + std::to_string(m_number) + "_ANIM_" + name + "_END");
     
-    //run the animation before this animation end.
-    if(!m_playLastAnimation)
+    if(m_alive)
     {
-        animation->gotoAndStopByFrame(lastAnimationName, 60);
-        setExpression(lastAnimationName);
-        m_playLastAnimation = false;
-    }
-    else if(lastAnimationName != m_lastAnimationName)
-    {
-        if(TEST_CHAR_ANIM_ON)printf(", startName = %s", m_lastAnimationName.c_str());
-        
-        animation->fadeIn(m_lastAnimationName, 0.2);
-        setExpression(m_lastAnimationName);
+        //run the animation before this animation end.
+        if(!m_playLastAnimation)
+        {
+            animation->gotoAndStopByFrame(lastAnimationName, 60);
+            setExpression(lastAnimationName);
+            m_playLastAnimation = false;
+        }
+        else if(lastAnimationName != m_lastAnimationName)
+        {
+            if(TEST_CHAR_ANIM_ON)printf(", startName = %s", m_lastAnimationName.c_str());
+            
+            animation->fadeIn(m_lastAnimationName, 0.2);
+            setExpression(m_lastAnimationName);
+        }
     }
     
     if(TEST_CHAR_ANIM_ON)printf(", event = CHAR_%i_ANIM_%s_END\n", m_number, name.c_str());
@@ -438,11 +443,13 @@ bool CharacterDisplay::setExpression(std::string animationName)
     
     std::string expressionFile = "char/texture/" + m_stuffList["breed"][0] +"/"+ expressionName + "_face.png";
     
+    //change face image
     auto slot = m_armatureDisplay->getArmature()->getSlot("character_face");
     auto image = cocos2d::Sprite::createWithSpriteFrameName(expressionFile);
     image->cocos2d::Node::setAnchorPoint(Vec2(64,64));
     slot->setDisplay(image, dragonBones::DisplayType::Image);
     
+    //change outline face image
     std::string expressionFileOutline = "char/outline/" + m_stuffList["breed"][0] +"/"+ expressionName + "_face.png";
     auto slotOutline = m_armatureDisplay->getArmature()->getSlot("character_outline_face");
     auto imageOutline = cocos2d::Sprite::createWithSpriteFrameName(expressionFileOutline);
@@ -459,6 +466,8 @@ bool CharacterDisplay::setExpression(std::string animationName)
     }
     
     slotOutline->setDisplay(imageOutline, dragonBones::DisplayType::Image);
+    
+    printf("char_%i_aName = %s\n", m_number, aName.c_str());
     
     MainSounds::playChar("expression_" + expressionName, m_number, m_linkedCharNbr);
     MainSounds::playChar("animation_" + aName, m_number, m_linkedCharNbr);
