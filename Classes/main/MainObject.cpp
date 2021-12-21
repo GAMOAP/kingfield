@@ -111,6 +111,13 @@ int MainObject::getNumberNodeByTag(int tag)
     return nNode;
 }
 
+bool MainObject::removeNodeFromMemory(cocos2d::Node *node_Ptr)
+{
+    node_Ptr->removeFromParent();
+    node_Ptr = NULL;
+    
+    return true;
+}
 //Boxes function......................................................
 Box* MainObject::getBoxByLC(int line, int collumn)
 {

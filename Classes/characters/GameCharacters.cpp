@@ -287,27 +287,27 @@ void GameCharacters::endActionSequence(Character* character)
 {
     character->getEventDispatcher()->removeCustomEventListeners("NODE_char" + std::to_string(character->getNumber()) + "_END_ACTION_SEQUENCE");
     
+    bool endGame = false;
     for(int c = 0; c < CHAR_NUMBER; c++)
     {
-        auto deadChar = MainObject::getCharByNumber(c);
-        if(c == 2 && !deadChar)
+        auto character = MainObject::getCharByNumber(c);
+        if(!character && (c == 2|| c == 7))
         {
-            GameDirector::stopFight(false);
-        }
-        else if(c == 7 && !deadChar)
-        {
-            GameDirector::stopFight(true);
+            endGame = true;
         }
     }
     
-    MainStuff::setCharSpec(character->getNumber(), "crystal", -m_actionSequence[0]->getCost());
-    
-    m_actionSequence.clear();
-    character->setIsMove(false);
-    
-    m_SharedGameCharacters->m_isActionRun = false;
-    
-    character->manageTired();
+    if(endGame == false)
+    {
+        MainStuff::setCharSpec(character->getNumber(), "crystal", -m_actionSequence[0]->getCost());
+        
+        m_actionSequence.clear();
+        character->setIsMove(false);
+        
+        m_SharedGameCharacters->m_isActionRun = false;
+        
+        character->manageTired();
+    }
     
     GameDirector::endTurn();
 }

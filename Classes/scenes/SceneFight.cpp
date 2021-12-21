@@ -171,6 +171,21 @@ bool SceneFight::startTurn()
 }
 bool SceneFight::endTurn()
 {
+    for(int c = 0; c < CHAR_NUMBER; c++)
+    {
+        auto character = MainObject::getCharByNumber(c);
+        if(!character && c == 2)
+        {
+            stopFight(true);
+            return true;
+        }
+        else if(!character && c == 7)
+        {
+            stopFight(false);
+            return true;
+        }
+    }
+    
     m_SharedSceneFight->m_turnNumber++;
     
     GameDirector::setActionInProgress(false);

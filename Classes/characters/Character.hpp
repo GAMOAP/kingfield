@@ -46,6 +46,7 @@ public:
     
     bool isSleeping();
     bool isBlocking();
+    bool isDead();
     
     void setIfActiveThisTurn(bool isActive);
     bool getIfActiveThisTurn();
@@ -67,11 +68,12 @@ private:
     
     bool applyBuff(std::string buffName);
     
-    
     std::string setReaction(m_reaction reaction, int actionCharNbr);
-     
+    
 protected:
     bool m_isPlayerTeam;
+    
+    bool m_isDead;
     
     CharacterDisplay* m_characterDisplay = nullptr;
     

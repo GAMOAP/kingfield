@@ -439,7 +439,7 @@ bool CharacterDisplay::setExpression(std::string animationName)
     if(aName == "pain"){expressionName = "pain";}
     if(aName == "sad"){expressionName = "pain";}
     if(aName == "happy"){expressionName = "happy";}
-    if(aName == "dead"){expressionName = "pain";}
+    if(aName == "death"){expressionName = "dead";}
     
     std::string expressionFile = "char/texture/" + m_stuffList["breed"][0] +"/"+ expressionName + "_face.png";
     

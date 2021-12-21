@@ -32,6 +32,7 @@ public:
     static bool isNodesMove();
     static KFNode* getNodeByTag(int tag, bool noBox = false);
     static int getNumberNodeByTag(int tag);
+    static bool removeNodeFromMemory(cocos2d::Node* node_Ptr);
     
     //Boxes
     static Box* getBoxByLC(int line, int collumn);

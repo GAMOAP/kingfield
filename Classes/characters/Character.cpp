@@ -22,9 +22,14 @@ USING_NS_CC;
 
 Character* Character::setCharacter(int number)
 {
+    
+    printf("[c]initChar Nbr = %i", number);
+    
     auto character = MainObject::getCharByNumber(number);
     if(!character)
     {
+        printf(" !character\n");
+        
         Character* ret = new (std::nothrow) Character();
         if(ret && ret->init(number))
         {
@@ -40,6 +45,8 @@ Character* Character::setCharacter(int number)
     }
     else
     {
+        printf(" initPosition\n");
+        
         character->initPosition(number);
         return character;
     }
@@ -71,6 +78,7 @@ bool Character::init(int number)
 
 bool Character::initPosition(int number)
 {
+    printf("[c]initPosition Nbr = %i\n", number);
     int originTag = m_originTagList[number];
     
     Vec2 positionLC = MainGrid::getLineCollumnByTag(originTag);
@@ -90,14 +98,23 @@ bool Character::initPosition(int number)
     }
     
     //remove character
-    auto IsBoxOutEvent = EventListenerCustom::create("NODE_box" + std::to_string(_tag) + "_IS_IN", [=](EventCustom* event)
+    if(!m_characterDisplay)
     {
-        if(!m_characterDisplay)
+        bool isboxIn = MainObject::getBoxByTag(_tag)->getIsIn();
+        if(isboxIn)
         {
             remove(1, 1, "both");
-        } 
-    });
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(IsBoxOutEvent, this);
+        }
+        else
+        {
+            auto IsBoxOutEvent = EventListenerCustom::create("NODE_box" + std::to_string(_tag) + "_IS_IN", [=](EventCustom* event)
+            {
+                remove(1, 1, "both");
+            });
+            _eventDispatcher->addEventListenerWithSceneGraphPriority(IsBoxOutEvent, this);
+        }
+    }
+    
     
     auto IsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag) + "_IS_OUT", [this,originTag](EventCustom* event)
     {
@@ -402,8 +419,6 @@ bool Character::setEndAction(Character* reactChar, m_reaction reaction, int reac
     {
         isLastAction = true;
     }
-    
-    std::printf("[ACT]setEndAction, reactedNbr_%i >= reactedSize_%i\n", reactedNbr, reactedSize);
     
     if(reaction == death)
     {
