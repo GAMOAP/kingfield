@@ -113,7 +113,6 @@ bool SceneFight::allNodeIsIn()
 //-----------------------FIGHT EVENT--------------------------------
 bool SceneFight::startFight(int teamNumber)
 {
-    printf("[c]------------------------fight\n");
     m_SharedSceneFight->m_teamNumber = teamNumber;
     m_SharedSceneFight->m_turnNumber = -1;
     
@@ -137,6 +136,8 @@ bool SceneFight::stopFight(bool isWin)
     }
     cocos2d::Vec2 kingLC = MainGrid::getLineCollumnByTag(kingDeadTag);
     GameInfoLayer::addInfoLogo(winOrFail, kingLC.x, kingLC.y);
+    
+    MainSounds::playGame(winOrFail);
     
     m_SharedSceneFight->removeToStage();
     
@@ -175,12 +176,12 @@ bool SceneFight::endTurn()
         auto character = MainObject::getCharByNumber(c);
         if(!character && c == 2)
         {
-            stopFight(true);
+            stopFight(false);
             return true;
         }
-        else if(!character && c == 7)
+        if(!character && c == 7)
         {
-            stopFight(false);
+            stopFight(true);
             return true;
         }
     }
