@@ -40,6 +40,7 @@ bool SceneBarrack::init()
 
 void SceneBarrack::addToStage()
 {
+    printf("[c]------------------------barrack\n");
     MainSounds::playMusic("barrack");
     
     MainStuff::initCharStuffList();
@@ -71,7 +72,7 @@ void SceneBarrack::removeToStage()
 }
 
 bool SceneBarrack::allNodeIsIn()
-{
+{  
     if(!GameCharacters::getCharIsSelected())
     {
         GameCharacters::setCharSelect();

@@ -49,7 +49,6 @@ void SceneFight::addToStage()
     MainSounds::playMusic("fight");
     
     auto gameCharacters = GameCharacters::getInstance();
-    gameCharacters->setCharacters(5);
     gameCharacters->unselectAll();
     
     auto gameCards = GameCards::getInstance();
@@ -58,9 +57,8 @@ void SceneFight::addToStage()
     gameCards->unselectAll();
     //gameCards->removeDeck();
     
-    startFight();
-    
-    GameBoxes::startRumbleBox(m_fightFieldTag);
+    GameBoxes::setBoxes();//must be change
+    GameBoxes::startRumbleBox(m_fightFieldTag);//must be change
     
     float delayTime = 1.5;
     Director::getInstance()->getScheduler()->schedule([this](float){
@@ -115,6 +113,7 @@ bool SceneFight::allNodeIsIn()
 //-----------------------FIGHT EVENT--------------------------------
 bool SceneFight::startFight(int teamNumber)
 {
+    printf("[c]------------------------fight\n");
     m_SharedSceneFight->m_teamNumber = teamNumber;
     m_SharedSceneFight->m_turnNumber = -1;
     

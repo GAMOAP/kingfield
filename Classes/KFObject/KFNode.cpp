@@ -59,16 +59,9 @@ bool KFNode::addToStage()
     //set position.
     setNodePosition();
     
-    if(m_className == "box")
-    {
-        addShader();
-    }
-    
     //add to stage.
     auto mainScene = MainObject::getMainLayer();
     mainScene->addChild(this, m_index);
-    
-    
     
     return true;
 }

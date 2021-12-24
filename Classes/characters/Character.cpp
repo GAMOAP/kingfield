@@ -28,7 +28,7 @@ Character* Character::setCharacter(int number)
     auto character = MainObject::getCharByNumber(number);
     if(!character)
     {
-        printf(" !character\n");
+        printf(" new character\n");
         
         Character* ret = new (std::nothrow) Character();
         if(ret && ret->init(number))
@@ -78,26 +78,30 @@ bool Character::init(int number)
 
 bool Character::initPosition(int number)
 {
-    printf("[c]initPosition Nbr = %i\n", number);
+    printf("[c]initPosition Nbr = %i, _tag = %i\n", number, _tag);
     int originTag = m_originTagList[number];
     
     Vec2 positionLC = MainGrid::getLineCollumnByTag(originTag);
     m_line = positionLC.x;
     m_collumn = positionLC.y;
     
-    //remove origin box
+    //character already exist and it's on origin box
     if(_tag == originTag)
     {
+        MainStuff::initCharSpec(m_number);
+        MainStuff::initCardBuff(m_number);
+        m_characterDisplay->setAnimation("stand");
         return true;
     }
     
+    //new character.
     if(_tag == -1)
     {
         addToStage();
         setTag(originTag);
     }
     
-    //remove character
+    //remove character box
     if(!m_characterDisplay)
     {
         bool isboxIn = MainObject::getBoxByTag(_tag)->getIsIn();
@@ -584,8 +588,6 @@ void Character::manageBuffs()
     }
     
     mainStuff->setLineBuff(m_number, m_line);
-    
-    
 }
 bool Character::applyBuff(std::string buffName)
 {
@@ -655,7 +657,6 @@ bool Character::manageTired()
     {
         mainStuff->setCharSpec(m_number, "shield", -2);
     }
-    
     
     return true;
 }
