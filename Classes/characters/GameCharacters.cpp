@@ -338,7 +338,17 @@ void GameCharacters::setActionAll(std::string actionName)
             {
                 character->manageBuffs();
             }
-            
+            if(actionName.substr(0, 8) == "end_game")
+            {
+                if(actionName == "victory")
+                {
+                    character->manageBuffs();
+                }
+                if(actionName == "defait")
+                {
+                    character->manageBuffs();
+                }
+            }
         }
     }
 }
