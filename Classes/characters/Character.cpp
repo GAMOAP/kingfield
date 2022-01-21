@@ -102,21 +102,18 @@ bool Character::initPosition(int number)
     }
     
     //remove character box
-    if(!m_characterDisplay)
+    bool isboxIn = MainObject::getBoxByTag(_tag)->getIsIn();
+    if(isboxIn)
     {
-        bool isboxIn = MainObject::getBoxByTag(_tag)->getIsIn();
-        if(isboxIn)
+        remove(1, 1, "both");
+    }
+    else
+    {
+        auto IsBoxOutEvent = EventListenerCustom::create("NODE_box" + std::to_string(_tag) + "_IS_IN", [=](EventCustom* event)
         {
             remove(1, 1, "both");
-        }
-        else
-        {
-            auto IsBoxOutEvent = EventListenerCustom::create("NODE_box" + std::to_string(_tag) + "_IS_IN", [=](EventCustom* event)
-            {
-                remove(1, 1, "both");
-            });
-            _eventDispatcher->addEventListenerWithSceneGraphPriority(IsBoxOutEvent, this);
-        }
+        });
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(IsBoxOutEvent, this);
     }
     
     
@@ -132,8 +129,23 @@ bool Character::initPosition(int number)
         {
             setNodePosition();
             setVisible(false);
+            
+            //remove origin box if'
             auto originBox = MainObject::getBoxByTag(originTag);
-            originBox->remove();
+            if(originBox->getIsIn())
+            {
+                originBox->remove(1, 1, "both");
+            }
+            else
+            {
+                auto IsBoxOutEvent = EventListenerCustom::create("NODE_box" + std::to_string(originTag) + "_IS_IN", [=](EventCustom* event)
+                {
+                    originBox->remove(1, 1, "both");
+                });
+                _eventDispatcher->addEventListenerWithSceneGraphPriority(IsBoxOutEvent, this);
+            }
+            
+            //add character when box is out
             auto IsOriginOutEvent = EventListenerCustom::create("NODE_box" +  std::to_string(originTag) + "_IS_OUT", [this, originTag](EventCustom* event)
             {
                 MainStuff::initCharSpec(m_number);

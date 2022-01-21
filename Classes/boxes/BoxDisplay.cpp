@@ -28,67 +28,32 @@ BoxDisplay* BoxDisplay::create(int line, int collumn, std::string type, std::str
 
 bool BoxDisplay::init(int line, int collumn, std::string type, std::string breed, std::string secondBreed, std::string scene)
 {
-    if(scene == "fight" || scene == "rumble")
+    if((scene == "fight" || scene == "rumble" || (scene == "barrack" && type == "field")) &&
+       line >= 0 && line <= 4 &&
+       collumn >= 0 && collumn <= 4)
     {
-        int backLine = line;
-        int frontLine = line;
-        
-        std::string backBreed = breed;
-        std::string frontBreed = breed;
-        
-        bool isFrontBox = false;
-        
-        if(line>=2)
+        if(m_backBox)
         {
-            backBreed = secondBreed;
+            m_backBox->removeFromParent();
+            m_backBox = nullptr;
         }
         
-        if(collumn != -1 && collumn != 5)
+        if(!m_fieldBox)
         {
-            switch (line) {
-                case 4:
-                    backLine = 0;
-                    break;
-                case 3:
-                    backLine = 1;
-                    frontLine = 3;
-                    frontBreed = breed;
-                    isFrontBox = true;
-                    break;
-                case 2:
-                    backBreed = breed;
-                    frontLine = 4;
-                    frontBreed = secondBreed;
-                    isFrontBox = true;
-                    break;
-                case 1:
-                    frontLine = 3;
-                    frontBreed = secondBreed;
-                    isFrontBox = true;
-                    break;
-                    
-                default:
-                    break;
-            }
+            m_fieldBox = BoxFieldDisplay::create(line, collumn, breed, secondBreed);
+            this->addChild(m_fieldBox, 1);
         }
-        
-        const std::string backFileName = "box/" + type + "/" + backBreed + "/" + std::to_string(backLine) + "_" + std::to_string(collumn);
-        setDisplayBox(m_backBox, backFileName, 0);
-        
-        if(isFrontBox)
+        else
         {
-            const std::string frontFileName = "box/" + type + "/" + frontBreed + "/" + std::to_string(frontLine) + "_" + std::to_string(collumn);
-            setDisplayBox(m_frontBox, frontFileName, 0);
+            m_fieldBox->setTexture(line, collumn, breed, secondBreed);
         }
-        
-        //printf("FRONT:: %s\n",backFileName.c_str());
     }
     else
     {
-        if(m_frontBox)
+        if(m_fieldBox)
         {
-            m_frontBox->removeFromParent();
-            m_frontBox = nullptr;
+            m_fieldBox->removeFromParent();
+            m_fieldBox = nullptr;
         }
         
         const std::string fileName = "box/" + type + "/" + breed + "/" + std::to_string(line) + "_" + std::to_string(collumn);
@@ -120,11 +85,11 @@ cocos2d::Sprite* BoxDisplay::setDisplayBox(Sprite* box, std::string fileName, in
     return box;
 }
 
-void BoxDisplay::setColor(const cocos2d::Color3B color)
+void BoxDisplay::setBoxColor(const cocos2d::Color3B color)
 {
-    if(m_frontBox != nullptr)
+    if(m_fieldBox != nullptr)
     {
-        m_frontBox->setColor(color);
+        m_fieldBox->setBoxColor(color);
     }
     
     if(m_backBox != nullptr)

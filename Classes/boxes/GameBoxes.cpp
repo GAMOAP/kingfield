@@ -119,7 +119,7 @@ void GameBoxes::setSelectActionBoxes(std::vector<cocos2d::Vec3> selectedActionBo
     {
         auto box = MainObject::getBoxByTag(selectedActionBoxes[t].y);
         if(box)
-            box->setActionUI(selectedActionBoxes[t].z, GameDirector::getScene()->getIsPlayerTurn());
+            box->setActionUI(selectedActionBoxes[t].z, selectedActionBoxes[t].x, GameDirector::getScene()->getIsPlayerTurn());
     }
 }
 

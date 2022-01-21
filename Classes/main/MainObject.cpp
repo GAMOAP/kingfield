@@ -9,6 +9,7 @@
 
 #include "GameDirector.hpp"
 #include "GameInfoLayer.hpp"
+#include "GameWeatherLayer.hpp"
 
 #include <iostream>
 
@@ -47,6 +48,15 @@ void MainObject::setInfoLayer(cocos2d::Node* infoLayer)
 cocos2d::Node* MainObject::getInfoLayer()
 {
     return m_SharedMainObject->m_infoLayer;
+}
+void MainObject::setWeatherLayer(cocos2d::Node* weatherLayer)
+{
+    m_SharedMainObject->m_weatherLayer = weatherLayer;
+    GameWeatherLayer::getInstance();
+}
+cocos2d::Node* MainObject::getWeatherLayer()
+{
+    return m_SharedMainObject->m_weatherLayer;
 }
 
 //Node function......................................................

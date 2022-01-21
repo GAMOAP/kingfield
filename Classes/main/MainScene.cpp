@@ -66,13 +66,18 @@ bool MainScene::init()
     auto mainLayer = Node::create();
     addChild(mainLayer, 0);
     
+    //Create WeatherLayer
+    auto weatherLayer = Node::create();
+    addChild(weatherLayer, 1);
+    
     //Create InfoLayer
     auto infoLayer = Node::create();
-    addChild(infoLayer, 1);
+    addChild(infoLayer, 2);
     
     //Create game Object
     auto mainObject = MainObject::getInstance();
     mainObject->setMainLayer(mainLayer);
+    mainObject->setWeatherLayer(infoLayer);
     mainObject->setInfoLayer(infoLayer);
     
     //Create game Stuff

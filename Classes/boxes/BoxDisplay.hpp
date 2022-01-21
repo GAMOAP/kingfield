@@ -10,6 +10,8 @@
 
 #include "cocos2d.h"
 
+#include "BoxFieldDisplay.hpp"
+
 class BoxDisplay : public cocos2d::Node
 {
 public:
@@ -17,7 +19,7 @@ public:
     
     void setTexture(int line, int collumn, std::string type, std::string breed, std::string secondBreed, std::string scene);
     
-    void setColor(const cocos2d::Color3B color);
+    void setBoxColor(const cocos2d::Color3B color);
     
     
 private:
@@ -35,7 +37,7 @@ protected:
     std::string m_secondBreed;
     
     cocos2d::Sprite* m_backBox = nullptr;
-    cocos2d::Sprite* m_frontBox = nullptr;
+    BoxFieldDisplay* m_fieldBox = nullptr;
    
 };
 

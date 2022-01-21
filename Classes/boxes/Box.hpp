@@ -28,7 +28,7 @@ public:
     void stopRumble();
     bool getIsRumble();
     
-    void setActionUI(int actionType,bool touchAuth);
+    void setActionUI(int actionType, int becameTag, bool touchAuth);
     void resetActionUI();
     bool getIsActionUI();
     
@@ -55,6 +55,7 @@ protected:
     
     BoxDisplay* m_boxDisplay = nullptr;
     cocos2d::Sprite* m_boxActionUI = nullptr;
+    cocos2d::Sprite* m_boxPathActionUI = nullptr;
     bool m_actionUI;
     bool m_touchAuth;
     
@@ -70,6 +71,6 @@ protected:
     const std::vector<int> m_libraryTag = {32,33,34,42,43,44,52,53,54,62,63,64};
     
     const cocos2d::Color3B m_colorSelect = {255, 255, 255};
-    const cocos2d::Color3B m_colorUnselect = {220, 220, 220};
+    const cocos2d::Color3B m_colorUnselect = {210, 210, 210};
 };
 #endif /* Box_hpp */

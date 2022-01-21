@@ -86,6 +86,7 @@ bool SceneFight::allNodeIsIn()
     {
         m_SharedSceneFight->m_turnNumber = 0;
         GameCharacters::setActionAll("manage_buffs");
+        GameInfoLayer::addExitFightButton();
     }
     
     if(!GameCharacters::getIsActionRun())
@@ -113,7 +114,6 @@ bool SceneFight::allNodeIsIn()
 //-----------------------FIGHT EVENT--------------------------------
 bool SceneFight::startFight(int teamNumber)
 {
-    printf("[c]------------------------fight\n");
     m_SharedSceneFight->m_teamNumber = teamNumber;
     m_SharedSceneFight->m_turnNumber = -1;
     

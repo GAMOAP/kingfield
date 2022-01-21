@@ -7,6 +7,8 @@
 
 #include "GameInfoLayer.hpp"
 
+#include "GameDirector.hpp"
+
 #include "MainGrid.hpp"
 #include "MainObject.hpp"
 
@@ -209,4 +211,45 @@ void GameInfoLayer::initInfoLogo(std::string name, int line, int collumn)
     }
 }
 
-
+//------------------------EXIT FIGHT BUTTON------------------------------
+void GameInfoLayer::addExitFightButton()
+{
+    m_SharedGameInfoLayer->initExitFightButton(true);
+}
+void GameInfoLayer::removeExitFightButton()
+{
+    m_SharedGameInfoLayer->initExitFightButton(false);
+}
+void GameInfoLayer::initExitFightButton(bool addRemove)
+{
+    if(!addRemove)
+    {
+        if(m_exitFightButton)
+        {
+            m_exitFightButton->removeFromParent();
+            m_exitFightButton = nullptr;
+        }
+    }
+    else
+    {
+        m_exitFightButton = cocos2d::ui::Button::create("screen/exit_fight_button_up.png","screen/exit_fight_button_down.png","screen/exit_fight_button_up.png",cocos2d::ui::TextureResType::PLIST);
+        
+        m_exitFightButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+                switch (type)
+                {
+                        case ui::Widget::TouchEventType::BEGAN:
+                                break;
+                        case ui::Widget::TouchEventType::ENDED:
+                                GameDirector::stopFight(false);
+                                break;
+                        default:
+                                break;
+                }
+        });
+        
+        Vec2 buttonSize = m_exitFightButton->getContentSize();
+        Vec2 visibleSize = MainGrid::getVisibleSize();
+        m_exitFightButton->setPosition(Vec2(visibleSize.x - buttonSize.x/2, visibleSize.y - buttonSize.y/2));
+        m_infoLayer->addChild(m_exitFightButton);
+    }
+}

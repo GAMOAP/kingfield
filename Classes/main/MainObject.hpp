@@ -22,10 +22,13 @@ public:
     static MainObject* getInstance();
     bool init();
     
+    //Layer
     static void setMainLayer(cocos2d::Node* mainLayer);
     static cocos2d::Node* getMainLayer();
     static void setInfoLayer(cocos2d::Node* infoLayer);
     static cocos2d::Node* getInfoLayer();
+    static void setWeatherLayer(cocos2d::Node* weatherLayer);
+    static cocos2d::Node* getWeatherLayer();
     
     //Node
     static bool isAllNodeIsIn();
@@ -55,6 +58,7 @@ private:
 protected:
     cocos2d::Node* m_mainLayer;
     cocos2d::Node* m_infoLayer;
+    cocos2d::Node* m_weatherLayer;
 };
 
 static MainObject* m_SharedMainObject = nullptr;

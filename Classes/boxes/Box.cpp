@@ -155,13 +155,12 @@ void Box::removeBox()
             m_boxDisplay = BoxDisplay::create(m_line, m_collumn, m_type, m_breed, m_secondBreed, m_scene);
             m_boxDisplay->setPosition(Vec2(0, m_centerHeigth));
             this->addChild(m_boxDisplay, 0);
-            
-            m_boxDisplay->setColor(m_colorUnselect);
         }
         else
         {
             m_boxDisplay->setTexture(m_line, m_collumn, m_type, m_breed, m_secondBreed, m_scene);
         }
+        m_boxDisplay->setBoxColor(m_colorUnselect);
     });
     _eventDispatcher->addEventListenerWithSceneGraphPriority(boxIsOutEvent, this);
 }
@@ -172,7 +171,7 @@ void Box::setSelect(float speedFactor)
     if(m_boxDisplay)
     {
         m_select = true;
-        m_boxDisplay->setColor(m_colorSelect);
+        m_boxDisplay->setBoxColor(m_colorSelect);
         this->up(speedFactor);
     }
 }
@@ -181,7 +180,7 @@ void Box::setUnselect()
     if(m_boxDisplay)
     {
         m_select = false;
-        m_boxDisplay->setColor(m_colorUnselect);
+        m_boxDisplay->setBoxColor(m_colorUnselect);
         this->place();
     }
 }
@@ -238,7 +237,7 @@ bool Box::getIsRumble()
 }
 
 //ACTION------------------------------------
-void Box::setActionUI(int actionType, bool touchAuth)
+void Box::setActionUI(int actionType, int becameTag, bool touchAuth)
 {
     std::string authColor = "";
     if(!touchAuth)
@@ -275,15 +274,19 @@ void Box::setActionUI(int actionType, bool touchAuth)
         {
             setSelect(0.5);
         }
+        
         std::string fileName = "UI/char/box_move_" + actionColor + authColor + ".png";
         if(!m_boxActionUI)
         {
             m_boxActionUI = Sprite::createWithSpriteFrameName(fileName);
-            m_boxActionUI->setName("board_action");
             this->addChild(m_boxActionUI);
         }
         else
+        {
             m_boxActionUI->setTexture(fileName);
+        }
+        
+        
     });
     auto seq = Sequence::create(delay, callFunc, NULL);
     this->runAction(seq);
