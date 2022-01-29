@@ -16,17 +16,17 @@ public:
     static GameWeatherLayer* getInstance();
     
     static void addClouds();
+    static void removeClouds();
     
 private:
     virtual bool init();
     
-    bool setCloud(cocos2d::Sprite* cloud);
+    bool setCloud();
     
 protected:
     cocos2d::Node* m_weatherLayer = nullptr;
     
-    cocos2d::Sprite* m_cloud_1 = nullptr;
-    cocos2d::Sprite* m_cloud_2 = nullptr;
+    cocos2d::Node* m_cloudLayer = nullptr;
     
 };
     
