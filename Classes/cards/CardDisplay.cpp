@@ -6,6 +6,7 @@
 //
 
 #include "MainStuff.hpp"
+#include "MainUser.hpp"
 
 #include "GameCharacters.hpp"
 
@@ -18,9 +19,8 @@ USING_NS_CC;
 CardDisplay* CardDisplay::create(std::string type, std::string breed, std::string object, std::string board)
 {
     CardDisplay* ret = new (std::nothrow) CardDisplay();
-    if(ret && ret->setTexture(type, breed, object))
+    if(ret && ret->setTexture(type, breed, object, board))
     {
-        ret->m_board = board;
         ret->autorelease();
         return ret;
     }
@@ -31,6 +31,20 @@ CardDisplay* CardDisplay::create(std::string type, std::string breed, std::strin
         return nullptr;
     }
     return ret;
+}
+
+bool CardDisplay::setTexture(std::string type, std::string breed, std::string object, std::string board)
+{
+    setName("displayNode");
+    
+    m_type = type;
+    m_breed = breed;
+    m_object = object;
+    m_board = board;
+    
+    setDisplay();
+    
+    return true;
 }
 
 bool CardDisplay::setTexture(std::string type, std::string breed, std::string object, bool popUpActived)
@@ -55,6 +69,18 @@ void CardDisplay::setDisplay()
     setImage();
     setSlots();
     
+    if(m_board == "library")
+    {
+        setLeft();
+    }
+    else
+    {
+        if(m_leftPointConteneur)
+        {
+            m_leftPointConteneur->removeFromParent();
+        }
+    }
+    
     if(m_type == "move" || m_type == "spell" || m_type == "weapon" || m_type == "object")
     {
         setMana();
@@ -77,7 +103,7 @@ void CardDisplay::setImage()
     if(!m_image)
     {
         m_image = Sprite::createWithSpriteFrameName(imageFileName);
-        this->addChild(m_image, 0);
+        this->addChild(m_image, 1);
     }
     else
     {
@@ -107,7 +133,7 @@ void CardDisplay::setMana()
         m_mana->setAnchorPoint(Vec2(0.5, 0.5));
         m_mana->setPosition(m_manaPosition);
         m_mana->setCascadeOpacityEnabled(true);
-        this->addChild(m_mana, 1);
+        this->addChild(m_mana, 2);
     }
     
     bool getOrigin = false;
@@ -160,11 +186,11 @@ void CardDisplay::setSlots()
     {
         m_slotContener = Node::create();
         m_slotContener->setAnchorPoint(Vec2(0, 0));
-        m_slotContener->setPositionY(slotStartY);
+        m_slotContener->setPositionY(m_slotStartY);
         m_slotContener->setCascadeOpacityEnabled(true);
-        this->addChild(m_slotContener, 0);
+        this->addChild(m_slotContener, 2);
     }
-    int positionX = slotStartX;
+    int positionX = m_slotStartX;
     
     for(int s = 0; s < m_nbrSlot ; s++)
     {
@@ -176,7 +202,7 @@ void CardDisplay::setSlots()
         {
             slot = Sprite::createWithSpriteFrameName(slotFileName);
             slot->setAnchorPoint(Vec2(0, 0));
-            slot->setPositionX(slotDec * s);
+            slot->setPositionX(m_slotDec * s);
             m_slotContener->addChild(slot, 0);
             m_slotList[s] = slot;
         }
@@ -191,7 +217,7 @@ void CardDisplay::setSlots()
         else
         {
             slot->setVisible(false);
-            positionX += slotDec/2;
+            positionX += m_slotDec/2;
         }
     }
     m_slotContener->setPositionX(positionX);
@@ -207,7 +233,7 @@ void CardDisplay::setChessBoard()
         m_chessBoard = Sprite::createWithSpriteFrameName(checkBoardFileName);
         m_chessBoard->setPosition(m_boardOrigin);
         m_chessBoard->setCascadeOpacityEnabled(true);
-        this->addChild(m_chessBoard, 1);
+        this->addChild(m_chessBoard, 2);
     }
     
     auto children = m_chessBoard->getChildren();
@@ -262,6 +288,102 @@ void CardDisplay::setChessBoard()
     }
 }
 
+void CardDisplay::setLeft()
+{
+    if(!m_leftPointConteneur)
+    {
+        m_leftPointConteneur = Node::create();
+        m_leftPointConteneur->setAnchorPoint(Vec2(0.5, 0.5));
+        m_leftPointConteneur->setPosition(Vec2(0,m_leftPointY));
+        m_leftPointConteneur->setCascadeOpacityEnabled(true);
+        this->addChild(m_leftPointConteneur, 3);
+    }
+    
+    CardsLeft cardLeft= getCardIsUsed();
+    int nbrCardLeft = cardLeft.nbrCardLeft;
+    
+    //printf("[TEST] cardLeft.nbrCardLeft = %i\n", cardLeft.nbrCardLeft);
+    if(nbrCardLeft > 1)
+    {
+        std::string cardLeftFileName = "UI/card/card_left_background.png";
+        if(!m_leftCard)
+        {
+            m_leftCard = Sprite::createWithSpriteFrameName(cardLeftFileName);
+            this->addChild(m_leftCard, 0);
+        }
+        else
+        {
+            m_leftCard->setSpriteFrame(cardLeftFileName);
+        }
+        m_leftCard->setVisible(true);
+    }
+    else
+    {
+        if(m_leftCard)
+        {
+            m_leftCard->setVisible(false);
+        }
+    }
+    
+    for(int p = 0; p < m_nbrLeftPoint; p++)
+    {
+        if(nbrCardLeft <= 0)
+        {
+            std::string leftPointFileName = "UI/card/used_card_red.png";
+            if(!cardLeft.usedByChar[p])
+            {
+                leftPointFileName = "UI/card/used_card_void.png";
+            }
+            
+            if(!m_LeftPointList[p])
+            {
+                m_LeftPointList[p] = Sprite::createWithSpriteFrameName(leftPointFileName);
+                m_LeftPointList[p]->setPositionX(m_leftPointDec * p - m_leftPointDec * 2);
+                m_leftPointConteneur->addChild(m_LeftPointList[p], 0);
+            }
+            else
+            {
+                m_LeftPointList[p]->setSpriteFrame(leftPointFileName);
+            }
+            m_LeftPointList[p]->setVisible(true);
+        }
+        else if(m_LeftPointList[p])
+        {
+            m_LeftPointList[p]->setVisible(false);
+        }
+    }
+    
+    /*
+    bool isUsed = false;
+    std::string color = "red";
+    int leftPointNbr = 5;
+    for(int c = 0; c < isCardUsedList.size(); c++)
+    {
+        if(isCardUsedList[c])
+        {
+            isUsed = true;
+        }
+    }
+    
+    for(int p = 0; p < isCardUsedList.size(); p++)
+    {
+        if(!isUsed)
+        {
+            leftPointNbr = 1;
+            isCardUsedList[0] = true;
+            color = "green";
+        }
+        if(!isCardUsedList[p])
+        {
+            color = "void";
+        }
+        auto slotImage = Sprite::createWithSpriteFrameName("UI/card/used_card_" + color + ".png");
+        slotImage->setPositionX(m_leftPointDec * p - m_leftPointDec * (leftPointNbr/2));
+        m_leftPointConteneur->addChild(slotImage, 0);
+    }
+     */
+}
+
 void CardDisplay::setSelect()
 {
     
@@ -291,16 +413,53 @@ bool CardDisplay::isCardAvailable()
     const int charCrystalRed = MainStuff::getCharSpec(charSelectNbr)["crystal_red"];
     
     bool getOrigin = false;
-       if(m_board == "library")
-           getOrigin = true;
+    if(m_board == "library")
+    {
+        getOrigin = true;
+    }
     int charNbr = GameCharacters::getCharSelect()->getNumber();
     int cardCost = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getMana(getOrigin);
     
     if(charCrystal >= cardCost && charCrystal > charCrystalRed)
+    {
         cardAvailable = true;
+    }
     
     return cardAvailable;
 }
+
+
+CardsLeft CardDisplay::getCardIsUsed()
+{
+    CardsLeft cardleft;
+    
+    auto stuffList = MainStuff::getStuffList();
+    
+    int typeInt = getIndex(CARD_TYPE, m_type);
+    int breedInt = getIndex(BREED_TYPE, m_breed);
+    int objectInt = getIndex(BREED_TYPE, m_object);
+    
+    int nbrCardLeft = MainUser::getUserCards()[typeInt][breedInt][objectInt];
+    
+    for(int c = 0; c < 5 ; c++)
+    {
+        std::string breed = stuffList[c][typeInt][1];
+        std::string object = stuffList[c][typeInt][2];
+        
+        bool isCardUsed = false;
+        if(m_breed == breed && m_object == object)
+        {
+            isCardUsed = true;
+            nbrCardLeft --;
+        }
+        cardleft.usedByChar[c] = isCardUsed;
+    }
+    
+    cardleft.nbrCardLeft = nbrCardLeft;
+    
+    return cardleft;
+}
+
 bool CardDisplay::isCardChanged()
 {
     int charNbr = GameCharacters::getCharSelect()->getNumber();
@@ -309,9 +468,13 @@ bool CardDisplay::isCardChanged()
     int mana = specCard->getMana(false);
     
     if(manaOrigin != mana)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 std::string CardDisplay::getMetaName()
@@ -319,4 +482,19 @@ std::string CardDisplay::getMetaName()
     std::string metaName = m_type + m_breed + m_object;
     
     return metaName;
+}
+
+int CardDisplay::getIndex(std::vector<std::string> v, std::string s)
+{
+    auto it = find(v.begin(), v.end(), s);
+ 
+    if (it != v.end())
+    {
+        int index = int(it - v.begin());
+        return index;
+    }
+    else
+    {
+        return 0;
+    }
 }

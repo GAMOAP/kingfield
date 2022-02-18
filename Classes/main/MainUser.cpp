@@ -134,6 +134,48 @@ std::string MainUser::getUserTeamStr()
     return userTeamStr;
 }
 
+//-------------------------USER CARDS---------------------------
+//GET
+std::vector<std::vector<std::vector<int>>> MainUser::getUserCards()
+{
+    std::vector<std::vector<std::vector<int>>>userCardsList;
+    
+    auto userDefault = UserDefault::getInstance();
+    std::string userCardsStr = userDefault->getStringForKey("USER_CARDS");
+    
+    if(userCardsStr == "")
+    {
+        std::stringstream stream;
+        for(int t = 0; t < CARD_TYPE.size(); t++)
+        {
+            stream << 't';
+            for(int b = 0; b < BREED_TYPE.size(); b++)
+            {
+                stream << 'b';
+                if(CARD_TYPE[t] != "breed" && CARD_TYPE[t] != "job")
+                {
+                    for(int b = 0; b < BREED_TYPE.size(); b++)
+                    {
+                        stream << 'o' << 1;
+                    }
+                }
+                else
+                {
+                    stream << 'o' << 2;
+                }
+            }
+        }
+        std::vector<std::vector<std::vector<int>>> cList;
+        userCardsStr = stream.str();
+        userDefault->setStringForKey("USER_CARDS", userCardsStr);
+        userDefault->flush();
+    }
+   
+    userCardsList = getCardsVec(userCardsStr);
+    
+    return userCardsList;
+}
+
 //------------------------------PRIVATE FUNCTION---------------------------
 std::vector<std::vector<std::vector<std::string>>> MainUser::getTeamVec(std::string teamStr)
 {
@@ -168,12 +210,37 @@ std::vector<std::vector<std::vector<std::string>>> MainUser::getTeamVec(std::str
     }
     return vecTeam;
 }
+std::vector<std::vector<std::vector<int>>> MainUser::getCardsVec(std::string cardsStr)
+{
+    std::vector<std::vector<std::vector<int>>> vecCards;
+    std::vector<std::string> cardsTypeStr = splitString(cardsStr, "t");
+    
+    for(int t = 0; t < cardsTypeStr.size(); t++)
+    {
+        std::vector<std::string> cardsBreedStr = splitString(cardsTypeStr[t], "b");
+        std::vector<std::vector<int>> cardsBreed;
+        for(int b = 0; b < cardsBreedStr.size(); b++)
+        {
+            std::vector<std::string> cardsObjectStr = splitString(cardsBreedStr[b], "o");
+            std::vector<int> cardsObject;
+            for(int o = 0; o < cardsObjectStr.size(); o++)
+            {
+                int cardNbr = stoi(cardsObjectStr[o]);
+                cardsObject.push_back(cardNbr);
+            }
+            cardsBreed.push_back(cardsObject);
+        }
+        vecCards.push_back(cardsBreed);
+    }
+    
+    return vecCards;
+}
 std::vector<std::string> MainUser::splitString(std::string mString, std::string mChar)
 {
     std::vector<std::string>result;
     std::string str = mString.substr(1, mString.size());
     while(str.size()){
-        int index = str.find(mChar);
+        int index = int(str.find(mChar));
         if(index != std::string::npos){
             result.push_back(str.substr(0,index));
             str = str.substr(index+mChar.size());
