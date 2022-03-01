@@ -47,9 +47,6 @@ DeckCard* DeckCard::setCard(int number, std::string board)
 bool DeckCard::init(int number)
 {
     m_tagList.insert(m_tagList.end(), {12, 13, 14, 15});
-    m_scaleArray.insert(m_scaleArray.end(), {0.9, 1.1, 1.2});
-    m_colorSelect = {255, 255, 255};
-    m_colorUnselect = {230, 220, 230};
     
     setNumber(number);
     m_board = "deck";
@@ -84,8 +81,7 @@ bool DeckCard::initDisplay()
         auto charIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
         {
             setTexture();
-            m_cardDisplay->setScale(m_scaleArray[0]);
-            m_cardDisplay->setColor(m_colorUnselect);
+            m_cardDisplay->setUnselect(m_board);
             m_cardDisplay->flipChessBoard(m_isEnemyTeam);
         });
         _eventDispatcher->addEventListenerWithSceneGraphPriority(charIsOutEvent, this);

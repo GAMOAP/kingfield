@@ -55,9 +55,6 @@ protected:
     CardDisplay* m_cardDisplay = nullptr;
     
     std::vector<int> m_tagList;
-    std::vector<float> m_scaleArray;
-    cocos2d::Color3B m_colorSelect;
-    cocos2d::Color3B m_colorUnselect;
 };
 
 #endif /* card_hpp */

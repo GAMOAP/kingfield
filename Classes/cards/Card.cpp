@@ -65,12 +65,10 @@ void Card::setSelect()
         up();
         auto charIsOutUp = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_UP", [this](EventCustom* event)
         {
-            m_cardDisplay->setScale(m_scaleArray[1]);
+            m_cardDisplay->setSelect(m_board);
             MainSounds::playCard("select", m_number);
             m_select = true;
         });
-        m_cardDisplay->setSelect();
-        m_cardDisplay->setColor(m_colorSelect);
         
         GameBoxes::setBoxSelect(getTag());
         
@@ -82,9 +80,7 @@ void Card::setUnselect()
     if(m_cardDisplay && m_board != "library")
     {
         m_select = false;
-        m_cardDisplay->setUnselect();
-        m_cardDisplay->setScale(m_scaleArray[0]);
-        m_cardDisplay->setColor(m_colorUnselect);
+        m_cardDisplay->setUnselect(m_board);
         
         GameBoxes::setBoxUnselect(getTag());
     }

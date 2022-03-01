@@ -25,8 +25,8 @@ public:
     bool setTexture(std::string type, std::string breed, std::string object, bool popUpActived = false);
     bool setChange();
     
-    void setSelect();
-    void setUnselect();
+    void setSelect(std::string board);
+    void setUnselect(std::string board);
     
     void flipChessBoard(bool isFlipped);
     
@@ -54,6 +54,8 @@ protected:
     std::string m_board;
     
     bool m_popUpActived;
+    
+    bool m_isSelect;
     
     cocos2d::Sprite* m_image = nullptr;
     cocos2d::Sprite* m_mana = nullptr;
@@ -87,6 +89,17 @@ protected:
         {0, 0, 255},
         {255, 0, 0},
         {0, 255, 0}};
+   
+    const cocos2d::Color3B m_selectColor = {255, 255, 255};
+    const std::map<std::string, cocos2d::Color3B> m_unselectColor= {
+        {"deck", {230, 220, 230}},
+        {"library", {200, 200, 240}},
+        {"sheet", {220, 210, 210}}};
+    
+    const std::map<std::string, std::vector<float>> m_scaleArray= {
+        {"deck", {0.9, 1.1, 1.2}},
+        {"library", {0.7, 0.9, 1.2}},
+        {"sheet", {0.8, 1, 1.2}}};
 };
 
 #endif /* CardDisplay_hpp */

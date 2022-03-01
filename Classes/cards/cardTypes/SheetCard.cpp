@@ -45,9 +45,6 @@ SheetCard* SheetCard::setCard(int number, std::string board)
 bool SheetCard::init(int number)
 {
     m_tagList.insert(m_tagList.end(), {45, 55, 65, 51, 61});
-    m_scaleArray.insert(m_scaleArray.end(), {0.8, 1, 1.2});
-    m_colorSelect = {255, 255, 255};
-    m_colorUnselect = {220, 210, 210};
     
     setNumber(number);
     m_board = "sheet";
@@ -79,8 +76,7 @@ bool SheetCard::initDisplay()
         auto charIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
         {
             setTexture();
-            m_cardDisplay->setScale(m_scaleArray[0]);
-            m_cardDisplay->setColor(m_colorUnselect);
+            m_cardDisplay->setUnselect(m_board);
         });
         _eventDispatcher->addEventListenerWithSceneGraphPriority(charIsOutEvent, this);
     }

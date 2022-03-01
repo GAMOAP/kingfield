@@ -49,9 +49,6 @@ LibraryCard* LibraryCard::setCard(int number, std::string board)
 bool LibraryCard::init(int number)
 {
     m_tagList.insert(m_tagList.end(), {62, 63, 64, 52, 53, 54, 42, 43, 44});
-    m_scaleArray.insert(m_scaleArray.end(), {0.7, 0.9, 1.2});
-    m_colorSelect = {255, 255, 255};
-    m_colorUnselect = {200, 200, 240};
     
     setNumber(number);
     m_board = "library";
@@ -106,8 +103,7 @@ bool LibraryCard::initDisplay()
             auto cardIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [=](EventCustom* event)
             {
                 setTexture();
-                m_cardDisplay->setScale(m_scaleArray[0]);
-                m_cardDisplay->setColor(m_colorUnselect);
+                m_cardDisplay->setUnselect(m_board);
                 
                 setVisible(isVisible);
             });
@@ -151,9 +147,7 @@ void LibraryCard::setSelect()
     {
         m_select = true;
         up(1, false);
-        m_cardDisplay->setSelect();
-        m_cardDisplay->setScale(m_scaleArray[1]);
-        m_cardDisplay->setColor(m_colorSelect);
+        m_cardDisplay->setSelect(m_board);
     }
 }
 
@@ -162,9 +156,7 @@ void LibraryCard::setUnselect()
     if(m_cardDisplay)
     {
         m_select = false;
-        m_cardDisplay->setUnselect();
-        m_cardDisplay->setScale(m_scaleArray[0]);
-        m_cardDisplay->setColor(m_colorUnselect);
+        m_cardDisplay->setUnselect(m_board);
     }
 }
 

@@ -290,6 +290,7 @@ void CardDisplay::setChessBoard()
 
 void CardDisplay::setLeft()
 {
+    //create and place left point conteneur
     if(!m_leftPointConteneur)
     {
         m_leftPointConteneur = Node::create();
@@ -299,10 +300,11 @@ void CardDisplay::setLeft()
         this->addChild(m_leftPointConteneur, 3);
     }
     
+    //get card info
     CardsLeft cardLeft= getCardIsUsed();
     int nbrCardLeft = cardLeft.nbrCardLeft;
     
-    //printf("[TEST] cardLeft.nbrCardLeft = %i\n", cardLeft.nbrCardLeft);
+    
     if(nbrCardLeft > 1)
     {
         std::string cardLeftFileName = "UI/card/card_left_background.png";
@@ -327,7 +329,7 @@ void CardDisplay::setLeft()
     
     for(int p = 0; p < m_nbrLeftPoint; p++)
     {
-        if(nbrCardLeft <= 0)
+        if(nbrCardLeft <= 0 && m_isSelect == false)
         {
             std::string leftPointFileName = "UI/card/used_card_red.png";
             if(!cardLeft.usedByChar[p])
@@ -353,44 +355,51 @@ void CardDisplay::setLeft()
         }
     }
     
-    /*
-    bool isUsed = false;
-    std::string color = "red";
-    int leftPointNbr = 5;
-    for(int c = 0; c < isCardUsedList.size(); c++)
+    if(nbrCardLeft <= 0 && m_isSelect == false)
     {
-        if(isCardUsedList[c])
-        {
-            isUsed = true;
-        }
+        m_image->setColor(Color3B(170, 150, 150));
     }
-    
-    for(int p = 0; p < isCardUsedList.size(); p++)
+    else
     {
-        if(!isUsed)
-        {
-            leftPointNbr = 1;
-            isCardUsedList[0] = true;
-            color = "green";
-        }
-        if(!isCardUsedList[p])
-        {
-            color = "void";
-        }
-        auto slotImage = Sprite::createWithSpriteFrameName("UI/card/used_card_" + color + ".png");
-        slotImage->setPositionX(m_leftPointDec * p - m_leftPointDec * (leftPointNbr/2));
-        m_leftPointConteneur->addChild(slotImage, 0);
+        //set unselected color
+        m_image->setColor(Color3B::WHITE);
     }
-     */
 }
 
-void CardDisplay::setSelect()
+void CardDisplay::setSelect(std::string board)
 {
+    m_isSelect = true;
     
+    //set selected color
+    this->setColor(m_selectColor);
+    
+    //set selected size
+    float scale = m_scaleArray.find(board)->second[1];
+    this->setScale(scale);
+    
+    //set left points and left cards
+    if(m_board == "library")
+    {
+        setLeft();
+    }
 }
-void CardDisplay::setUnselect()
+void CardDisplay::setUnselect(std::string board)
 {
+    m_isSelect = false;
     
+    //set unselected color
+    cocos2d::Color3B color = m_unselectColor.find(board)->second;
+    this->setColor(color);
+    
+    //set unselected size
+    float scale = m_scaleArray.find(board)->second[0];
+    this->setScale(scale);
+    
+    //set left points and left cards
+    if(m_board == "library")
+    {
+        setLeft();
+    }
 }
 
 void CardDisplay::flipChessBoard(bool isFlipped)
@@ -427,7 +436,6 @@ bool CardDisplay::isCardAvailable()
     
     return cardAvailable;
 }
-
 
 CardsLeft CardDisplay::getCardIsUsed()
 {
