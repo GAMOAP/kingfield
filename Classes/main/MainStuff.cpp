@@ -117,6 +117,26 @@ std::vector<std::string> MainStuff::getStuffByName(int charNumber, int cardNumbe
     return stuffCard;
 }
 
+int MainStuff::getCharUsingStuff(std::string type, std::string breed, std::string object)
+{
+    int characterNbr = -1;
+    
+    int typeInt = m_SharedMainStuff->getIndex(CARD_TYPE, type);
+    
+    for(int c = 0; c < CHAR_NUMBER/2; c++)
+    {
+        std::string breedTested = m_SharedMainStuff->m_charStuffList[c][typeInt][1];
+        std::string objectTested = m_SharedMainStuff->m_charStuffList[c][typeInt][2];
+        if(breedTested == breed && objectTested == object)
+        {
+            characterNbr = c;
+            break;
+        }
+    }
+    
+    return characterNbr;
+}
+
 //---------------------------KARMA----------------------------------------------
 std::string MainStuff::getKarma(int charNumber)
 {
@@ -379,3 +399,21 @@ KFSpecCard* MainStuff::getCardSpec(std::string type, std::string breed, std::str
     
     return specCard;
 }
+
+
+//-----------------------HELP FUNCTION---------------------------------
+int MainStuff::getIndex(std::vector<std::string> v, std::string s)
+{
+    auto it = find(v.begin(), v.end(), s);
+ 
+    if (it != v.end())
+    {
+        int index = int(it - v.begin());
+        return index;
+    }
+    else
+    {
+        return -1;
+    }
+}
+

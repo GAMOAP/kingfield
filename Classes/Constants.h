@@ -9,6 +9,8 @@
 #define Constants_h
 
 //------------------------------GLOBAL CONSTANT---------------------------
+const bool RESET_MEMORY = true;
+
 const bool TEST_SCENE = false;
 
 const bool TEST_CHAR_ANIM_ON = false;

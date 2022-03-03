@@ -54,7 +54,11 @@ bool MainScene::init()
     //==============================================================
     
     
-    //MainUser::reset();
+    //intit MainUser
+    if(RESET_MEMORY)
+    {
+        MainUser::reset();
+    }
     
     auto director = Director::getInstance();
     director->setClearColor(Color4F(255, 255, 255, 255));

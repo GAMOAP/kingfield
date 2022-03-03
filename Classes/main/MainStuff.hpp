@@ -24,9 +24,10 @@ public:
     
     static bool setStuff(int charNumber, std::string type, std::string breed, std::string object);
     
+    //STUFF
     static std::vector<std::vector<std::vector<std::string>>> getStuffList();
-    
     static std::vector<std::string> getStuffByName(int charNumber, int cardNumber);
+    static int getCharUsingStuff(std::string type, std::string breed, std::string object);
     
     static std::string getKarma(int charNumber);
     static std::string getTeamKarma(int teamNumber);
@@ -49,9 +50,10 @@ public:
     //Card.
     static KFSpecCard* getCardSpec(std::string type, std::string breed, std::string object, int charNbr);
     
+    static int getIndex(std::vector<std::string> v, std::string s);
+    
 private:
     bool init();
-    
     
 protected:
     std::map<std::string, int> m_charactersSpec[CHAR_NUMBER];

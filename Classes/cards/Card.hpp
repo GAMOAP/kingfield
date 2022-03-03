@@ -40,6 +40,8 @@ public:
     
     virtual bool isEqual(const Card* b)const;
     
+    virtual bool isClickable();
+    
 private:
     
     

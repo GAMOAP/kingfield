@@ -97,6 +97,7 @@ void CardDisplay::setDisplay()
     }
 }
 
+//-------------------------------IMAGE---------------------------
 void CardDisplay::setImage()
 {
     std::string imageFileName = "card/" + m_breed + "/" + m_object + "_" + m_type + "Card.png";
@@ -115,6 +116,8 @@ void CardDisplay::setImage()
         else
             m_image->setColor(Color3B::WHITE);
 }
+
+//-------------------------------MANA---------------------------
 void CardDisplay::setMana()
 {
     std::string cardCrystalColor = "red";
@@ -180,6 +183,8 @@ void CardDisplay::setMana()
         }
     }
 }
+
+//-------------------------------SLOTS---------------------------
 void CardDisplay::setSlots()
 {
     if(!m_slotContener)
@@ -222,6 +227,8 @@ void CardDisplay::setSlots()
     }
     m_slotContener->setPositionX(positionX);
 }
+
+//-------------------------------CHESS BOARD---------------------------
 void CardDisplay::setChessBoard()
 {
     int charNbr = GameCharacters::getCharSelect()->getNumber();
@@ -288,6 +295,7 @@ void CardDisplay::setChessBoard()
     }
 }
 
+//-------------------------------LEFT CARD---------------------------
 void CardDisplay::setLeft()
 {
     //create and place left point conteneur
@@ -303,7 +311,10 @@ void CardDisplay::setLeft()
     //get card info
     CardsLeft cardLeft= getCardIsUsed();
     int nbrCardLeft = cardLeft.nbrCardLeft;
+    int nbrCardTotal = cardLeft.nbrCardTotal;
     
+    
+    printf("[T] card = %s_%s_%s -> nbrCardLeft = %i, nbrCardTotal = %i\n", m_type.c_str(), m_breed.c_str(), m_object.c_str(), nbrCardLeft , nbrCardTotal);
     
     if(nbrCardLeft > 1)
     {
@@ -329,7 +340,7 @@ void CardDisplay::setLeft()
     
     for(int p = 0; p < m_nbrLeftPoint; p++)
     {
-        if(nbrCardLeft <= 0 && m_isSelect == false)
+        if(nbrCardLeft < nbrCardTotal)
         {
             std::string leftPointFileName = "UI/card/used_card_red.png";
             if(!cardLeft.usedByChar[p])
@@ -355,17 +366,55 @@ void CardDisplay::setLeft()
         }
     }
     
-    if(nbrCardLeft <= 0 && m_isSelect == false)
+    if(nbrCardLeft > 0 || m_isSelect == true)
     {
-        m_image->setColor(Color3B(170, 150, 150));
+        setImage();
+        m_leftPointConteneur->setScale(0.8);
     }
     else
     {
-        //set unselected color
-        m_image->setColor(Color3B::WHITE);
+        m_image->setSpriteFrame("card/" + m_breed + "/_backCard.png");
+        m_leftPointConteneur->setScale(1.5);
     }
 }
 
+CardsLeft CardDisplay::getCardIsUsed()
+{
+    CardsLeft cardleft;
+    
+    auto stuffList = MainStuff::getStuffList();
+    
+    int typeInt = getIndex(CARD_TYPE, m_type);
+    int breedInt = getIndex(BREED_TYPE, m_breed);
+    int objectInt = 0;
+    if(m_type != "breed" && m_type != "job")
+    {
+        getIndex(BREED_TYPE, m_object);
+    }
+    
+    cardleft.nbrCardTotal = MainUser::getUserCards()[typeInt][breedInt][objectInt];
+    int nbrCardLeft = cardleft.nbrCardTotal;
+    
+    for(int c = 0; c < 5 ; c++)
+    {
+        std::string breed = stuffList[c][typeInt][1];
+        std::string object = stuffList[c][typeInt][2];
+        
+        bool isCardUsed = false;
+        if(m_breed == breed && m_object == object)
+        {
+            isCardUsed = true;
+            nbrCardLeft --;
+        }
+        cardleft.usedByChar[c] = isCardUsed;
+    }
+    
+    cardleft.nbrCardLeft = nbrCardLeft;
+    
+    return cardleft;
+}
+
+//-------------------------------SELECT UNSELECT---------------------------
 void CardDisplay::setSelect(std::string board)
 {
     m_isSelect = true;
@@ -402,6 +451,7 @@ void CardDisplay::setUnselect(std::string board)
     }
 }
 
+//-------------------------------FLIP CHESS BOARD---------------------------
 void CardDisplay::flipChessBoard(bool isFlipped)
 {
     int intIsFlip = (-1 + isFlipped * 2)* -1;
@@ -411,6 +461,8 @@ void CardDisplay::flipChessBoard(bool isFlipped)
     }
 }
 
+
+//###########################################################################
 bool CardDisplay::isCardAvailable()
 {
     bool cardAvailable = false;
@@ -435,37 +487,6 @@ bool CardDisplay::isCardAvailable()
     }
     
     return cardAvailable;
-}
-
-CardsLeft CardDisplay::getCardIsUsed()
-{
-    CardsLeft cardleft;
-    
-    auto stuffList = MainStuff::getStuffList();
-    
-    int typeInt = getIndex(CARD_TYPE, m_type);
-    int breedInt = getIndex(BREED_TYPE, m_breed);
-    int objectInt = getIndex(BREED_TYPE, m_object);
-    
-    int nbrCardLeft = MainUser::getUserCards()[typeInt][breedInt][objectInt];
-    
-    for(int c = 0; c < 5 ; c++)
-    {
-        std::string breed = stuffList[c][typeInt][1];
-        std::string object = stuffList[c][typeInt][2];
-        
-        bool isCardUsed = false;
-        if(m_breed == breed && m_object == object)
-        {
-            isCardUsed = true;
-            nbrCardLeft --;
-        }
-        cardleft.usedByChar[c] = isCardUsed;
-    }
-    
-    cardleft.nbrCardLeft = nbrCardLeft;
-    
-    return cardleft;
 }
 
 bool CardDisplay::isCardChanged()
@@ -503,6 +524,6 @@ int CardDisplay::getIndex(std::vector<std::string> v, std::string s)
     }
     else
     {
-        return 0;
+        return -1;
     }
 }

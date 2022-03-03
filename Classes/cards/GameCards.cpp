@@ -7,6 +7,7 @@
 
 #include "MainObject.hpp"
 #include "MainStuff.hpp"
+#include "MainUser.hpp"
 
 #include "GameDirector.hpp"
 
@@ -140,29 +141,26 @@ void GameCards::setCardsChange()
 //library-------------
 void GameCards::setCardSelectLibrary(Card* cardCliqued)
 {
+    auto mainStuff = MainStuff::getInstance();
+    
     const auto charSelect = GameCharacters::getCharSelect();
     
     const auto charUI = GameCharacters::getCharUI();
     const auto cardSelect = getCardSelect();
     
-    const std::string oldKarma = MainStuff::getTeamKarma(0);
+    const std::string oldKarma = mainStuff->getTeamKarma(0);
     
     std::string cardCliquedTBO = cardCliqued->getType_Breed_object();
     std::string cardSelectTBO = cardSelect->getType_Breed_object();
     
-    if(charSelect && cardSelect && cardCliqued && cardCliqued->isVisible() && cardCliquedTBO != cardSelectTBO)
+    if(charSelect && cardSelect && cardCliqued && cardCliqued->isClickable() && cardCliquedTBO != cardSelectTBO)
     {
         const int charNumber = charSelect->getNumber();
         const std::string type = cardCliqued->getType();
         const std::string breed = cardCliqued->getBreed();
         const std::string object = cardCliqued->getObject();
         
-        
-        
-        
-        
-        
-        MainStuff::setStuff(charNumber, type, breed, object);
+        mainStuff->setStuff(charNumber, type, breed, object);
         charSelect->setStuff(type);
         charUI->setCharacterUI(charNumber);
         cardSelect->initDisplay();
@@ -181,7 +179,7 @@ void GameCards::setCardSelectLibrary(Card* cardCliqued)
             }
         }
         
-        const std::string newKarma = MainStuff::getTeamKarma(0);
+        const std::string newKarma = mainStuff->getTeamKarma(0);
         if(oldKarma != newKarma)
         {
             GameDirector::setKingBreed(newKarma);

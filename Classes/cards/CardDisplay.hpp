@@ -13,6 +13,7 @@
 struct CardsLeft
 {
     unsigned int nbrCardLeft;
+    unsigned int nbrCardTotal;
     int usedByChar[5] = {false,false,false,false,false};
 };
 
@@ -32,6 +33,8 @@ public:
     
     std::string getMetaName();
     
+    CardsLeft getCardIsUsed();
+    
 private:
     void setDisplay();
     
@@ -42,7 +45,6 @@ private:
     void setLeft();
     
     bool isCardAvailable();
-    CardsLeft getCardIsUsed();
     bool isCardChanged();
     
     int getIndex(std::vector<std::string> v, std::string s);

@@ -74,34 +74,55 @@ std::vector<std::vector<std::vector<std::string>>> MainUser::getUserTeam()
     
     if(userTeamStr == "")
     {
+        std::vector<std::vector<std::vector<int>>> cardList = getUserCards();
+        
         std::stringstream stream;
         std::vector<std::vector<std::vector<int>>> cList;
         for(int c = 0; c < CHAR_NUMBER / 2; c++)
         {
             stream << 'c';
             srand((unsigned)time(NULL) + c);
+            
             for(int t = 0; t < CARD_TYPE.size(); t++)
             {
-                stream << 't';
                 int b = rand()% BREED_TYPE.size();
-                stream << 'b' << b << 'o';
+                int o = 0;
                 if(CARD_TYPE[t] != "breed" && CARD_TYPE[t] != "job")
                 {
-                    int o = rand()% BREED_TYPE.size();
+                    o = rand()% BREED_TYPE.size();
+                }
+                while (cardList[t][b][o] <= 0)
+                {
+                    b = rand()% BREED_TYPE.size();
+                    o = 0;
+                    if(CARD_TYPE[t] != "breed" && CARD_TYPE[t] != "job")
+                    {
+                        o = rand()% BREED_TYPE.size();
+                    }
+                }
+                cardList[t][b][o] --;
+                
+                
+                stream << "tb" << b << 'o';
+                if(CARD_TYPE[t] != "breed" && CARD_TYPE[t] != "job")
+                {
                     stream << o;
                 }
                 else
+                {
                     stream << '*';
+                }
             }
         }
         userTeamStr = stream.str();
         userDefault->setStringForKey("USER_TEAM", userTeamStr);
         userDefault->flush();
     }
+    
     std::string charStuffStr = userTeamStr + userTeamStr;
     charStuffList = getTeamVec(charStuffStr);
     
-    return charStuffList;
+    return charStuffList; 
 }
 //----------------------------OPPSING TEAM--------------------------------
 bool MainUser::setOpposingTeam(std::string opposingTeamStr)
@@ -165,12 +186,11 @@ std::vector<std::vector<std::vector<int>>> MainUser::getUserCards()
                 }
             }
         }
-        std::vector<std::vector<std::vector<int>>> cList;
         userCardsStr = stream.str();
         userDefault->setStringForKey("USER_CARDS", userCardsStr);
         userDefault->flush();
     }
-   
+    
     userCardsList = getCardsVec(userCardsStr);
     
     return userCardsList;

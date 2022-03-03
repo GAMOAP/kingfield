@@ -118,3 +118,16 @@ bool Card::isEqual(const Card* b)const
 {
     return (m_type == b->m_type && m_breed == b->m_breed && m_object == b->m_object);
 }
+
+bool Card::isClickable()
+{
+    bool clickable = true;
+    
+    if(!isVisible() || m_cardDisplay->getCardIsUsed().nbrCardLeft <= 0)
+    {
+        clickable = false;
+    }
+    
+    
+    return (clickable);
+}
