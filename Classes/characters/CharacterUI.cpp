@@ -37,12 +37,15 @@ bool CharacterUI::initStage(int charNumber)
 {
     m_popUpActived = false;
     if(charNumber == m_charNumber)
+    {
         m_popUpActived = true;
+    }
     
     init(charNumber);
     
     createCrystal();
     createLife();
+    createXp();
     createKarma();
     createDefense();
     createAttack();
@@ -75,6 +78,7 @@ bool CharacterUI::initOption(int charNumber)
     
     createCrystal();
     createLife();
+    createXp();
     createKarma();
     createDefense();
     createAttack();
@@ -149,7 +153,7 @@ void CharacterUI::createLife()
         {
             auto lifePointer = Sprite::createWithSpriteFrameName("UI/char/lifebar.png");
             lifePointer->setAnchorPoint(Vec2( 0.5, 0.5));
-            lifePointer->setPosition(Vec2(m_lifeListX + l*12, m_lifeListY));
+            lifePointer->setPosition(Vec2(m_lifeListX + l*11, m_lifeListY));
             lifePointer->setVisible(false);
             m_lifeList.push_back(lifePointer);
             this->addChild(lifePointer, 1);
@@ -167,6 +171,54 @@ void CharacterUI::createLife()
             popUp(lifePointer, "UI/char/lifebar" + isVoid + ".png" , true);
         else
             popUp(lifePointer, "UI/char/lifebar.png", false);
+    }
+}
+
+//XP
+void CharacterUI::createXp()
+{
+    if(m_xpList.size() <= 0)
+    {
+        for(int x = 0; x < m_xpNbr; x++)
+        {
+            auto xpPointer = Sprite::createWithSpriteFrameName("UI/char/xpbar.png");
+            xpPointer->setAnchorPoint(Vec2( 0, 0));
+            xpPointer->setPosition(Vec2(m_xpListX + x*4, m_xpListY));
+            xpPointer->setVisible(false);
+            m_xpList.push_back(xpPointer);
+            this->addChild(xpPointer, 0);
+        }
+    }
+    
+    int xp = m_charSpec["xp"];
+    int level = m_charSpec["level_xp"];
+    int level_xp = LEVELS[level];
+    printf("manageXp::---->character_%i xp = %i, level = %i level_xp = %i\n", m_charNumber, xp, level, level_xp);
+    
+    for(int x = 0; x < m_xpList.size(); x++)
+    {
+        auto xpPointer = m_xpList[x];
+        
+        std::string isVoid = "";
+        std::string isEndBar = "";
+        if(x == level_xp -1)
+        {
+            isEndBar  = "_end";
+        }
+        
+        if(x >= xp)
+        {
+            isVoid = "_void";
+        }
+        
+        if(x < level_xp)
+        {
+            popUp(xpPointer, "UI/char/xpbar" + isVoid + isEndBar + ".png" , true);
+        }
+        else
+        {
+            popUp(xpPointer, "UI/char/xpbar.png", false);
+        }
     }
 }
 

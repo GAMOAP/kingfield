@@ -15,6 +15,7 @@
 
 #include "CharacterDisplay.hpp"
 
+enum m_xpState{start, end, manage};
 
 class Character : public KFNode
 {
@@ -32,11 +33,13 @@ public:
     void setUnselect();
     
     void setBuff(std::string buffName);
-    void manageBuffs();
+    void manageBuffs(bool reset = false);
     std::string getBuffName();
     int getBuffTurnLeft();
     
-    bool manageTired();
+    bool manageTired(bool reset = false);
+    
+    bool manageXp(m_xpState state);
     
     void setFlag();
     
@@ -67,7 +70,7 @@ private:
     bool setEndAction(Character* reactChar, m_reaction reaction, int reactedSize, int reactedNbr);
     
     bool applyBuff(std::string buffName);
-    
+     
     std::string setReaction(m_reaction reaction, int actionCharNbr);
     
 protected:
@@ -81,6 +84,8 @@ protected:
     const float m_moveDecTime = 0.2;
     
     const std::vector<int> m_originTagList= {21, 22, 23, 24, 25, 65, 64, 63, 62, 61};
+    
+    int m_level;
     
     struct
     {

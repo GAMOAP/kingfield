@@ -21,24 +21,29 @@ public:
     std::string getBreed();
     std::string getObject();
     
-    void setMana();
     int getMana(bool isOrigin);
     
-    void setSlotList();
     std::vector<std::string> getSlotList();
     std::string getSlot(int number);
     std::string getSlot(std::string slotName);
     
-    void setBoard();
     std::vector<std::vector<int>> getBoard();
     
     enum BuffName{mana};
     bool setCardBuff(BuffName name, int value);
     
+    bool setCardLevel(int value);
+    int getCardLevel();
+    
 private:
     bool init(std::string type, std::string breed, std::string object);
     
     void setKFcardSpec();
+    
+    void setMana(rapidjson::Value& spec);
+    void setBoard(rapidjson::Value& spec);
+    void setSlotList(rapidjson::Value& spec);
+    
     
 protected:
     std::string m_type;
@@ -47,6 +52,8 @@ protected:
     
     int m_mana;
     int m_manaOrigin;
+    
+    int m_level;
     
     std::vector<std::string> m_slotList;
     

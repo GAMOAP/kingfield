@@ -189,7 +189,8 @@ bool Character::setAction(KFAction* action)
     int actionType = action->getType();
     int actionCard = action->getCardNbr();
     
-    printf("[CHAR]actionCard = %i\n",actionCard);
+    printf("manageXp::character_%i setAction\n", m_number);
+    MainStuff::setCharSpec(m_number, "xp", 1);
     
     //move character...
     setIsMove(true);
@@ -238,8 +239,6 @@ bool Character::setAction(KFAction* action)
     
     return true;
 }
-
-
 
 //------------------ACTION MOVE----------------
 bool Character::setMove(int startTag, int endTag)
@@ -471,6 +470,11 @@ std::string Character::setReaction(m_reaction reaction, int actionCharNbr)
     int nbrLoop = 1;
     bool playLastAnimation = true;
     
+    auto mainStuff = MainStuff::getInstance();
+    
+    printf("manageXp::character_%i setReaction\n", m_number);
+    mainStuff->setCharSpec(m_number, "xp", 1);
+    
     switch (reaction) {
             
         //strike
@@ -481,7 +485,7 @@ std::string Character::setReaction(m_reaction reaction, int actionCharNbr)
             animationName = "block";
             break;
         case pain:
-            MainStuff::setCharSpec(m_number, "health", -1);
+            mainStuff->setCharSpec(m_number, "health", -1);
             animationName = "pain";
             break;
         case death:
@@ -489,13 +493,13 @@ std::string Character::setReaction(m_reaction reaction, int actionCharNbr)
             playLastAnimation = false;
             break;
         case heal:
-            MainStuff::setCharSpec(m_number, "health", 1);
+            mainStuff->setCharSpec(m_number, "health", 1);
             animationName = "happy";
             break;
     
         //Spell
         case crystal_break:
-            MainStuff::setCharSpec(m_number, "crystal", -1);
+            mainStuff->setCharSpec(m_number, "crystal", -1);
             animationName = "sad";
             break;
         case defense_more:
@@ -562,6 +566,7 @@ void Character::setUnselect()
     m_characterDisplay->setUnselect();
     this->setLocalZOrder(m_index);
 }
+
 //------------------BUFF----------------
 void Character::setBuff(std::string buffName)
 {
@@ -584,14 +589,14 @@ void Character::setBuff(std::string buffName)
     
     applyBuff(buffName);
 }
-void Character::manageBuffs()
+void Character::manageBuffs(bool reset)
 {
     auto gameDirector = GameDirector::getInstance();
     
     auto mainStuff = MainStuff::getInstance();
     
     int turnNbr = gameDirector->getScene()->getTurnNumber();
-    if(m_buffList.endTurn < turnNbr)
+    if(m_buffList.endTurn < turnNbr || reset == true)
     {
         m_buffList.name = "";
         m_buffList.startTurn = 0;
@@ -605,7 +610,7 @@ bool Character::applyBuff(std::string buffName)
 {
     auto mainStuff = MainStuff::getInstance();
     
-    if(buffName == "NULL");
+    if(buffName == "NULL")
     {
         mainStuff->initCombatSpecs(m_number);
         mainStuff->initCardBuff(m_number);
@@ -648,10 +653,19 @@ bool Character::applyBuff(std::string buffName)
     return true;
 }
 
-bool Character::manageTired()
+//------------------TIRED----------------
+bool Character::manageTired(bool reset)
 {
     auto mainStuff = MainStuff::getInstance();
     auto charSpecs = mainStuff->getCharSpec(m_number);
+    
+    if(reset == true)
+    {
+        m_characterDisplay->setState("ok");
+        m_characterDisplay->setAnimation("stand");
+        
+        return true;
+    }
     
     if(charSpecs["crystal"] <= charSpecs["crystal_red"] && m_characterDisplay->getStateName() == "ok")
     {
@@ -673,6 +687,46 @@ bool Character::manageTired()
     return true;
 }
 
+//------------------XP----------------
+bool Character::manageXp(m_xpState state)
+{
+    auto mainStuff = MainStuff::getInstance();
+    
+    int xp = mainStuff->getCharSpec(m_number)["xp"];
+    int level = mainStuff->getCharSpec(m_number)["level_xp"];
+    
+    switch (state) {
+        case start:
+            mainStuff->setCharSpec(m_number,"xp", -LEVELS[LEVELS_NUMBER -1]);
+            mainStuff->setCharSpec(m_number, "level_xp", 1);
+            m_level = 0;
+            break;
+        case end:
+            mainStuff->setCharSpec(m_number,"xp", -LEVELS[LEVELS_NUMBER -1]);
+            mainStuff->setCharSpec(m_number, "level_xp", -LEVELS_NUMBER);
+            m_level = 0;
+            break;
+            
+        case manage:
+            if(m_level != level)
+            {
+                if(m_level > 0)
+                {
+                    printf("manageXp::character_%i xp = %i, level = %i, m_level = %i ----LEVEL_UP---\n", m_number, xp, level, m_level);
+                }
+                m_level ++;
+            }
+            break;
+            
+        default:
+            break;
+    }
+    
+    return true;
+}
+
+//---------------------------------------------
+
 bool Character::isSleeping()
 {
     if(m_characterDisplay->getStateName() == "sleep")
@@ -680,6 +734,7 @@ bool Character::isSleeping()
     else
         return false;
 }
+
 bool Character::isBlocking()
 {
     if(m_characterDisplay->getStateName() == "block")
@@ -720,4 +775,3 @@ bool Character::getIsPlayerTeam()
 {
     return m_isPlayerTeam;
 }
-

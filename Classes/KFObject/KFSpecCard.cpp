@@ -33,6 +33,7 @@ bool KFSpecCard::init(std::string type, std::string breed, std::string object)
     m_type = type;
     m_breed = breed;
     m_object = object;
+    m_level = 0;
     
     if(!m_KFcardSpec.IsObject())
     {
@@ -41,11 +42,13 @@ bool KFSpecCard::init(std::string type, std::string breed, std::string object)
     }
     else
     {
-        setMana();
+        setSlotList(m_KFcardSpec[m_type.c_str()][m_breed.c_str()]);
         
-        setSlotList();
-        
-        setBoard();
+        if(m_object != "")
+        {
+            setMana(m_KFcardSpec[m_type.c_str()][m_breed.c_str()][m_object.c_str()]);
+            setBoard(m_KFcardSpec[m_type.c_str()][m_breed.c_str()][m_object.c_str()]);
+        }
     }
     
     return true;
@@ -83,6 +86,19 @@ bool KFSpecCard::setCardBuff(BuffName buffName, int value)
     return true;
 }
 
+bool KFSpecCard::setCardLevel(int value)
+{
+    m_level = value;
+    
+    std::string levelStr = "level" + std::to_string(m_level);
+    if(m_object != "" && m_KFcardSpec[m_type.c_str()][m_breed.c_str()][m_object.c_str()].HasMember(levelStr.c_str()))
+    {
+        
+    }
+    
+    return true;
+}
+
 std::string KFSpecCard::getType()
 {
     return m_type;
@@ -97,11 +113,11 @@ std::string KFSpecCard::getObject()
 }
 
 //Mana-------------------------------
-void KFSpecCard::setMana()
+void KFSpecCard::setMana(rapidjson::Value& JsonValue)
 {
-    if(m_object != "" && m_KFcardSpec[m_type.c_str()][m_breed.c_str()][m_object.c_str()].HasMember("mana"))
+    if(m_object != "" && JsonValue.HasMember("mana"))
     {
-        const rapidjson::Value& spec = m_KFcardSpec[m_type.c_str()][m_breed.c_str()][m_object.c_str()]["mana"];
+        const rapidjson::Value& spec = JsonValue["mana"];
         m_manaOrigin = cocos2d::Value(spec.GetInt()).asInt();
     }
     m_mana = m_manaOrigin;
@@ -114,24 +130,46 @@ int KFSpecCard::getMana(bool isOrigin)
         return m_mana;
 }
 
+//Board-----------------------------------
+void KFSpecCard::setBoard(rapidjson::Value& spec)
+{
+    if(spec.HasMember("board"))
+    {
+        const rapidjson::Value& specBoard = spec["board"];
+        for( rapidjson::SizeType i = 0; i < specBoard.Size(); i++)
+        {
+            std::vector<int> vect;
+            const rapidjson::Value& specItem = specBoard[i];
+            for( rapidjson::SizeType y = 0; y < specItem.Size(); y++)
+            {
+                const rapidjson::Value& spec = specItem[y];
+                int value = cocos2d::Value(spec.GetInt()).asInt();
+                vect.push_back(value);
+            }
+            m_board.push_back(vect);
+        }
+    }
+}
+
 //SlotList----------------------------
-void KFSpecCard::setSlotList()
+void KFSpecCard::setSlotList(rapidjson::Value& spec)
 {
     for (int s = 0; s < 3; s++)
     {
         std::string slot = "slot" + std::to_string(s);
         if(m_object != "")
         {
-            const rapidjson::Value& spec = m_KFcardSpec[m_type.c_str()][m_breed.c_str()][m_object.c_str()][slot.c_str()];
-            m_slotList.push_back(cocos2d::Value(spec.GetString()).asString());
+            const rapidjson::Value& value = spec[m_object.c_str()][slot.c_str()];
+            m_slotList.push_back(cocos2d::Value(value.GetString()).asString());
         }
         else
         {
-            const rapidjson::Value& spec = m_KFcardSpec[m_type.c_str()][m_breed.c_str()][slot.c_str()];
-            m_slotList.push_back(cocos2d::Value(spec.GetString()).asString());
+            const rapidjson::Value& value = spec[slot.c_str()];
+            m_slotList.push_back(cocos2d::Value(value.GetString()).asString());
         }
     }
 }
+
 std::vector<std::string> KFSpecCard::getSlotList()
 {
     return m_slotList;
@@ -147,26 +185,6 @@ std::string KFSpecCard::getSlot(std::string slotName)
     return m_slotList[number];
 }
 
-//Board-----------------------------------
-void KFSpecCard::setBoard()
-{
-    if(m_object != "" && m_KFcardSpec[m_type.c_str()][m_breed.c_str()][m_object.c_str()].HasMember("board"))
-    {
-        const rapidjson::Value& specBoard = m_KFcardSpec[m_type.c_str()][m_breed.c_str()][m_object.c_str()]["board"];
-        for( rapidjson::SizeType i = 0; i < specBoard.Size(); i++)
-        {
-            std::vector<int> vect;
-            const rapidjson::Value& specItem = specBoard[i];
-            for( rapidjson::SizeType y = 0; y < specItem.Size(); y++)
-            {
-                const rapidjson::Value& spec = specItem[y];
-                int value = cocos2d::Value(spec.GetInt()).asInt();
-                vect.push_back(value);
-            }
-            m_board.push_back(vect);
-        }
-    }
-}
 std::vector<std::vector<int>> KFSpecCard::getBoard()
 {
     return m_board;

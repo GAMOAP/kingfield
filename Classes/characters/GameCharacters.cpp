@@ -338,16 +338,20 @@ void GameCharacters::setActionAll(std::string actionName)
             {
                 character->manageBuffs();
             }
-            if(actionName.substr(0, 8) == "end_game")
+            if(actionName == "manage_xp")
             {
-                if(actionName == "victory")
-                {
-                    character->manageBuffs();
-                }
-                if(actionName == "defait")
-                {
-                    character->manageBuffs();
-                }
+                character->manageXp(manage);
+            }
+            if(actionName == "start_game")
+            {
+                character->manageBuffs();
+                character->manageXp(start);
+            }
+            if(actionName == "end_game")
+            {
+                character->manageBuffs(true);
+                character->manageTired(true);
+                character->manageXp(end);
             }
         }
     }

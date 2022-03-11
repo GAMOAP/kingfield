@@ -9,7 +9,7 @@
 #define Constants_h
 
 //------------------------------GLOBAL CONSTANT---------------------------
-const bool RESET_MEMORY = true;
+const bool RESET_MEMORY = false;
 
 const bool TEST_SCENE = false;
 
@@ -21,6 +21,9 @@ const bool TEST_NET_ON = false;
 const bool MULTI_PLAYER_ON = false;
 
 const int CHAR_NUMBER = 10;
+
+const int LEVELS_NUMBER = 6;
+const int LEVELS[LEVELS_NUMBER] = {0, 3, 7, 12, 18, 25};
 
 const std::vector<std::string> CARD_TYPE = {"move","spell","weapon","object","item","armor","helmet","job","breed"};
 

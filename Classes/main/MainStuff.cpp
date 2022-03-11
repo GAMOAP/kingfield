@@ -205,6 +205,7 @@ void MainStuff::initCharSpec(int charNbr)
     charSpec["crystal_red"] = 0;
     charSpec["crystal_blue"] = 0;
     charSpec["life"] = 0;
+    charSpec["level_xp"] = 0;
     charSpec["defense"] = 0;
     charSpec["attack"] = 0;
     
@@ -223,7 +224,7 @@ void MainStuff::initCharSpec(int charNbr)
                     charSpec[csIt->first]++;
                     if(charSpec["crystal_red"] > 6){charSpec["crystal_red"] = 6;}
                     if(charSpec["crystal_blue"] > 6){charSpec["crystal_blue"] = 6;}
-                    if(charSpec["life"] > 12){charSpec["life"] = 12;}
+                    if(charSpec["life"] > 9){charSpec["life"] = 9;}
                     if(charSpec["defense"] > 12){charSpec["defense"] = 12;}
                     if(charSpec["attack"] > 12){charSpec["attack"] = 12;}
                 }
@@ -232,6 +233,7 @@ void MainStuff::initCharSpec(int charNbr)
     }
     charSpec["crystal"] = charSpec["crystal_red"] + charSpec["crystal_blue"];
     charSpec["health"] = charSpec["life"];
+    charSpec["xp"] = charSpec["level_xp"];
     charSpec["shield"] = charSpec["defense"];
     charSpec["force"] = charSpec["attack"];
     
@@ -250,6 +252,12 @@ void MainStuff::setCharSpec(int charNbr, std::string specName, int value)
     if(specName == "health" && specValue > charSpec["life"]){specValue = charSpec["life"];}
     if(specName == "shield" && specValue > 12){specValue = 12;}
     if(specName == "force" && specValue > 12){specValue = 12;}
+    if(specName == "level_xp" && specValue > LEVELS_NUMBER - 1){specValue = LEVELS_NUMBER -1;}
+    if(specName == "xp" && charSpec["level_xp"] >= 1 && specValue >= LEVELS[charSpec["level_xp"]])
+    {
+            specValue = specValue - LEVELS[charSpec["level_xp"]];
+            setCharSpec(charNbr, "level_xp", 1);
+    }
     
     if(m_SharedMainStuff->m_charactersSpec[charNbr][specName] != specValue)
     {

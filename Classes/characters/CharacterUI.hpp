@@ -23,6 +23,7 @@ public:
 private:
     void createCrystal();
     void createLife();
+    void createXp();
     void createKarma();
     void createDefense();
     void createAttack();
@@ -55,10 +56,16 @@ protected:
     const int m_crystalListY = 99;
     
     //life
-    int m_lifeNbr = 12;
+    int m_lifeNbr = 9;
     std::vector<cocos2d::Sprite*> m_lifeList;
-    const int m_lifeListX = -28;
+    const int m_lifeListX = -29;
     const int m_lifeListY = 84;
+    
+    //Xp
+    int m_xpNbr = 25;// 3 7 12 18 25
+    std::vector<cocos2d::Sprite*> m_xpList;
+    const int m_xpListX = -36;
+    const int m_xpListY = 70;
     
     //Karma
     cocos2d::Sprite* m_karma = nullptr;

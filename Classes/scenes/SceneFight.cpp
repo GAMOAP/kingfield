@@ -85,7 +85,7 @@ bool SceneFight::allNodeIsIn()
     if(m_turnNumber == -1)
     {
         m_SharedSceneFight->m_turnNumber = 0;
-        GameCharacters::setActionAll("manage_buffs");
+        GameCharacters::setActionAll("start_game");
         GameInfoLayer::addExitFightButton();
     }
     
@@ -135,6 +135,9 @@ bool SceneFight::stopFight(bool isWin)
         winOrFail = "defeat";
         kingDeadTag = GameCharacters::getCharTagMemory(2);
     }
+    
+    GameCharacters::setActionAll("end_game");
+    
     cocos2d::Vec2 kingLC = MainGrid::getLineCollumnByTag(kingDeadTag);
     GameInfoLayer::addInfoLogo(winOrFail, kingLC.x, kingLC.y);
     
@@ -148,6 +151,7 @@ bool SceneFight::startTurn()
 {
     GameCharacters::setActionAll("give_crystals");
     GameCharacters::setActionAll("manage_buffs");
+    GameCharacters::setActionAll("manage_xp");
     
     if(!GameCharacters::getCharIsSelected())
     {
