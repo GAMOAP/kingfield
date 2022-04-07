@@ -68,8 +68,9 @@ bool DeckCard::initDisplay()
     std::string object = cardDetails[1];
     bool isEnemyTeam = true;
     if(charSelectNumber < 5)
+    {
         isEnemyTeam = false;
-    
+    }
     if(m_type != type || m_breed != breed || m_object != object || m_isEnemyTeam != isEnemyTeam)
     {
         m_type = type;
@@ -80,7 +81,7 @@ bool DeckCard::initDisplay()
         removeCard();
         auto charIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
         {
-            setTexture();
+            setTexture(NORMAL);
             m_cardDisplay->setUnselect(m_board);
             m_cardDisplay->flipChessBoard(m_isEnemyTeam);
         });
@@ -88,8 +89,32 @@ bool DeckCard::initDisplay()
     }
     else
     {
-        setTexture(true);
+        setTexture(POPUP);
     }
     
     return true;
+}
+
+void Card::initLevelUp()
+{
+    int charSelectNumber = GameCharacters::getCharSelect()->getNumber();
+    
+    std::vector<std::string> cardDetails = MainStuff::getStuffByName(charSelectNumber, m_number);
+    
+    m_type = CARD_TYPE[m_number];
+    m_breed = cardDetails[0];
+    m_object = cardDetails[1];
+    
+    removeCard();
+    
+    auto cardIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
+    {
+        setTexture(LEVELUP);
+        auto cardIsInEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_IN", [this](EventCustom* event)
+        {
+            setTexture(POPLEVELUP);
+        });
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(cardIsInEvent, this);
+    });
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(cardIsOutEvent, this);
 }

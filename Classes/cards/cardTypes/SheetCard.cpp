@@ -75,7 +75,7 @@ bool SheetCard::initDisplay()
         removeCard();
         auto charIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [this](EventCustom* event)
         {
-            setTexture();
+            setTexture(NORMAL);
             m_cardDisplay->setUnselect(m_board);
         });
         _eventDispatcher->addEventListenerWithSceneGraphPriority(charIsOutEvent, this);

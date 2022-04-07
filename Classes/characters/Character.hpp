@@ -41,12 +41,18 @@ public:
     
     bool manageXp(m_xpState state);
     
+    void setLevel(int levelNbr);
+    int getLevel();
+    int getCardLevel(int cardTypeNbr);
+    int getCardLevel(std::string cardName);
+    
     void setFlag();
     
     void setInfo(std::string infoName, int infoValue = -1);
     
     bool getIsPlayerTeam();
     
+    bool isLevelUp();
     bool isSleeping();
     bool isBlocking();
     bool isDead();
@@ -76,6 +82,8 @@ private:
 protected:
     bool m_isPlayerTeam;
     
+    bool m_isLevelUp;
+    
     bool m_isDead;
     
     CharacterDisplay* m_characterDisplay = nullptr;
@@ -86,6 +94,7 @@ protected:
     const std::vector<int> m_originTagList= {21, 22, 23, 24, 25, 65, 64, 63, 62, 61};
     
     int m_level;
+    int m_deckCardLevel[4] = {0, 0, 0, 0};
     
     struct
     {

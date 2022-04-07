@@ -34,7 +34,7 @@ private:
     std::vector<std::vector<int>> m_upList;
     std::vector<std::vector<int>> m_popList;
     
-    std::vector<std::string> m_typeNameUpList = {"crystal", "health"};
+    std::vector<std::string> m_typeNameUpList = {"crystal", "health", "xp", "level"};
     std::vector<std::string> m_typeNamePopList = {"defense", "attack", "defense_more","attack_more","defense_less","attack_less","poison","sleep","block"};
     
     cocos2d::Sprite* m_pop_picture = nullptr;

@@ -11,6 +11,7 @@
 #include "cocos2d.h"
 
 #include "Card.hpp"
+#include "Character.hpp"
 
 class GameCards
 {
@@ -31,13 +32,14 @@ public:
     static void setCardSelect(int number, std::string board);
     static void setCardSelectLibrary(Card* card);
     static void unselectAll();
+    static void askLevelUp();
     static int getCardNumberMemory();
     
     static void setCardsChange();
     
     static bool setLibraryPage(int pagePlus);
     
-    static void resetCards();
+    static void resetCards(Character* character);
     static void resetLibrary();
     
     static void CardsReseted();
@@ -54,7 +56,6 @@ private:
     void remove(std::string board);
     
     bool setCardSelectLibrary(int number);
-    
     
 protected:
     Card* m_cardSelected = nullptr;

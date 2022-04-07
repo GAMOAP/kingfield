@@ -5,8 +5,15 @@
 //  Created by alexandre gimeno on 12/07/2019.
 //
 
+/*
 #include "MainStuff.hpp"
 #include "MainUser.hpp"
+
+#include "GameCharacters.hpp"
+*/
+
+#include "MainUser.hpp"
+#include "MainStuff.hpp"
 
 #include "GameCharacters.hpp"
 
@@ -19,7 +26,7 @@ USING_NS_CC;
 CardDisplay* CardDisplay::create(std::string type, std::string breed, std::string object, std::string board)
 {
     CardDisplay* ret = new (std::nothrow) CardDisplay();
-    if(ret && ret->setTexture(type, breed, object, board))
+    if(ret && ret->setTexture(type, breed, object, board, NORMAL))
     {
         ret->autorelease();
         return ret;
@@ -33,29 +40,25 @@ CardDisplay* CardDisplay::create(std::string type, std::string breed, std::strin
     return ret;
 }
 
-bool CardDisplay::setTexture(std::string type, std::string breed, std::string object, std::string board)
+bool CardDisplay::setTexture(std::string type, std::string breed, std::string object, std::string board, TextureStyle style)
 {
     setName("displayNode");
     
+    //init card display attributes
     m_type = type;
     m_breed = breed;
     m_object = object;
     m_board = board;
+    m_style = style;
     
-    setDisplay();
+    Character* character = GameCharacters::getCharSelect();
+    m_specCard = MainStuff::getCardSpec(m_type, m_breed, m_object, character->getNumber());
     
-    return true;
-}
-
-bool CardDisplay::setTexture(std::string type, std::string breed, std::string object, bool popUpActived)
-{
-    setName("displayNode");
-    
-    m_type = type;
-    m_breed = breed;
-    m_object = object;
-    
-    m_popUpActived = popUpActived;
+    //specCard before player chose what card level up
+    if(m_style == POPLEVELUP)
+    {
+        m_specCard = MainStuff::getCardSpec(m_type, m_breed, m_object, character->getNumber(), true);
+    }
     
     setDisplay();
     
@@ -83,43 +86,105 @@ void CardDisplay::setDisplay()
     
     if(m_type == "move" || m_type == "spell" || m_type == "weapon" || m_type == "object")
     {
-        setMana();
-        m_mana->setVisible(true);
+        //mana
+        if(!m_manaSprite || m_mana != m_specCard->getMana(false))
+        {
+            if((m_board == "deck" && m_style == POPLEVELUP) || m_style == POPUP)
+            {
+                popUp(MANA);
+            }
+            else
+            {
+                setMana();
+            }
+        }
+        
+        m_manaSprite->setVisible(true);
+        
+        //slots
+        for(int s = 0; s > m_nbrSlot; s++)
+        {
+            if(m_slotList[s] && m_board == "deck" && m_style == POPLEVELUP)
+            {
+                popUp(SLOTS);
+            }
+        }
+        
+        //chess board
         setChessBoard();
-        m_chessBoard->setVisible(true);
+        m_chessBoardSprite->setVisible(true);
     }
     else
     {
-        if(m_mana)
-            m_mana->setVisible(false);
-        if(m_chessBoard)
-            m_chessBoard->setVisible(false);
+        if(m_manaSprite)
+        {
+            m_manaSprite->setVisible(false);
+        }
+            
+        if(m_chessBoardSprite)
+        {
+            m_chessBoardSprite->setVisible(false);
+        }
     }
 }
 
 //-------------------------------IMAGE---------------------------
 void CardDisplay::setImage()
 {
-    std::string imageFileName = "card/" + m_breed + "/" + m_object + "_" + m_type + "Card.png";
-    if(!m_image)
+    if(m_imageSprite && (m_style == LEVELUP || m_style == POPLEVELUP))
     {
-        m_image = Sprite::createWithSpriteFrameName(imageFileName);
-        this->addChild(m_image, 1);
+        int animationImageNbr = 4;
+        cocos2d::Vector<cocos2d::SpriteFrame*> imageFrame;
+        imageFrame.reserve(animationImageNbr);
+        auto spriteCache = SpriteFrameCache::getInstance();
+        for(int f = 0; f < animationImageNbr; f++)
+        {
+            std::string animName = "UI/card/level_up_btn_up_" + std::to_string(f) + ".png";
+            imageFrame.pushBack(spriteCache->getSpriteFrameByName(animName.c_str()));
+        }
+        Animation* imageAnimation = Animation::createWithSpriteFrames(imageFrame, 0.1f);
+        Animate* imageAnimate = Animate::create(imageAnimation);
+        m_imageSprite->runAction(RepeatForever::create(imageAnimate));
     }
     else
     {
-        m_image->setSpriteFrame(imageFileName);
+        std::string imageFileName = "card/" + m_breed + "/" + m_object + "_" + m_type + "Card.png";
+        if(!m_imageSprite)
+        {
+            m_imageSprite = Sprite::createWithSpriteFrameName(imageFileName);
+            this->addChild(m_imageSprite, 1);
+            
+            m_imageSprite->stopAllActions();
+        }
+        else
+        {
+            m_imageSprite->stopAllActions();
+            m_imageSprite->setSpriteFrame(imageFileName);
+        }
+        
+        if((m_type == "move" || m_type == "spell" || m_type == "weapon" || m_type == "object") && !isCardAvailable())
+        {
+            m_imageSprite->setColor(Color3B::GRAY);
+        }
+        else
+        {
+            m_imageSprite->setColor(Color3B::WHITE);
+        }
     }
     
-    if((m_type == "move" || m_type == "spell" || m_type == "weapon" || m_type == "object") && !isCardAvailable())
-            m_image->setColor(Color3B::GRAY);
-        else
-            m_image->setColor(Color3B::WHITE);
 }
 
 //-------------------------------MANA---------------------------
 void CardDisplay::setMana()
 {
+    if(!m_manaLayer)
+    {
+        m_manaLayer = Node::create();
+        m_manaLayer->setPosition(m_manaPosition);
+        m_manaLayer->setCascadeOpacityEnabled(true);
+        this->addChild(m_manaLayer, 2);
+    }
+    
     std::string cardCrystalColor = "red";
     if(isCardAvailable())
     {
@@ -130,57 +195,31 @@ void CardDisplay::setMana()
     }
     
     std::string manaFileName = "UI/card/card_crystal_" + cardCrystalColor + ".png";
-    if(!m_mana)
+    if(!m_manaSprite)
     {
-        m_mana = Sprite::createWithSpriteFrameName(manaFileName);
-        m_mana->setAnchorPoint(Vec2(0.5, 0.5));
-        m_mana->setPosition(m_manaPosition);
-        m_mana->setCascadeOpacityEnabled(true);
-        this->addChild(m_mana, 2);
+        m_manaSprite = Sprite::createWithSpriteFrameName(manaFileName);
+        m_manaLayer->addChild(m_manaSprite);
     }
     
     bool getOrigin = false;
     if(m_board == "library")
         getOrigin = true;
     
-    int charNbr = GameCharacters::getCharSelect()->getNumber();
-    int manaNbr = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getMana(getOrigin);
+    int manaNbr = m_specCard->getMana(getOrigin);
     std::string manaNbrFileName = "UI/card/number_" + std::to_string(manaNbr) + ".png";
-    if(!m_manaNbr)
+    if(!m_manaNbrSprite)
     {
-        m_manaNbr = Sprite::createWithSpriteFrameName(manaNbrFileName);
-        m_manaNbr->setName(manaNbrFileName);
-        m_manaNbr->setAnchorPoint(Vec2(0.5, 0.5));
-        m_manaNbr->setPosition(m_manaNbrPosition);
-        m_mana->addChild(m_manaNbr);
+        m_manaNbrSprite = Sprite::createWithSpriteFrameName(manaNbrFileName);
+        m_manaNbrSprite->setPosition(m_manaNbrPosition);
+        
+        m_manaLayer->addChild(m_manaNbrSprite);
     }
     
-    if(m_mana && m_manaNbr)
+    if(m_manaSprite && m_manaNbrSprite)
     {
-        if(m_popUpActived && m_manaNbr->getName() != manaNbrFileName)
-        {
-            float popUpTime = 0.2;
-            auto scaleUp = ScaleTo::create(popUpTime, 2.5);
-            auto scaleDown = ScaleTo::create(popUpTime, 1);
-            auto scaleUpEase = EaseOut::create(scaleUp, 0.5);
-            auto scaleDownEase = EaseIn::create(scaleDown, 0.5);
-            auto callFunc = CallFunc::create([=]()
-            {
-                m_mana->setSpriteFrame(manaFileName);
-                
-                m_manaNbr->setSpriteFrame(manaNbrFileName);
-                m_manaNbr->setName(manaNbrFileName);
-            });
-            auto popUpSeq = Sequence::create(scaleUpEase, callFunc, scaleDownEase, NULL);
-            m_mana->runAction(popUpSeq);
-        }
-        else
-        {
-            m_mana->setSpriteFrame(manaFileName);
-            
-            m_manaNbr->setName(manaNbrFileName);
-            m_manaNbr->setSpriteFrame(manaNbrFileName);
-        }
+        m_manaSprite->setSpriteFrame(manaFileName);
+        m_manaNbrSprite->setSpriteFrame(manaNbrFileName);
+        m_mana = m_specCard->getMana(false);
     }
 }
 
@@ -200,8 +239,7 @@ void CardDisplay::setSlots()
     for(int s = 0; s < m_nbrSlot ; s++)
     {
         auto slot = m_slotList[s];
-        int charNbr = GameCharacters::getCharSelect()->getNumber();
-        std::string slotName = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getSlot("slot" + std::to_string(s));
+        std::string slotName = m_specCard->getSlot("slot" + std::to_string(s));
         std::string slotFileName = "UI/card/" + slotName + ".png";
         if(!slot)
         {
@@ -224,6 +262,7 @@ void CardDisplay::setSlots()
             slot->setVisible(false);
             positionX += m_slotDec/2;
         }
+        m_slotList[s]->setName(slotName);
     }
     m_slotContener->setPositionX(positionX);
 }
@@ -231,19 +270,19 @@ void CardDisplay::setSlots()
 //-------------------------------CHESS BOARD---------------------------
 void CardDisplay::setChessBoard()
 {
-    int charNbr = GameCharacters::getCharSelect()->getNumber();
-    std::vector<std::vector<int>> board = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr)->getBoard();
+    std::vector<std::vector<int>> board = m_specCard->getBoard();
     
     std::string checkBoardFileName = "UI/card/chess_board.png";
-    if(!m_chessBoard)
+    if(!m_chessBoardSprite)
     {
-        m_chessBoard = Sprite::createWithSpriteFrameName(checkBoardFileName);
-        m_chessBoard->setPosition(m_boardOrigin);
-        m_chessBoard->setCascadeOpacityEnabled(true);
-        this->addChild(m_chessBoard, 2);
+        m_chessBoardSprite = Sprite::createWithSpriteFrameName(checkBoardFileName);
+        m_chessBoardSprite->setPosition(m_boardOrigin);
+        m_chessBoardSprite->setCascadeOpacityEnabled(true);
+        this->addChild(m_chessBoardSprite, 2);
+        
     }
     
-    auto children = m_chessBoard->getChildren();
+    auto children = m_chessBoardSprite->getChildren();
     Vector<Node*>::iterator scIt;
     for(scIt = children.begin(); scIt != children.end(); scIt++)
     {
@@ -268,7 +307,7 @@ void CardDisplay::setChessBoard()
             boardMove->setAnchorPoint(Vec2(0.5, 0.5));
             boardMove->setPosition(Vec2(originX, originY));
             boardMove->setColor(boardColor);
-            m_chessBoard->addChild(boardMove);
+            m_chessBoardSprite->addChild(boardMove);
         }
         for(int w = 3; w < boardSpec.size(); w++)
         {
@@ -276,7 +315,7 @@ void CardDisplay::setChessBoard()
             auto overboardMove = Sprite::createWithSpriteFrameName(overBoardMoveFileName);
             overboardMove->setAnchorPoint(Vec2(0.5, 0.5));
             overboardMove->setPosition(Vec2(originX, originY));
-            m_chessBoard->addChild(overboardMove, 1);
+            m_chessBoardSprite->addChild(overboardMove, 1);
         }
     }
     if(board.size() > 0){
@@ -284,14 +323,14 @@ void CardDisplay::setChessBoard()
         auto yellowDot = Sprite::createWithSpriteFrameName(yellowDotFileName);
         yellowDot->setAnchorPoint(Vec2(0.5, 0.5));
         yellowDot->setPosition(m_boardMoveOrigin);
-        m_chessBoard->addChild(yellowDot, 2);
+        m_chessBoardSprite->addChild(yellowDot, 2);
         
         std::string overYellowDotFileName = "UI/card/over_board_0.png";
         auto overYellowDot = Sprite::createWithSpriteFrameName(overYellowDotFileName);
         overYellowDot->setAnchorPoint(Vec2(0.5, 0.5));
         overYellowDot->setPosition(m_boardMoveOrigin);
         overYellowDot->setColor(boardMoveColor[board[0][2]]);
-        m_chessBoard->addChild(overYellowDot, 2);
+        m_chessBoardSprite->addChild(overYellowDot, 2);
     }
 }
 
@@ -312,9 +351,6 @@ void CardDisplay::setLeft()
     CardsLeft cardLeft= getCardIsUsed();
     int nbrCardLeft = cardLeft.nbrCardLeft;
     int nbrCardTotal = cardLeft.nbrCardTotal;
-    
-    
-    printf("[T] card = %s_%s_%s -> nbrCardLeft = %i, nbrCardTotal = %i\n", m_type.c_str(), m_breed.c_str(), m_object.c_str(), nbrCardLeft , nbrCardTotal);
     
     if(nbrCardLeft > 1)
     {
@@ -373,7 +409,7 @@ void CardDisplay::setLeft()
     }
     else
     {
-        m_image->setSpriteFrame("card/" + m_breed + "/_backCard.png");
+        m_imageSprite->setSpriteFrame("card/" + m_breed + "/_backCard.png");
         m_leftPointConteneur->setScale(1.5);
     }
 }
@@ -455,12 +491,51 @@ void CardDisplay::setUnselect(std::string board)
 void CardDisplay::flipChessBoard(bool isFlipped)
 {
     int intIsFlip = (-1 + isFlipped * 2)* -1;
-    if(m_chessBoard){
-        m_chessBoard->setScaleX(intIsFlip);
-        m_chessBoard->setScaleY(intIsFlip);
+    if(m_chessBoardSprite){
+        m_chessBoardSprite->setScaleX(intIsFlip);
+        m_chessBoardSprite->setScaleY(intIsFlip);
     }
 }
 
+//-------------------------------POPUP--------------------------------------
+void CardDisplay::popUp(PopObject popObject)
+{
+    cocos2d::Node* layer;
+    CallFunc* callFunc;
+    
+    switch (popObject) {
+        case IMAGE:
+            layer = m_imageLayer;
+            callFunc = CallFunc::create([=](){setImage();});
+            break;
+        case MANA:
+            layer = m_manaLayer;
+            callFunc = CallFunc::create([=](){setMana();});
+            break;
+        case SLOTS:
+            layer = m_slotsLayer;
+            callFunc = CallFunc::create([=](){setSlots();});
+            break;
+        case BOARD:
+            layer = m_chessBoardLayer;
+            callFunc = CallFunc::create([=](){setChessBoard();});
+            break;
+        default:
+            break;
+    }
+    
+    float popUpTime = 0.2;
+    auto scaleUp = ScaleTo::create(popUpTime, 0);
+    auto scaleDown = ScaleTo::create(popUpTime, 1);
+    auto scaleUpEase = EaseOut::create(scaleUp, 0.5);
+    auto scaleDownEase = EaseIn::create(scaleDown, 0.5);
+    
+    if(layer && callFunc)
+    {
+        auto popUpSeq = Sequence::create(scaleUpEase, callFunc, scaleDownEase, NULL);
+        layer->runAction(popUpSeq);
+    }
+}
 
 //###########################################################################
 bool CardDisplay::isCardAvailable()
@@ -491,10 +566,8 @@ bool CardDisplay::isCardAvailable()
 
 bool CardDisplay::isCardChanged()
 {
-    int charNbr = GameCharacters::getCharSelect()->getNumber();
-    KFSpecCard* specCard = MainStuff::getCardSpec(m_type, m_breed, m_object, charNbr);
-    int manaOrigin = specCard->getMana(true);
-    int mana = specCard->getMana(false);
+    int manaOrigin = m_specCard->getMana(true);
+    int mana = m_specCard->getMana(false);
     
     if(manaOrigin != mana)
     {

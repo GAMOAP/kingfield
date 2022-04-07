@@ -55,7 +55,6 @@ void SceneFight::addToStage()
     gameCards->removeSheet();
     gameCards->removeLibrary();
     gameCards->unselectAll();
-    //gameCards->removeDeck();
     
     GameBoxes::setBoxes();//must be change
     GameBoxes::startRumbleBox(m_fightFieldTag);//must be change
@@ -105,7 +104,10 @@ bool SceneFight::allNodeIsIn()
             GameCards::CardsReseted();
         }
         
-        m_SharedSceneFight->setActionBoxTags();
+        if(!GameCharacters::getCharSelect()->isLevelUp())
+        {
+            m_SharedSceneFight->setActionBoxTags();
+        }
     }
     
     return true;
@@ -230,29 +232,47 @@ bool SceneFight::unTouchBox(int tag)
         {
             GameCharacters::setCharSelect(character->getNumber());
             GameBoxes::setUnselectActionBoxes();
+            if(character->isLevelUp())
+            {
+                GameCards::askLevelUp();
+            }
         }
         //select card.
         if(card && !card->getIsSelect())
         {
-            GameCards::setCardSelect(card->getNumber(), card->getBoard());
-            GameBoxes::setUnselectActionBoxes();
-            setActionBoxTags();
+            if(GameCharacters::getCharSelect()->isLevelUp())
+            {
+                
+            }
+            else
+            {
+                GameCards::setCardSelect(card->getNumber(), card->getBoard());
+                GameBoxes::setUnselectActionBoxes();
+                setActionBoxTags();
+            }
         }
         //select actionBox.
         if(box && box->getIsActionUI() && m_SharedSceneFight->getIsPlayerTurn())
         {
-            int charSelectNbr = GameCharacters::getCharSelect()->getNumber();
-            int cardSelectNbr = GameCards::getCardSelect()->getNumber();
-            
-            srand((unsigned)time(NULL));
-            uint sRandom = rand() % (UINT_MAX);
-            
-            if(MULTI_PLAYER_ON)
-                MainMultiPlayer::sendCharacterActionData(charSelectNbr, cardSelectNbr, tag, sRandom);
-            
-            std::vector<KFAction*> actionSequence = MainAction::getActionSequence(charSelectNbr, cardSelectNbr, tag, sRandom);
-            
-            GameCharacters::setAction(actionSequence);
+            if(!GameCharacters::getCharSelect()->isLevelUp())
+            {
+                int charSelectNbr = GameCharacters::getCharSelect()->getNumber();
+                int cardSelectNbr = GameCards::getCardSelect()->getNumber();
+                
+                srand((unsigned)time(NULL));
+                uint sRandom = rand() % (UINT_MAX);
+                
+                if(MULTI_PLAYER_ON)
+                    MainMultiPlayer::sendCharacterActionData(charSelectNbr, cardSelectNbr, tag, sRandom);
+                
+                std::vector<KFAction*> actionSequence = MainAction::getActionSequence(charSelectNbr, cardSelectNbr, tag, sRandom);
+                
+                GameCharacters::setAction(actionSequence);
+            }
+            else
+            {
+                
+            }
         }
         
         //unselect

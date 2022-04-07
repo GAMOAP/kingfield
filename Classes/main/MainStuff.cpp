@@ -40,7 +40,6 @@ bool MainStuff::init()
         m_lineBuff[c] = -1;
     }
     
-    
     std::string filePath = "res/json/card_spec.json";
     std::string prevPath = FileUtils::getInstance()->fullPathForFilename(filePath);
     const auto data = cocos2d::FileUtils::getInstance()->getStringFromFile(prevPath);
@@ -50,17 +49,20 @@ bool MainStuff::init()
         for(int b = 0; b < BREED_TYPE.size(); b++)
         {
             KFSpecCard* stuffCard = nullptr;
-            if(CARD_TYPE[t] == "breed" || CARD_TYPE[t] == "job")
+            for(int cardLevel = 0; cardLevel < CARD_LEVELS_NBR; cardLevel++)
             {
-                stuffCard = KFSpecCard::createCard(CARD_TYPE[t], BREED_TYPE[b]);
-                m_cardSpecLibrary.push_back(stuffCard);
-            }
-            else
-            {
-                for(int o = 0; o < BREED_TYPE.size(); o++)
+                if(CARD_TYPE[t] == "breed" || CARD_TYPE[t] == "job")
                 {
-                    stuffCard = KFSpecCard::createCard(CARD_TYPE[t], BREED_TYPE[b], BREED_TYPE[o]);
+                    stuffCard = KFSpecCard::createCard(CARD_TYPE[t], BREED_TYPE[b], "", cardLevel);
                     m_cardSpecLibrary.push_back(stuffCard);
+                }
+                else
+                {
+                    for(int o = 0; o < BREED_TYPE.size(); o++)
+                    {
+                        stuffCard = KFSpecCard::createCard(CARD_TYPE[t], BREED_TYPE[b], BREED_TYPE[o], cardLevel);
+                        m_cardSpecLibrary.push_back(stuffCard);
+                    }
                 }
             }
         }
@@ -377,37 +379,55 @@ bool MainStuff::setLineBuff(int charNbr, int charLine)
     return true;
 }
 
-
 //---------------------------CARD SPEC----------------------------------
-KFSpecCard* MainStuff::getCardSpec(std::string type, std::string breed, std::string object, int charNbr)
+KFSpecCard* MainStuff::getCardSpec(std::string type, std::string breed, std::string object, int charNbr, bool isLevelUp)
 {
     KFSpecCard* specCard = nullptr;
     
-    Vector<KFSpecCard*>::iterator cslIt;
-    for(cslIt = m_SharedMainStuff->m_cardSpecLibrary.begin(); cslIt != m_SharedMainStuff->m_cardSpecLibrary.end(); cslIt++)
+    int level = MainObject::getCharByNumber(charNbr)->getCardLevel(type);
+    
+    if(isLevelUp)
     {
-        KFSpecCard* sc = *cslIt;
-        if(sc->getType() == type && sc->getBreed() == breed && sc->getObject() == object)
+        level +=1;
+    }
+    
+    if(level > CARD_LEVELS_NBR -1)
+    {
+        level = CARD_LEVELS_NBR -1;
+    }
+    
+    if(level >= 0)
+    {
+        Vector<KFSpecCard*>::iterator cslIt;
+        for(cslIt = m_SharedMainStuff->m_cardSpecLibrary.begin(); cslIt != m_SharedMainStuff->m_cardSpecLibrary.end(); cslIt++)
         {
-            specCard = sc;
+            KFSpecCard* sc = *cslIt;
+            if(sc->getType() == type && sc->getBreed() == breed && sc->getObject() == object && sc->getLevel() == level)
+            {
+                specCard = sc;
+            }
         }
     }
     
+    m_SharedMainStuff->addCardSpecBuff(specCard, "crystal", charNbr);
+    
+    return specCard;
+}
+
+void MainStuff::addCardSpecBuff(KFSpecCard* specCard, std::string buffName, int charNbr)
+{
     specCard->setCardBuff(KFSpecCard::mana, 0);
     
     std::map<std::string, int>::iterator cblIt;
     for(cblIt = m_SharedMainStuff->m_cardBuff[charNbr].begin(); cblIt != m_SharedMainStuff->m_cardBuff[charNbr].end(); cblIt++)
     {
-        std::size_t crystal = cblIt->first.find("crystal");
-        if(crystal != std::string::npos && cblIt->first.compare(8, cblIt->first.size() -8, type) == 0)
+        std::size_t crystal = cblIt->first.find(buffName);
+        if(crystal != std::string::npos && cblIt->first.compare(8, cblIt->first.size() -8, specCard->getType()) == 0)
         {
             specCard->setCardBuff(KFSpecCard::mana, cblIt->second);
         }
     }
-    
-    return specCard;
 }
-
 
 //-----------------------HELP FUNCTION---------------------------------
 int MainStuff::getIndex(std::vector<std::string> v, std::string s)

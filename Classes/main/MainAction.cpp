@@ -20,6 +20,7 @@ USING_NS_CC;
 std::vector<Vec3> MainAction::getActionBoxesTags(int charSelectNbr, int cardSelectNbr)
 {
     std::vector<std::string> cardName = MainStuff::getStuffByName(charSelectNbr, cardSelectNbr);
+    Character* character = MainObject::getCharByNumber(charSelectNbr);
     KFSpecCard* specCard = MainStuff::getCardSpec(CARD_TYPE[cardSelectNbr], cardName[0], cardName[1], charSelectNbr);
     
     std::vector<Vec3> actionBoxesTags;

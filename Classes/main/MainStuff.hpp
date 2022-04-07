@@ -48,7 +48,7 @@ public:
     static bool setLineBuff(int charNbr, int charLine);
     
     //Card.
-    static KFSpecCard* getCardSpec(std::string type, std::string breed, std::string object, int charNbr);
+    static KFSpecCard* getCardSpec(std::string type, std::string breed, std::string object, int charNbr, bool isLevelUp = false);
     
     static int getIndex(std::vector<std::string> v, std::string s);
     
@@ -59,6 +59,9 @@ protected:
     std::map<std::string, int> m_charactersSpec[CHAR_NUMBER];
     
     std::map<std::string, int> m_cardBuff[CHAR_NUMBER];
+    
+    //Card.
+    void addCardSpecBuff(KFSpecCard* specCard, std::string buffName, int charNumber);
     
     int m_lineBuff[CHAR_NUMBER];
     

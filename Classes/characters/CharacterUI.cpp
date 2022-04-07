@@ -193,7 +193,6 @@ void CharacterUI::createXp()
     int xp = m_charSpec["xp"];
     int level = m_charSpec["level_xp"];
     int level_xp = LEVELS[level];
-    printf("manageXp::---->character_%i xp = %i, level = %i level_xp = %i\n", m_charNumber, xp, level, level_xp);
     
     for(int x = 0; x < m_xpList.size(); x++)
     {

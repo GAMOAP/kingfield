@@ -60,6 +60,7 @@ bool Character::init(int number)
     setName(m_className + "_" + std::to_string(number));
     
     m_isActiveThisTurn = false;
+    m_isLevelUp = false;
     
     if(number >= 5)
     {
@@ -189,7 +190,6 @@ bool Character::setAction(KFAction* action)
     int actionType = action->getType();
     int actionCard = action->getCardNbr();
     
-    printf("manageXp::character_%i setAction\n", m_number);
     MainStuff::setCharSpec(m_number, "xp", 1);
     
     //move character...
@@ -472,7 +472,6 @@ std::string Character::setReaction(m_reaction reaction, int actionCharNbr)
     
     auto mainStuff = MainStuff::getInstance();
     
-    printf("manageXp::character_%i setReaction\n", m_number);
     mainStuff->setCharSpec(m_number, "xp", 1);
     
     switch (reaction) {
@@ -705,6 +704,7 @@ bool Character::manageXp(m_xpState state)
             mainStuff->setCharSpec(m_number,"xp", -LEVELS[LEVELS_NUMBER -1]);
             mainStuff->setCharSpec(m_number, "level_xp", -LEVELS_NUMBER);
             m_level = 0;
+            m_isLevelUp = false;
             break;
             
         case manage:
@@ -713,6 +713,7 @@ bool Character::manageXp(m_xpState state)
                 if(m_level > 0)
                 {
                     printf("manageXp::character_%i xp = %i, level = %i, m_level = %i ----LEVEL_UP---\n", m_number, xp, level, m_level);
+                    m_isLevelUp = true;
                 }
                 m_level ++;
             }
@@ -725,7 +726,44 @@ bool Character::manageXp(m_xpState state)
     return true;
 }
 
+//-----------------LEVEL-------------------------
+void Character::setLevel(int levelNbr)
+{
+    
+}
+int Character::getLevel()
+{
+    return m_level;
+}
+int Character::getCardLevel(int cardTypeNbr)
+{
+    int cardLevel = 0;
+    
+    if(cardTypeNbr  < 4)
+    {
+        cardLevel = m_deckCardLevel[cardTypeNbr];
+    }
+    
+    return cardLevel;
+}
+int Character::getCardLevel(std::string cardName)
+{
+    int cardTypeNbr;
+    for(int c = 0; c < CARD_TYPE.size(); c++)
+    {
+        if(CARD_TYPE[c] == cardName)
+        {
+            cardTypeNbr = c;
+        }
+    }
+    
+    return getCardLevel(cardTypeNbr);
+}
 //---------------------------------------------
+bool Character::isLevelUp()
+{
+    return m_isLevelUp;
+}
 
 bool Character::isSleeping()
 {
@@ -775,3 +813,4 @@ bool Character::getIsPlayerTeam()
 {
     return m_isPlayerTeam;
 }
+

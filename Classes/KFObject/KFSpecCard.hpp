@@ -15,11 +15,12 @@
 class KFSpecCard
 {
 public:
-    static KFSpecCard* createCard(std::string type, std::string breed, std::string object = "");
+    static KFSpecCard* createCard(std::string type, std::string breed, std::string object, int level);
     
     std::string getType();
     std::string getBreed();
     std::string getObject();
+    int getLevel();
     
     int getMana(bool isOrigin);
     
@@ -32,18 +33,14 @@ public:
     enum BuffName{mana};
     bool setCardBuff(BuffName name, int value);
     
-    bool setCardLevel(int value);
-    int getCardLevel();
-    
 private:
-    bool init(std::string type, std::string breed, std::string object);
+    bool init(std::string type, std::string breed, std::string object, int level);
     
     void setKFcardSpec();
     
-    void setMana(rapidjson::Value& spec);
-    void setBoard(rapidjson::Value& spec);
-    void setSlotList(rapidjson::Value& spec);
-    
+    int setMana(rapidjson::Value& spec);
+    std::vector<std::vector<int>> setBoard(rapidjson::Value& spec);
+    std::vector<std::string> setSlotList(rapidjson::Value& spec);
     
 protected:
     std::string m_type;

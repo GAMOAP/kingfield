@@ -43,7 +43,7 @@ bool Card::initPosition()
     return true;
 }
 
-void Card::setTexture(bool popUp)
+void Card::setTexture(TextureStyle style)
 {
     if(!m_cardDisplay)
     {
@@ -52,14 +52,16 @@ void Card::setTexture(bool popUp)
     }
     else
     {
-        m_cardDisplay->setTexture(m_type, m_breed, m_object, popUp);
+        m_cardDisplay->setTexture(m_type, m_breed, m_object, m_board, style);
     }
 }
 
 //------------------------SELECT UNSELECT-----------------------
 void Card::setSelect()
 {
-    if(m_cardDisplay && m_board != "library")
+    bool isCharLeveling = GameCharacters::getCharSelect()->isLevelUp();
+    
+    if(m_cardDisplay && m_board != "library" && !isCharLeveling)
     {
         m_select = true;
         up();
@@ -88,7 +90,9 @@ void Card::setUnselect()
 void Card::removeCard()
 {
     if(!m_cardDisplay)
+    {
         remove();
+    }
     else
     {
         float r = random(0, 100);

@@ -102,7 +102,6 @@ void GameCharacters::removeCharacter(int charNbr)
 //----------------------------CHARACTER SELECT------------------------------------
 void GameCharacters::setCharSelect(int number)
 {
-    
     if(number < 0)
     {
         number = 2;
@@ -120,7 +119,6 @@ void GameCharacters::setCharSelect(int number)
     
     if(!charSelected || charSelected->getNumber() != number)
     {
-        
         auto sceneChildren = MainObject::getMainLayer()->getChildren();
         Vector<Node*>::iterator scIt;
         for(scIt = sceneChildren.begin(); scIt != sceneChildren.end(); scIt++)
@@ -134,13 +132,12 @@ void GameCharacters::setCharSelect(int number)
                     bool isPlayerTurn = GameDirector::getScene()->getIsPlayerTurn();
                     if(isPlayerTurn)
                     {
-
                         GameBoxes::setBoxSelect(character->getTag());
                     }
                     
                     character->setSelect(isPlayerTurn);
                     m_SharedGameCharacters->m_characterUI = CharacterUI::setCharacterUI(number);
-                    GameCards::resetCards();
+                    GameCards::resetCards(character);
                 }
                 else
                 {

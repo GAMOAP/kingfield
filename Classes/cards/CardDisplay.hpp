@@ -8,6 +8,8 @@
 #ifndef CardDisplay_hpp
 #define CardDisplay_hpp
 
+#include "KFSpecCard.hpp"
+
 #include "cocos2d.h"
 
 struct CardsLeft
@@ -17,13 +19,15 @@ struct CardsLeft
     int usedByChar[5] = {false,false,false,false,false};
 };
 
+enum TextureStyle{NORMAL, POPUP, LEVELUP, POPLEVELUP};
+
 class CardDisplay : public cocos2d::Node
 {
 public:
     static CardDisplay* create(std::string type, std::string breed, std::string object, std::string board);
     
-    bool setTexture(std::string type, std::string breed, std::string object, std::string board);
-    bool setTexture(std::string type, std::string breed, std::string object, bool popUpActived = false);
+    bool setTexture(std::string type, std::string breed, std::string object, std::string board, TextureStyle style);
+    
     bool setChange();
     
     void setSelect(std::string board);
@@ -49,20 +53,33 @@ private:
     
     int getIndex(std::vector<std::string> v, std::string s);
     
+    enum PopObject{IMAGE, MANA, SLOTS, BOARD};
+    void popUp(PopObject popObject);
+    
 protected:
     std::string m_type;
     std::string m_breed;
     std::string m_object;
     std::string m_board;
+    int m_level;
     
-    bool m_popUpActived;
+    TextureStyle m_style;
     
     bool m_isSelect;
     
-    cocos2d::Sprite* m_image = nullptr;
-    cocos2d::Sprite* m_mana = nullptr;
-    cocos2d::Sprite* m_manaNbr = nullptr;
-    cocos2d::Sprite* m_chessBoard = nullptr;
+    KFSpecCard* m_specCard;
+    
+    cocos2d::Node* m_imageLayer = nullptr;
+    cocos2d::Node* m_manaLayer = nullptr;
+    cocos2d::Node* m_slotsLayer = nullptr;
+    cocos2d::Node* m_chessBoardLayer = nullptr;
+    
+    cocos2d::Sprite* m_imageSprite = nullptr;
+    cocos2d::Sprite* m_manaSprite = nullptr;
+    cocos2d::Sprite* m_manaNbrSprite = nullptr;
+    cocos2d::Sprite* m_chessBoardSprite = nullptr;
+    
+    int m_mana;
     
     cocos2d::Sprite* m_leftCard = nullptr;
     cocos2d::Node* m_leftPointConteneur = nullptr;
@@ -74,7 +91,7 @@ protected:
     cocos2d::Sprite* m_slotList[3];
     
     cocos2d::Vec2 m_manaPosition = {-32, 48 };
-    cocos2d::Vec2 m_manaNbrPosition = {24, 28};
+    cocos2d::Vec2 m_manaNbrPosition = {0, 4};
     
     const int m_slotStartX = -56;
     const int m_slotStartY = -72;

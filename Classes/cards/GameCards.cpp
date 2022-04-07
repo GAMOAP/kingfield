@@ -134,7 +134,7 @@ void GameCards::setCardsChange()
         auto card = dynamic_cast<DeckCard*>(*nlIt);
         if(card)
         {
-            card->setTexture(true);
+            card->setTexture(POPUP);
         }
     }
 }
@@ -203,6 +203,21 @@ void GameCards::unselectAll()
         m_SharedGameCards->m_cardSelectedLibrary = nullptr;
     }
 }
+//levelUp--------------------
+void GameCards::askLevelUp()
+{
+    unselectAll();
+    auto nodeList = MainObject::getMainLayer()->getChildren();
+    std::vector<Node*>::iterator nlIt;
+    for(nlIt = nodeList.begin(); nlIt != nodeList.end(); nlIt++)
+    {
+        auto card = dynamic_cast<Card*>(*nlIt);
+        if(card && card->getBoard() == "deck")
+        {
+            card->initLevelUp();
+        }
+    }
+}
 //----------------------------MEMORY---------------------------
 int GameCards::getCardNumberMemory()
 {
@@ -210,7 +225,7 @@ int GameCards::getCardNumberMemory()
 }
 
 //Cards Reset.
-void GameCards::resetCards()
+void GameCards::resetCards(Character* character)
 {
     auto nodeList = MainObject::getMainLayer()->getChildren();
     std::vector<Node*>::iterator nlIt;

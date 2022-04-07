@@ -102,7 +102,7 @@ bool LibraryCard::initDisplay()
             remove(speedFactor, delayFactor, movement);
             auto cardIsOutEvent = EventListenerCustom::create("NODE_"+ m_className + std::to_string(_tag)+"_IS_OUT", [=](EventCustom* event)
             {
-                setTexture();
+                setTexture(NORMAL);
                 m_cardDisplay->setUnselect(m_board);
                 
                 setVisible(isVisible);
@@ -124,7 +124,7 @@ bool LibraryCard::initDisplay()
             auto respawn = Spawn::createWithTwoActions(scaleIn, rotate);
             auto callFunc = CallFunc::create([=]()
             {
-                setTexture();
+                setTexture(NORMAL);
                 setVisible(isVisible);
                 setUnselect();
             });

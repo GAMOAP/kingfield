@@ -132,7 +132,6 @@ void SceneOption::removeObjects()
     m_maskSeq = Sequence::create(maskFadeOut, callFunc, NULL);
     m_mask->runAction(m_maskSeq);
      
-    Vec3 nodeCenterBox = MainGrid::getPositionXYZ(m_cloneNodeLC.x, m_cloneNodeLC.y);
     auto movePlace = MoveTo::create(fadeTime, m_focusedNode->getPosition());
     auto scale = ScaleTo::create(fadeTime, 1);
     auto nodeFadeOut = FadeOut::create(m_fadeTime);

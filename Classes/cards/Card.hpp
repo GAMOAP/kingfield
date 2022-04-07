@@ -22,7 +22,9 @@ public:
     
     virtual bool initDisplay() = 0;
     
-    virtual void setTexture(bool popUp = false);
+    virtual void setTexture(TextureStyle style);
+    
+    virtual void initLevelUp();
     
     virtual void setSelect();
     virtual void setUnselect();
@@ -35,6 +37,7 @@ public:
     virtual std::string getType();
     virtual std::string getBreed();
     virtual std::string getObject();
+    
     virtual std::string getType_Breed_object();
     virtual int getCost();
     
@@ -53,6 +56,7 @@ protected:
     std::string m_object = "";
     
     bool m_isEnemyTeam;
+    bool m_isLevelUp;
     
     CardDisplay* m_cardDisplay = nullptr;
     

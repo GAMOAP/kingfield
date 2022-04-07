@@ -24,6 +24,7 @@ const int CHAR_NUMBER = 10;
 
 const int LEVELS_NUMBER = 6;
 const int LEVELS[LEVELS_NUMBER] = {0, 3, 7, 12, 18, 25};
+const int CARD_LEVELS_NBR = 3;
 
 const std::vector<std::string> CARD_TYPE = {"move","spell","weapon","object","item","armor","helmet","job","breed"};
 
