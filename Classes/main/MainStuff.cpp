@@ -207,7 +207,7 @@ void MainStuff::initCharSpec(int charNbr)
     charSpec["crystal_red"] = 0;
     charSpec["crystal_blue"] = 0;
     charSpec["life"] = 0;
-    charSpec["level_xp"] = 0;
+    charSpec["level"] = 0;
     charSpec["defense"] = 0;
     charSpec["attack"] = 0;
     
@@ -235,7 +235,7 @@ void MainStuff::initCharSpec(int charNbr)
     }
     charSpec["crystal"] = charSpec["crystal_red"] + charSpec["crystal_blue"];
     charSpec["health"] = charSpec["life"];
-    charSpec["xp"] = charSpec["level_xp"];
+    charSpec["xp"] = charSpec["level"];
     charSpec["shield"] = charSpec["defense"];
     charSpec["force"] = charSpec["attack"];
     
@@ -254,11 +254,11 @@ void MainStuff::setCharSpec(int charNbr, std::string specName, int value)
     if(specName == "health" && specValue > charSpec["life"]){specValue = charSpec["life"];}
     if(specName == "shield" && specValue > 12){specValue = 12;}
     if(specName == "force" && specValue > 12){specValue = 12;}
-    if(specName == "level_xp" && specValue > LEVELS_NUMBER - 1){specValue = LEVELS_NUMBER -1;}
-    if(specName == "xp" && charSpec["level_xp"] >= 1 && specValue >= LEVELS[charSpec["level_xp"]])
+    if(specName == "level" && specValue > LEVELS_NUMBER - 1){specValue = LEVELS_NUMBER -1;}
+    if(specName == "xp" && charSpec["level"] >= 1 && specValue >= LEVELS[charSpec["level"]])
     {
-            specValue = specValue - LEVELS[charSpec["level_xp"]];
-            setCharSpec(charNbr, "level_xp", 1);
+            specValue = specValue - LEVELS[charSpec["level"]];
+            setCharSpec(charNbr, "level", 1);
     }
     
     if(m_SharedMainStuff->m_charactersSpec[charNbr][specName] != specValue)
@@ -279,6 +279,19 @@ bool MainStuff::initCombatSpecs(int charNbr)
 {
     m_SharedMainStuff->m_charactersSpec[charNbr]["shield"] = m_SharedMainStuff->m_charactersSpec[charNbr]["defense"];
     m_SharedMainStuff->m_charactersSpec[charNbr]["force"] = m_SharedMainStuff->m_charactersSpec[charNbr]["attack"];
+    
+    return true;
+}
+bool MainStuff::initLevelXp(int charNbr, bool isStart)
+{
+    int level = 0;
+    if(isStart)
+    {
+        level = 1;
+    }
+        
+    m_SharedMainStuff->m_charactersSpec[charNbr]["xp"] = 0;
+    m_SharedMainStuff->m_charactersSpec[charNbr]["level"] = level;
     
     return true;
 }

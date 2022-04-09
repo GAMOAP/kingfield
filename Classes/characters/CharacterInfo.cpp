@@ -43,6 +43,8 @@ bool CharacterInfo::addToInfoList(int characterNbr, std::string infoName, int in
     {
         if(infoName == m_typeNameUpList[u])
         {
+            printf("CharacterInfo::  infoName = %s , m_typeNameUpList[u] = %s \n", infoName.c_str(), m_typeNameUpList[u].c_str());
+            
             const std::vector<int> infoUp= {u,infoValue};
             m_upList.push_back(infoUp);
         }
@@ -135,11 +137,19 @@ cocos2d::Node* CharacterInfo::createUpInfo(std::vector<int> info)
     bool numbers = false;
     
     switch (infoType) {
-        case 0:
+        case 0://crystal
             numbers = true;
             infoPos = {0, 0};
             break;
-        case 1:
+        case 1://health
+            numbers = true;
+            infoPos = {0, 0};
+            break;
+        case 2://xp
+            numbers = true;
+            infoPos = {0, 0};
+            break;
+        case 3://level
             numbers = true;
             infoPos = {0, 0};
             break;
@@ -159,7 +169,6 @@ cocos2d::Node* CharacterInfo::createUpInfo(std::vector<int> info)
         {
             signString = "minus";
             infoColor = {235, 34, 39};
-            
         }
         
         auto digit = Sprite::createWithSpriteFrameName("UI/char/info_number_" + std::to_string(abs(infoValue)) + ".png");

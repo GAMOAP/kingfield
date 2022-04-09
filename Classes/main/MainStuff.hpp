@@ -38,6 +38,7 @@ public:
     static void setCharSpec(int charNbr, std::string specName, int value);
     static std::map<std::string, int> getCharSpec(int charNbr);
     static bool initCombatSpecs(int charNbr);
+    static bool initLevelXp(int charNbr, bool isStart);
     
     //Buff.
     static bool initCardBuff(int charNbr);

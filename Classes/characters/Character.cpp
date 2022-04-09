@@ -190,7 +190,8 @@ bool Character::setAction(KFAction* action)
     int actionType = action->getType();
     int actionCard = action->getCardNbr();
     
-    MainStuff::setCharSpec(m_number, "xp", 1);
+    m_xp++;
+    printf("[m_xp] Character::setAction charNbr = %i, m_xp = %i\n", m_number, m_xp);
     
     //move character...
     setIsMove(true);
@@ -472,7 +473,8 @@ std::string Character::setReaction(m_reaction reaction, int actionCharNbr)
     
     auto mainStuff = MainStuff::getInstance();
     
-    mainStuff->setCharSpec(m_number, "xp", 1);
+    m_xp++;
+    printf("[m_xp] Character::setReaction charNbr = %i m_xp = %i\n", m_number, m_xp);
     
     switch (reaction) {
             
@@ -692,22 +694,28 @@ bool Character::manageXp(m_xpState state)
     auto mainStuff = MainStuff::getInstance();
     
     int xp = mainStuff->getCharSpec(m_number)["xp"];
-    int level = mainStuff->getCharSpec(m_number)["level_xp"];
+    int level = mainStuff->getCharSpec(m_number)["level"];
     
     switch (state) {
         case start:
-            mainStuff->setCharSpec(m_number,"xp", -LEVELS[LEVELS_NUMBER -1]);
-            mainStuff->setCharSpec(m_number, "level_xp", 1);
+            mainStuff->initLevelXp(m_number, true);
+            m_xp = 0;
             m_level = 0;
             break;
         case end:
-            mainStuff->setCharSpec(m_number,"xp", -LEVELS[LEVELS_NUMBER -1]);
-            mainStuff->setCharSpec(m_number, "level_xp", -LEVELS_NUMBER);
+            mainStuff->initLevelXp(m_number, false);
+            m_xp = 0;
             m_level = 0;
             m_isLevelUp = false;
             break;
             
         case manage:
+            if(m_xp > 0)
+            {
+                mainStuff->setCharSpec(m_number, "xp", m_xp);
+                m_xp = 0;
+            }
+            
             if(m_level != level)
             {
                 if(m_level > 0)

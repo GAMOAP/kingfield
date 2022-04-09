@@ -93,6 +93,7 @@ protected:
     
     const std::vector<int> m_originTagList= {21, 22, 23, 24, 25, 65, 64, 63, 62, 61};
     
+    int m_xp;
     int m_level;
     int m_deckCardLevel[4] = {0, 0, 0, 0};
     

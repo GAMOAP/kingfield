@@ -191,7 +191,7 @@ void CharacterUI::createXp()
     }
     
     int xp = m_charSpec["xp"];
-    int level = m_charSpec["level_xp"];
+    int level = m_charSpec["level"];
     int level_xp = LEVELS[level];
     
     for(int x = 0; x < m_xpList.size(); x++)
