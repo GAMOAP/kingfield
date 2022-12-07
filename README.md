@@ -1,10 +1,11 @@
 # kingfield
 Mobile Tactical Battle Arena
 
-http://www.gamoap.com/kingfield/pitch_deck.pdf
+[pitch-deck](http://www.gamoap.com/kingfield/pitch_deck.pdf)
 
-https://www.youtube.com/watch?v=Gn47W1HGLT4
-https://www.linkedin.com/company/71664572
+[gameplay video](https://www.youtube.com/watch?v=Gn47W1HGLT4)
+
+[GAMOAP on linkedin](https://www.linkedin.com/company/71664572)
 
 
 Git user attention
