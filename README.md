@@ -1,8 +1,6 @@
 # kingfield
 Mobile Tactical Battle Arena
 
-[pitch-deck](http://www.gamoap.com/kingfield/pitch_deck.pdf)
-
 [gameplay video](https://www.youtube.com/watch?v=Gn47W1HGLT4)
 
 [GAMOAP on linkedin](https://www.linkedin.com/company/71664572)
